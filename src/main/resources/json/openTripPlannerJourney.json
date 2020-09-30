@@ -1,0 +1,919 @@
+{
+  "requestParameters": {
+    "date": "09-30-2020",
+    "arriveBy": "false",
+    "optimize": "QUICK",
+    "fromPlace": "48.048320,8.209972",
+    "toPlace": "48.088204,7.950507\n",
+    "time": "13:00",
+    "locale": "en"
+  },
+  "plan": {
+    "date": 1601463600000,
+    "from": {
+      "name": "Origin",
+      "lon": 8.209972,
+      "lat": 48.04832,
+      "orig": "",
+      "vertexType": "NORMAL"
+    },
+    "to": {
+      "name": "Destination",
+      "lon": 7.950507,
+      "lat": 48.088204,
+      "orig": "",
+      "vertexType": "NORMAL"
+    },
+    "itineraries": [
+      {
+        "duration": 5203,
+        "startTime": 1601464093000,
+        "endTime": 1601469296000,
+        "walkTime": 1121,
+        "transitTime": 3660,
+        "waitingTime": 422,
+        "walkDistance": 1422.651781948021,
+        "walkLimitExceeded": false,
+        "elevationLost": 0.0,
+        "elevationGained": 0.0,
+        "transfers": 1,
+        "fare": {
+          "fare": {
+            "regular": {
+              "currency": {
+                "currency": "EUR",
+                "defaultFractionDigits": 2,
+                "currencyCode": "EUR",
+                "symbol": "€"
+              },
+              "cents": 200
+            }
+          },
+          "details": {
+            "regular": [
+              {
+                "fareId": "1:K",
+                "price": {
+                  "currency": {
+                    "currency": "EUR",
+                    "defaultFractionDigits": 2,
+                    "currencyCode": "EUR",
+                    "symbol": "€"
+                  },
+                  "cents": 100
+                },
+                "routes": [
+                  "1:7-272-j1j-1"
+                ]
+              },
+              {
+                "fareId": "1:K",
+                "price": {
+                  "currency": {
+                    "currency": "EUR",
+                    "defaultFractionDigits": 2,
+                    "currencyCode": "EUR",
+                    "symbol": "€"
+                  },
+                  "cents": 100
+                },
+                "routes": [
+                  "1:7-201-j1j-1"
+                ]
+              }
+            ]
+          }
+        },
+        "legs": [
+          {
+            "startTime": 1601464093000,
+            "endTime": 1601464859000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 977.3549999999998,
+            "pathway": false,
+            "mode": "WALK",
+            "route": "",
+            "agencyTimeZoneOffset": 7200000,
+            "interlineWithPreviousLeg": false,
+            "from": {
+              "name": "Origin",
+              "lon": 8.209972,
+              "lat": 48.04832,
+              "departure": 1601464093000,
+              "orig": "",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "Furtwangen Ilbenstraße",
+              "stopId": "1:de:08326:490",
+              "lon": 8.198995,
+              "lat": 48.047922,
+              "arrival": 1601464859000,
+              "departure": 1601464860000,
+              "stopIndex": 5,
+              "stopSequence": 6,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "legGeometry": {
+              "points": "cmgdHqobq@EH@r@Cv@?|ABr@Bt@@HB`@Ff@Jf@Db@B^@n@HfAFb@TrB^vB^tBRrADj@CdATlAVvATvAq@j@UT_BvAQHeB`@MDDb@Bj@Dn@Hx@H|@F`@Jd@FVL^\\~@Rf@JPLZ@?",
+              "length": 45
+            },
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 766.0,
+            "transitLeg": false,
+            "intermediateStops": [],
+            "steps": [
+              {
+                "distance": 119.978,
+                "relativeDirection": "DEPART",
+                "streetName": "Am Großhausberg",
+                "absoluteDirection": "NORTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.210010375305611,
+                "lat": 48.048340289920255,
+                "elevation": []
+              },
+              {
+                "distance": 350.073,
+                "relativeDirection": "CONTINUE",
+                "streetName": "Weg",
+                "absoluteDirection": "WEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.208427,
+                "lat": 48.048346900000006,
+                "elevation": []
+              },
+              {
+                "distance": 101.693,
+                "relativeDirection": "SLIGHTLY_LEFT",
+                "streetName": "Martin-Schmitt-Straße",
+                "absoluteDirection": "SOUTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.2039258,
+                "lat": 48.047521100000004,
+                "elevation": []
+              },
+              {
+                "distance": 187.02800000000002,
+                "relativeDirection": "RIGHT",
+                "streetName": "Weibert-Mahler-Straße",
+                "absoluteDirection": "NORTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.202655100000001,
+                "lat": 48.047182500000005,
+                "elevation": []
+              },
+              {
+                "distance": 218.58300000000003,
+                "relativeDirection": "LEFT",
+                "streetName": "Bregstraße",
+                "absoluteDirection": "WEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.201638,
+                "lat": 48.048698400000006,
+                "elevation": []
+              }
+            ]
+          },
+          {
+            "startTime": 1601464860000,
+            "endTime": 1601467500000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 26394.0899937427,
+            "pathway": false,
+            "mode": "BUS",
+            "route": "272",
+            "agencyName": "Sonstige",
+            "agencyUrl": "https://www.suedbadenbus.de/suedbadenbus/view/index.shtml",
+            "agencyTimeZoneOffset": 7200000,
+            "routeType": 3,
+            "routeId": "1:7-272-j1j-1",
+            "interlineWithPreviousLeg": false,
+            "headsign": "Furtwangen Hinterbreg",
+            "agencyId": "99999",
+            "tripId": "1:100.T0.7-272-j1j-1.30.R",
+            "serviceDate": "20200930",
+            "from": {
+              "name": "Furtwangen Ilbenstraße",
+              "stopId": "1:de:08326:490",
+              "lon": 8.198995,
+              "lat": 48.047922,
+              "arrival": 1601464859000,
+              "departure": 1601464860000,
+              "stopIndex": 5,
+              "stopSequence": 6,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "to": {
+              "name": "Bleibach SEV",
+              "stopId": "1:de:08316:11560:1",
+              "lon": 7.998644,
+              "lat": 48.127233,
+              "arrival": 1601467500000,
+              "departure": 1601467920000,
+              "stopIndex": 36,
+              "stopSequence": 37,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "legGeometry": {
+              "points": "mjgdHuj`q@HRl@x@rAfBxAtAb@Xd@^^X^^`@Z\\^`@\\Zd@N\\Hb@Lp@PjAJdAPrCL`FExF@TG^CPCDCDCFAF?H?FBJDHDFFBF?HCDIDI@K?MAICGCGECECE?A?E@E@CDCDCFAF?H?FBJDHDFB@FPHZHr@|@dF^vDb@`KLv@Rf@NPRDLAB?LCPGNSJWBMFY@a@AeEIcG?eADs@Hi@N]RURIZCXHbC`BrCv@`@Pt@v@Rb@jClI\\`Af@lAZh@f@|@tAtB`AxAXf@Zj@\\~@Hd@NjBHnCJzEEhGMnGGrBCbBWxCQdBUvAUpAWpA_@rAITi@jBaAtCMj@EXGr@Eh@?f@AP@`@?JD~AFzADnA@lA?bACtBU`Fo@nLY`EK~@Qv@Qj@Yh@Y\\_@Vm@Re@Dg@A_@E[Gu@Uo@]o@c@a@WKCM?GBMFKNGHETAL?N@LBLFPJRJPn@l@jAtAbArAh@|@j@jAd@vAX`An@fDRvBT|DHrANrAr@|EJnAJjDLdBVxAX|@z@jCZpAHd@RrBVpC@LJz@HrAFbBAd@Cx@Cv@Gb@Gj@Mn@UbA[bASp@Ot@AFIh@Gt@M|DIt@Kj@Sp@Uf@u@pAWd@O\\Ql@Of@KTOTMLg@R[HaAb@WRc@`@[\\c@n@a@n@]t@Qb@iAfCi@`AORs@|@e@h@QRMVIVK^MVKLUTu@l@KFEDGJEJCNAH?T?J@LBHBHJJJHHDRNXRNTLXDLBFGPPbBDh@I`@BPDJTrAb@pAZfALJPAGs@M}@oBeJCGEMMYOUYSSOCGCIIQEECGAM?M?OMA?T?J@LBHBHJJJHHDRNXRNTLXHTnBdJ?DLv@Fr@@|@GpD@n@?BBd@D^Fb@ZpABZ?b@Gj@QxACr@Ed@O`@MLUNULyAdAKLELCHAN?NBNHLJFj@DtAL~@l@^Vh@h@nA|ARb@J\\FV@^B\\?b@GdA?VHh@XV`Ad@n@d@N\\H`@T|BJhALdALz@Bp@Aj@Eh@Ed@E^?`@B\\Hb@N`@^p@Vr@Nf@Hd@DZ@~@@\\Jt@DXATC\\Ih@CVCN?TFTDL|@`AXd@HTJXFVJZNRVPb@FPFDDDLHf@@fADj@BNDJZd@X`@RXRf@H`@?fA@d@Bb@DXRt@BXFj@A^KZMVMPOPc@N]HmB?kB]_JeEuDgC_Ae@WKa@Eg@P_@P]BWC]K]WQQSW]IULQP]j@a@z@Ol@KZKf@Gn@KZQP[VY\\_@p@Ob@I`@Gn@Mt@KRIJMHUD]E_@Ac@BS?QEUO[WWQYM[K[EUE}@G_@AYGUGQKSOSGKAI?GBIJCJ@RBNHJFBD@JA^IV@l@NZJTHv@^PJRLTRJPVr@FTLNTPb@F\\B`@H|@d@~@h@FBRBJ?HANCJGFGLKHKHOR_@HSF[DY@S?YCa@?SBQJOLIL?JDFFDLBP?RAVAHERKd@KVIV]n@S\\Q\\Uj@MVKRMJODSBYAcDa@c@BY@WHa@LM?I?EAMMSYMUQSMOMCOFQHKPU`@MZOXQTOPUP_@NSB[Gg@Mm@Ck@LSTQXUl@c@jBc@`BIh@Gf@OvAElCBzAFx@^vCBj@CXIXWV[RgCbAwAh@{An@iBjA}AtAsB~Bm@j@m@d@kAr@iAf@gBjAsAx@y@`@c@Ne@Pg@JqCb@}@R}@ToA^]N[Ns@\\mAz@wEtCk@XOJ[JSDQ?a@IeCgAm@Qi@EaAEaA?k@Ay@?e@BQBGBIHSPINABKTmA`C[l@Wb@ONSN[La@J]HkInAg@HsANuAHy@B{DNs@?y@Eo@Sq@_@WOYGOCSDSH{BbCs@l@gAz@a@`@Wb@[j@g@hAw@dB[l@a@n@e@f@[VSJKDQBUBW?[GUI}Am@UGWAa@@{AV_Bd@qAp@cAx@sAlAYZSR[ZSP[Rq@XkAj@YVQJqBnAc@VOLUTKNUf@i@zAYh@WTQHk@VoAj@e@X[T}@jAWTYP]J{@Jm@RONY\\_@p@]p@mApCs@xBWv@qBfGM`@C^Ad@@RA^APANGRIRWf@]l@GJO\\I^AVAR@TB`@Dj@@X?\\E\\EZM^KTKVQROPSPSJQHYFUBK?q@@]@k@Jc@Rs@h@uAlAcDrC{BjBo@r@WZKNMXWj@Qd@IXI\\O|@C`@Ch@Cv@CfACjAKxAC|@C|@Cf@IdAE|ACl@Ed@Ev@Et@?FE^Gf@Id@sA`Ha@~CMfA?V?b@Bj@@t@AdAA~@E~@Ir@S`AMj@e@bBMb@INKVq@vAYr@_ApB{@zA[l@M\\Od@[~AIVILODo@B_@DODSDKHQPWXw@l@yAnAo@x@a@f@kAjBgAvB]v@Q\\MR]d@m@v@kAlAMLi@f@m@n@OTWj@U|@SfAe@tAa@~@Yd@WVc@Zg@d@_@h@OVQf@o@zASf@Mj@?^BjB@b@IvA[pBg@lCG\\GX?HB`BCPDDEEERMRQ\\Q^[t@Ul@Oj@Mv@ObAMf@If@Cj@El@E\\GTCDIPY^[b@O\\ERMd@Wp@Yj@[f@[b@g@TUHYHEBYNSN[b@[h@Sf@Wv@Ux@IXUn@Un@a@|@k@lAWp@y@jCSl@OZILOTWXUPWTUVKVUj@K^G\\Mz@OpAMn@Mb@Ob@_@h@i@x@g@z@[r@e@lAMb@K^G\\E^Mt@EPCLGLGLILQTGFOPQLm@b@YRg@`@y@~@[b@[h@Yj@s@xAeAnBc@v@]f@YZOTKPCFMf@k@jBUh@s@pAS`@O^Ql@W`BOv@e@nEIh@ELADKVIPg@j@a@^SNQP}AlAc@`@MJ]b@kAzAoBpCkB~CwAdDg@`Bc@~A_BdHe@xBOn@k@~Ba@zAo@xByBtGgAvDk@zB_@`BYrAaAxFg@xDOlBEvAApA_@CO@[DMHOLOVgAhCQb@_@dAQl@UpB]fD[vAOp@O~@C\\?XChAAPEl@]pBIr@ATCnBKAJ@AZGx@E`@?f@@t@Ah@Ar@Gt@Il@UrBE^E\\Ex@Cr@Fb@X~@Jr@FjATn@Rd@PXNRh@b@VV?BBD?BBDPdAAvAEn@IzBM`B[nDE`@Gd@Mr@`@NHC^RRPNNHLHLJTFNBJDNBLBRBR?JAXALEPGHGHGDGBIBe@RaB]{Bk@g@QsC}@cA]eBq@{BaAmB_AoAo@}BsAuAaAw@w@y@}@q@_Aq@eAsAuBi@u@ITJXtApBdCxDGXg@rE",
+              "length": 1129
+            },
+            "routeShortName": "272",
+            "routeLongName": "Waldkirch Gymnasium - Furtwangen Rößleplatz",
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 2640.0,
+            "transitLeg": true,
+            "intermediateStops": [
+              {
+                "name": "Furtwangen Hinterbreg",
+                "stopId": "1:de:08326:489",
+                "lon": 8.191692,
+                "lat": 48.044943,
+                "arrival": 1601464920000,
+                "departure": 1601464920000,
+                "stopIndex": 6,
+                "stopSequence": 7,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Furtwangen Am Staatsberg 6",
+                "stopId": "1:de:08326:1972",
+                "lon": 8.186302,
+                "lat": 48.043772,
+                "arrival": 1601464980000,
+                "departure": 1601464980000,
+                "stopIndex": 7,
+                "stopSequence": 8,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Furtwangen Kurbeleck",
+                "stopId": "1:de:08326:177",
+                "lon": 8.187228,
+                "lat": 48.040168,
+                "arrival": 1601465040000,
+                "departure": 1601465040000,
+                "stopIndex": 8,
+                "stopSequence": 9,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Neukirch Abzw.",
+                "stopId": "1:de:08326:488",
+                "lon": 8.174939,
+                "lat": 48.038943,
+                "arrival": 1601465100000,
+                "departure": 1601465100000,
+                "stopIndex": 9,
+                "stopSequence": 10,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Neu-Eck(1010m ü.M.)",
+                "stopId": "1:de:08326:485",
+                "lon": 8.172504,
+                "lat": 48.03967,
+                "arrival": 1601465160000,
+                "departure": 1601465160000,
+                "stopIndex": 10,
+                "stopSequence": 11,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Gaißdobel",
+                "stopId": "1:de:08326:484",
+                "lon": 8.164231,
+                "lat": 48.042811,
+                "arrival": 1601465220000,
+                "departure": 1601465220000,
+                "stopIndex": 11,
+                "stopSequence": 12,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Vordertal",
+                "stopId": "1:de:08326:483",
+                "lon": 8.15152,
+                "lat": 48.039105,
+                "arrival": 1601465340000,
+                "departure": 1601465340000,
+                "stopIndex": 12,
+                "stopSequence": 13,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Vordertal 33",
+                "stopId": "1:de:08326:929",
+                "lon": 8.147666,
+                "lat": 48.039532,
+                "arrival": 1601465400000,
+                "departure": 1601465400000,
+                "stopIndex": 13,
+                "stopSequence": 14,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Rathaus",
+                "stopId": "1:de:08326:482",
+                "lon": 8.138826,
+                "lat": 48.044378,
+                "arrival": 1601465460000,
+                "departure": 1601465460000,
+                "stopIndex": 14,
+                "stopSequence": 15,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Maierhof",
+                "stopId": "1:de:08326:481",
+                "lon": 8.13632,
+                "lat": 48.043496,
+                "arrival": 1601465520000,
+                "departure": 1601465520000,
+                "stopIndex": 15,
+                "stopSequence": 16,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gütenbach Teich 15",
+                "stopId": "1:de:08326:937",
+                "lon": 8.134362,
+                "lat": 48.043321,
+                "arrival": 1601465580000,
+                "departure": 1601465580000,
+                "stopIndex": 16,
+                "stopSequence": 17,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Sternen",
+                "stopId": "1:de:08316:478",
+                "lon": 8.114374,
+                "lat": 48.045129,
+                "arrival": 1601465880000,
+                "departure": 1601465880000,
+                "stopIndex": 17,
+                "stopSequence": 18,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Wehrlehofweg",
+                "stopId": "1:de:08316:477",
+                "lon": 8.102148,
+                "lat": 48.05906,
+                "arrival": 1601466060000,
+                "departure": 1601466060000,
+                "stopIndex": 18,
+                "stopSequence": 19,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Engel",
+                "stopId": "1:de:08316:476",
+                "lon": 8.100908,
+                "lat": 48.064536,
+                "arrival": 1601466120000,
+                "departure": 1601466120000,
+                "stopIndex": 19,
+                "stopSequence": 20,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Mattenhof",
+                "stopId": "1:de:08316:275",
+                "lon": 8.099031,
+                "lat": 48.067561,
+                "arrival": 1601466180000,
+                "departure": 1601466180000,
+                "stopIndex": 20,
+                "stopSequence": 21,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Stegenbrücke",
+                "stopId": "1:de:08316:475",
+                "lon": 8.095536,
+                "lat": 48.074963,
+                "arrival": 1601466300000,
+                "departure": 1601466300000,
+                "stopIndex": 21,
+                "stopSequence": 22,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Rebstock",
+                "stopId": "1:de:08316:260",
+                "lon": 8.093596,
+                "lat": 48.079392,
+                "arrival": 1601466360000,
+                "departure": 1601466360000,
+                "stopIndex": 22,
+                "stopSequence": 23,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Griesbach Neuenweg",
+                "stopId": "1:de:08316:474",
+                "lon": 8.088,
+                "lat": 48.084511,
+                "arrival": 1601466420000,
+                "departure": 1601466420000,
+                "stopIndex": 23,
+                "stopSequence": 24,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Ibendörfli",
+                "stopId": "1:de:08316:46",
+                "lon": 8.074489,
+                "lat": 48.09095,
+                "arrival": 1601466540000,
+                "departure": 1601466540000,
+                "stopIndex": 24,
+                "stopSequence": 25,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Oberer Felsen",
+                "stopId": "1:de:08316:471",
+                "lon": 8.067958,
+                "lat": 48.092258,
+                "arrival": 1601466600000,
+                "departure": 1601466600000,
+                "stopIndex": 25,
+                "stopSequence": 26,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Neuenberg",
+                "stopId": "1:de:08316:463",
+                "lon": 8.063512,
+                "lat": 48.095738,
+                "arrival": 1601466660000,
+                "departure": 1601466660000,
+                "stopIndex": 26,
+                "stopSequence": 27,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Rathaus",
+                "stopId": "1:de:08316:462",
+                "lon": 8.056936,
+                "lat": 48.100225,
+                "arrival": 1601466720000,
+                "departure": 1601466720000,
+                "stopIndex": 27,
+                "stopSequence": 28,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Bären",
+                "stopId": "1:de:08316:461",
+                "lon": 8.052884,
+                "lat": 48.100783,
+                "arrival": 1601466780000,
+                "departure": 1601466780000,
+                "stopIndex": 28,
+                "stopSequence": 29,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Gallisäge",
+                "stopId": "1:de:08316:460",
+                "lon": 8.048034,
+                "lat": 48.103291,
+                "arrival": 1601466840000,
+                "departure": 1601466840000,
+                "stopIndex": 29,
+                "stopSequence": 30,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Deutscher Hof",
+                "stopId": "1:de:08316:459",
+                "lon": 8.046264,
+                "lat": 48.104257,
+                "arrival": 1601466900000,
+                "departure": 1601466900000,
+                "stopIndex": 30,
+                "stopSequence": 31,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Simonswald Adler",
+                "stopId": "1:de:08316:458",
+                "lon": 8.031172,
+                "lat": 48.112168,
+                "arrival": 1601467020000,
+                "departure": 1601467020000,
+                "stopIndex": 31,
+                "stopSequence": 32,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Bleibach Kregelbach",
+                "stopId": "1:de:08316:457",
+                "lon": 8.023725,
+                "lat": 48.116721,
+                "arrival": 1601467080000,
+                "departure": 1601467080000,
+                "stopIndex": 32,
+                "stopSequence": 33,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Bleibach Schwarzwälder Hof",
+                "stopId": "1:de:08316:15",
+                "lon": 8.010798,
+                "lat": 48.12126,
+                "arrival": 1601467140000,
+                "departure": 1601467140000,
+                "stopIndex": 33,
+                "stopSequence": 34,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Bleibach Löwen",
+                "stopId": "1:de:08316:464",
+                "lon": 8.007798,
+                "lat": 48.121788,
+                "arrival": 1601467200000,
+                "departure": 1601467200000,
+                "stopIndex": 34,
+                "stopSequence": 35,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Bleibach Bahnhofstraße",
+                "stopId": "1:de:08316:6439",
+                "lon": 8.003504,
+                "lat": 48.121878,
+                "arrival": 1601467260000,
+                "departure": 1601467260000,
+                "stopIndex": 35,
+                "stopSequence": 36,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              }
+            ],
+            "steps": []
+          },
+          {
+            "startTime": 1601467920000,
+            "endTime": 1601468940000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 6783.947677786285,
+            "pathway": false,
+            "mode": "BUS",
+            "route": "201",
+            "agencyName": "Sonstige",
+            "agencyUrl": "https://www.suedbadenbus.de/suedbadenbus/view/index.shtml",
+            "agencyTimeZoneOffset": 7200000,
+            "routeType": 3,
+            "routeId": "1:7-201-j1j-1",
+            "interlineWithPreviousLeg": false,
+            "headsign": "Bleibach Stollen",
+            "agencyId": "99999",
+            "tripId": "1:32.T0.7-201-j1j-1.10.H",
+            "serviceDate": "20200930",
+            "from": {
+              "name": "Bleibach SEV",
+              "stopId": "1:de:08316:11560:1",
+              "lon": 7.998644,
+              "lat": 48.127233,
+              "arrival": 1601467500000,
+              "departure": 1601467920000,
+              "stopIndex": 1,
+              "stopSequence": 2,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "to": {
+              "name": "Waldkirch Kastelberghalle",
+              "stopId": "1:de:08316:811",
+              "lon": 7.952947,
+              "lat": 48.090458,
+              "arrival": 1601468940000,
+              "departure": 1601468941000,
+              "stopIndex": 12,
+              "stopSequence": 13,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "legGeometry": {
+              "points": "e{vdHagyo@f@sEFYeCyDuAqBKYHUh@t@rAtBp@dAp@~@x@|@v@v@tA`A|BrAnAn@lB~@zB`AdBp@bA\\rC|@f@PzBj@b@h@JNFR@P@RAP?PCXITOTONKFQHQBOBSCYGQKKWa@a@]hAe@|AkAfEQz@UbAKj@YzAANAP@P@NJXJTJJ`An@xAx@n@j@|@fAf@h@XVrA~@~@`Aj@hAP^NVRXvAjArAlAVPx@p@fChCdAdA\\`@zA|@r@b@NHTJl@Pt@T~@b@NH^R|FrCf@Vl@^j@ZnAl@pAx@b@^@@d@p@p@lATd@`CdFfDbHdApCz@xBlBnFvBpFhApCp@tAn@uBRg@|A}Cx@`Bp@jAHV?Fj@nBLZBHj@lAn@fAbCbEn@hAT~@RzADp@HAv@QbAS^ClAHlALTJVLRH^Fh@C`@Cl@G^IdAq@FCVKBAJ?J?LDHHDB\\h@d@x@LVXp@Ld@TbALd@DLDHf@f@^`@NV\\`BDNHRJLNNTNX\\NXPl@N|@VbAh@zBNd@Zv@|@`Bx@|A\\b@b@RfA`@?YCGBF?XRL\\XZ^Xd@b@dAb@tA^tAv@~B`A|Bt@tA`@d@dAp@rA|@XTz@t@~@`APP`BnBRd@Tz@Nj@Lr@~@dDFXTbAH^r@fDVz@FT`AnChBtEN^Zn@Xl@Xp@Vr@HVDTFd@Ff@BN",
+              "length": 220
+            },
+            "routeShortName": "201",
+            "routeLongName": "Oberprechtal Forellenhof - Emmendingen Bahnhof/ZOB",
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 1020.0,
+            "transitLeg": true,
+            "intermediateStops": [
+              {
+                "name": "Bleibach Stollen",
+                "stopId": "1:de:08316:312",
+                "lon": 7.993811,
+                "lat": 48.123125,
+                "arrival": 1601468040000,
+                "departure": 1601468040000,
+                "stopIndex": 2,
+                "stopSequence": 3,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gutach Brücke",
+                "stopId": "1:de:08316:194",
+                "lon": 7.986283,
+                "lat": 48.116775,
+                "arrival": 1601468100000,
+                "departure": 1601468100000,
+                "stopIndex": 3,
+                "stopSequence": 4,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Gutach Gütermann",
+                "stopId": "1:de:08316:311",
+                "lon": 7.983921,
+                "lat": 48.11308,
+                "arrival": 1601468220000,
+                "departure": 1601468220000,
+                "stopIndex": 4,
+                "stopSequence": 5,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Kollnau Waldhorn",
+                "stopId": "1:de:08316:310",
+                "lon": 7.97986,
+                "lat": 48.110609,
+                "arrival": 1601468280000,
+                "departure": 1601468280000,
+                "stopIndex": 5,
+                "stopSequence": 6,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Kollnau Realschule",
+                "stopId": "1:de:08316:215",
+                "lon": 7.97474,
+                "lat": 48.106374,
+                "arrival": 1601468400000,
+                "departure": 1601468400000,
+                "stopIndex": 6,
+                "stopSequence": 7,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Kollnau Post",
+                "stopId": "1:de:08316:213",
+                "lon": 7.972261,
+                "lat": 48.105199,
+                "arrival": 1601468460000,
+                "departure": 1601468460000,
+                "stopIndex": 7,
+                "stopSequence": 8,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Kollnau Bf (Bus)",
+                "stopId": "1:de:08316:6533:4",
+                "lon": 7.972467,
+                "lat": 48.101665,
+                "arrival": 1601468520000,
+                "departure": 1601468520000,
+                "stopIndex": 8,
+                "stopSequence": 9,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Waldkirch Rettungszentrum",
+                "stopId": "1:de:08316:303",
+                "lon": 7.965937,
+                "lat": 48.09767,
+                "arrival": 1601468640000,
+                "departure": 1601468640000,
+                "stopIndex": 9,
+                "stopSequence": 10,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Waldkirch Stadtmitte",
+                "stopId": "1:de:08316:846",
+                "lon": 7.961104,
+                "lat": 48.093896,
+                "arrival": 1601468760000,
+                "departure": 1601468760000,
+                "stopIndex": 10,
+                "stopSequence": 11,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              },
+              {
+                "name": "Waldkirch Post",
+                "stopId": "1:de:08316:280",
+                "lon": 7.95796,
+                "lat": 48.0926,
+                "arrival": 1601468880000,
+                "departure": 1601468880000,
+                "stopIndex": 11,
+                "stopSequence": 12,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              }
+            ],
+            "steps": []
+          },
+          {
+            "startTime": 1601468941000,
+            "endTime": 1601469296000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 445.084,
+            "pathway": false,
+            "mode": "WALK",
+            "route": "",
+            "agencyTimeZoneOffset": 7200000,
+            "interlineWithPreviousLeg": false,
+            "from": {
+              "name": "Waldkirch Kastelberghalle",
+              "stopId": "1:de:08316:811",
+              "lon": 7.952947,
+              "lat": 48.090458,
+              "arrival": 1601468940000,
+              "departure": 1601468941000,
+              "stopIndex": 12,
+              "stopSequence": 13,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "to": {
+              "name": "Destination",
+              "lon": 7.950507,
+              "lat": 48.088204,
+              "arrival": 1601469296000,
+              "orig": "",
+              "vertexType": "NORMAL"
+            },
+            "legGeometry": {
+              "points": "mtodHyhpo@@HVbDPVHlABAl@QRIDN|@Sd@Gx@Ob@EDp@FfAD~@@JDd@Fd@@JPt@v@{@LM",
+              "length": 23
+            },
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 355.0,
+            "transitLeg": false,
+            "intermediateStops": [],
+            "steps": [
+              {
+                "distance": 66.611,
+                "relativeDirection": "DEPART",
+                "streetName": "Freiburger Straße",
+                "absoluteDirection": "WEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 7.95293959362364,
+                "lat": 48.090477331892,
+                "elevation": []
+              },
+              {
+                "distance": 89.202,
+                "relativeDirection": "SLIGHTLY_LEFT",
+                "streetName": "Weg",
+                "absoluteDirection": "SOUTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": true,
+                "lon": 7.952065200000001,
+                "lat": 48.090344200000004,
+                "elevation": []
+              },
+              {
+                "distance": 110.231,
+                "relativeDirection": "SLIGHTLY_LEFT",
+                "streetName": "Unterfelderweg",
+                "absoluteDirection": "SOUTH",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 7.951626200000001,
+                "lat": 48.089829900000005,
+                "elevation": []
+              },
+              {
+                "distance": 131.266,
+                "relativeDirection": "RIGHT",
+                "streetName": "Hansjakobstraße",
+                "absoluteDirection": "WEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 7.951876400000001,
+                "lat": 48.0888531,
+                "elevation": []
+              },
+              {
+                "distance": 47.774,
+                "relativeDirection": "LEFT",
+                "streetName": "Erwin-Sick-Straße",
+                "absoluteDirection": "SOUTHEAST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 7.950171500000001,
+                "lat": 48.088571800000004,
+                "elevation": []
+              }
+            ]
+          }
+        ],
+        "tooSloped": false
+      }
+    ]
+  },
+  "debugOutput": {
+    "precalculationTime": 39,
+    "pathCalculationTime": 995,
+    "pathTimes": [
+      47,
+      107,
+      98,
+      112,
+      124,
+      100,
+      116,
+      94,
+      145
+    ],
+    "renderingTime": 22,
+    "totalTime": 1056,
+    "timedOut": true
+  },
+  "elevationMetadata": {
+    "ellipsoidToGeoidDifference": 34.78946858125849,
+    "geoidElevation": false
+  }
+}
