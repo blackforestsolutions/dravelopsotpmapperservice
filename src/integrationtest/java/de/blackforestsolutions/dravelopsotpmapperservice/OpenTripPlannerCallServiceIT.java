@@ -17,6 +17,7 @@ import reactor.test.StepVerifier;
 
 import java.time.ZonedDateTime;
 
+import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +41,9 @@ class OpenTripPlannerCallServiceIT {
         testData.setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"));
         testData.setDepartureCoordinate(new Point(8.209972d, 48.048320d));
         testData.setArrivalCoordinate(new Point(7.950507d, 48.088204d));
+        testData.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()));
 
-        Mono<ResponseEntity<String>> result = callService.get(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()).toString(), HttpHeaders.EMPTY);
+        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY);
 
         StepVerifier.create(result)
                 .assertNext(response -> {
