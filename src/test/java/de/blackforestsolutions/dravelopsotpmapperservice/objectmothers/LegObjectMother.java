@@ -106,6 +106,8 @@ public class LegObjectMother {
                 .setDeparture(departure)
                 .setArrival(arrival)
                 .setTrack(getExampleTrack())
+                .setVehicleNumber("4")
+                .setVehicleName("Bad Dürkheim - LU Oggersheim - LU Hbf - Berliner Platz - MA Hbf - Wasserturm - Paradeplatz - Alte Feuerwache - Schafweide - Universitätsklinikum - Bonafitiuskirche - Ulmenweg - Waldfriedhof")
                 .setDuration(Duration.between(departure.getDepartureTime(), arrival.getArrivalTime()))
                 .setIntermediateStops(getMannheimUniversityToMannheimBerlinerPlaceIntermediateStop())
                 .build();
@@ -122,7 +124,6 @@ public class LegObjectMother {
                 .setArrival(arrival)
                 .setTrack(getExampleTrack())
                 .setDuration(Duration.between(departure.getDepartureTime(), arrival.getArrivalTime()))
-                .setIntermediateStops(getMannheimUniversityToMannheimBerlinerPlaceIntermediateStop())
                 .build();
 
     }
