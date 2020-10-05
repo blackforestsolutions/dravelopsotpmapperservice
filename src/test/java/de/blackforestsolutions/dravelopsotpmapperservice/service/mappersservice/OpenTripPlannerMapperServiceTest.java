@@ -78,4 +78,49 @@ class OpenTripPlannerMapperServiceTest {
                 })
                 .verifyComplete();
     }
+
+    @Test
+    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_returns_failed_CallStatus() {
+        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        String departureTestData = "Mannheim Hbf";
+        String arrivalTestData = "Ludwigsburg Center";
+
+        testData.getPlan().getItineraries().get(0).setLegs(null);
+        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
+
+
+        StepVerifier.create(result)
+                .assertNext(journeyCallStatus -> {
+                    assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(journeyCallStatus.getThrowable()).isInstanceOf(NullPointerException.class);
+                    assertThat(journeyCallStatus.getCalledObject()).isNull();
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_returns_onErrorResume_mono_failed_callStatus() {
+        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        String departureTestData = "Mannheim Hbf";
+        String arrivalTestData = "Ludwigsburg Center";
+
+        testData.setPlan(null);
+        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
+
+        StepVerifier.create(result)
+                .assertNext(journeyCallStatus -> {
+                    assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(journeyCallStatus.getThrowable()).isInstanceOf(NullPointerException.class);
+                    assertThat(journeyCallStatus.getCalledObject()).isNull();
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_returns_onErrorResume_mono_failed_callStatus() {
+
+    }
 }
+
