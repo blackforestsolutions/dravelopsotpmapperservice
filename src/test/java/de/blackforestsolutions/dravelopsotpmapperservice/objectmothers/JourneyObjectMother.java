@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.LegObjectMother.*;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PriceObjectMother.getFurtwangenToWaldkirchPrice;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PriceObjectMother.getMannheimHbfToLudwigsburgCenterPrice;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UUIDObjectMother.TEST_UUID_1;
 
 public class JourneyObjectMother {
@@ -30,7 +29,6 @@ public class JourneyObjectMother {
     public static Journey getMannheimHbfLudwigsburgCenterJourney() {
         return new Journey.JourneyBuilder(TEST_UUID_1)
                 .setLegs(getMannheimHbfToLudwigsburgCenterLegs())
-                .setPrices(getMannheimHbfToLudwigsburgCenterPrices())
                 .build();
     }
 
@@ -55,11 +53,5 @@ public class JourneyObjectMother {
         legs.put(getMannheimUniversityToMannheimBerlinerPlaceLeg().getId(), getMannheimUniversityToMannheimBerlinerPlaceLeg());
         legs.put(getBerlinerPlaceToDestinationLeg().getId(), getBerlinerPlaceToDestinationLeg());
         return legs;
-    }
-
-    private static LinkedHashMap<PriceType, Price> getMannheimHbfToLudwigsburgCenterPrices() {
-        LinkedHashMap<PriceType, Price> prices = new LinkedHashMap<>();
-        prices.put(getMannheimHbfToLudwigsburgCenterPrice().getPriceType(), getMannheimHbfToLudwigsburgCenterPrice());
-        return prices;
     }
 }

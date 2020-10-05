@@ -14,12 +14,4 @@ public class PriceObjectMother {
                 .setSmallestCurrencyValue(200L)
                 .build();
     }
-
-    public static Price getMannheimHbfToLudwigsburgCenterPrice() {
-        return new Price.PriceBuilder()
-                .setPriceType(PriceType.REGULAR)
-                .setCurrency(Currency.getInstance("EUR"))
-                .setSmallestCurrencyValue(200L)
-                .build();
-    }
 }

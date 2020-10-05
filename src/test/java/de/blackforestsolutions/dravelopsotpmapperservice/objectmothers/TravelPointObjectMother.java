@@ -89,7 +89,7 @@ public class TravelPointObjectMother {
     public static TravelPoint getMannheimHbfTravelPoint() {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Mannheim Hbf")
-                .setCoordinates(new Point(8.46427d, 49.483628140481024d))
+                .setCoordinates(new Point(8.464279d, 49.483628d))
                 .setDepartureTime(LocalDateTime.parse("2020-10-06T01:20:11"))
                 .build();
     }
@@ -98,7 +98,7 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Universität")
                 .setPlatform("C")
-                .setCoordinates(new Point(8.4633481d, 49.4821881d))
+                .setCoordinates(new Point(8.463348d, 49.482188d))
                 .setArrivalTime(LocalDateTime.parse("2020-10-06T01:24:59"))
                 .setDepartureTime(LocalDateTime.parse("2020-10-06T01:25"))
                 .build();
@@ -118,7 +118,7 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Konrad-Adenauer-Br.")
                 .setPlatform("B")
-                .setCoordinates(new Point(8.458576, 49.482392))
+                .setCoordinates(new Point(8.458577, 49.482392))
                 .setArrivalTime(LocalDateTime.parse("2020-10-06T01:26"))
                 .setDepartureTime(LocalDateTime.parse("2020-10-06T01:26"))
                 .build();
