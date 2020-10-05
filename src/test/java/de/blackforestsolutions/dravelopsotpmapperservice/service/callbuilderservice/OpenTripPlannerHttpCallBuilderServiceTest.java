@@ -1,4 +1,4 @@
-package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
+package de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.junit.jupiter.api.Test;

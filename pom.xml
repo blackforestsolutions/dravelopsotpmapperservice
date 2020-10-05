@@ -21,7 +21,7 @@
         <jaxws.version>2.3.2</jaxws.version>
 <!--        <blackforestsolutions.dravelopsdatamodel.version>0.1.0</blackforestsolutions.dravelopsdatamodel.version>-->
         <blackforestsolutions.dravelopsfrontenddatamodel.version>0.1.0</blackforestsolutions.dravelopsfrontenddatamodel.version>
-        <blackforestsolutions.dravelopsgeneratedcontent.version>journey-1</blackforestsolutions.dravelopsgeneratedcontent.version>
+        <blackforestsolutions.dravelopsgeneratedcontent.version>journey-5</blackforestsolutions.dravelopsgeneratedcontent.version>
         <!-- Maven test Dependencies -->
         <assertj.version>3.9.0</assertj.version>
         <junit.version>5.0.0</junit.version>
@@ -82,6 +82,11 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-geode</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.15.0</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.github.blackforestsolutions</groupId>-->
