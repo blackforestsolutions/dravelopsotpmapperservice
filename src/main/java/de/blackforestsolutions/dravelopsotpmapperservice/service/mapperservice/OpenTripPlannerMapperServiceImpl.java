@@ -156,7 +156,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private Price extractPriceFrom(Map.Entry<Fare.FareType, Money> fare) {
         return new Price.PriceBuilder()
-                .setPriceType(PriceType.valueOf(fare.getKey().toString().toUpperCase()))
+                .setPriceType(PriceType.valueOf(fare.getKey().toString().toUpperCase(Locale.GERMANY)))
                 .setSmallestCurrencyValue(fare.getValue().getCents())
                 .setCurrency(Currency.getInstance(fare.getValue().getCurrency().getCurrencyCode()))
                 .build();

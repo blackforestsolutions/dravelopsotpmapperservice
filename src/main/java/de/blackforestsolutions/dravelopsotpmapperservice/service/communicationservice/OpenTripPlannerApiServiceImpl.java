@@ -26,6 +26,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallB
 public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService {
 
     private static final String NO_PATH_FOUND_ERROR = "PATH_NOT_FOUND";
+    private static final long ERROR_404 = 404L;
 
     private final OpenTripPlannerMapperService openTripPlannerMapperService;
     private final OpenTripPlannerHttpCallBuilderService openTripPlannerHttpCallBuilderService;
@@ -67,7 +68,7 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
 
     private Mono<OpenTripPlannerJourneyResponse> filterErrors(OpenTripPlannerJourneyResponse response) {
         Optional<Error> optionalError = Optional.ofNullable(response.getError());
-        if (optionalError.isPresent() && optionalError.get().getId() == 404L && optionalError.get().getMessage().equals(NO_PATH_FOUND_ERROR)) {
+        if (optionalError.isPresent() && optionalError.get().getId() == ERROR_404 && optionalError.get().getMessage().equals(NO_PATH_FOUND_ERROR)) {
             return Mono.error(new NoExternalResultFoundException());
         }
         return Mono.just(response);

@@ -34,7 +34,7 @@ public class JourneyObjectMother {
 
     private static LinkedHashMap<UUID, Leg> getFurtwangenToWaldkirchLegs() {
         LinkedHashMap<UUID, Leg> legs = new LinkedHashMap<>();
-        legs.put(getGroßhausbergToFurtwangenIlbenstreetLeg().getId(), getGroßhausbergToFurtwangenIlbenstreetLeg());
+        legs.put(getGrosshausbergToFurtwangenIlbenstreetLeg().getId(), getGrosshausbergToFurtwangenIlbenstreetLeg());
         legs.put(getFurtwangenIlbenstreetToBleibachLeg().getId(), getFurtwangenIlbenstreetToBleibachLeg());
         legs.put(getBleibachToWaldkirchKastelberghalleLeg().getId(), getBleibachToWaldkirchKastelberghalleLeg());
         legs.put(getWaldkirchKastelberghalleToSickLeg().getId(), getWaldkirchKastelberghalleToSickLeg());

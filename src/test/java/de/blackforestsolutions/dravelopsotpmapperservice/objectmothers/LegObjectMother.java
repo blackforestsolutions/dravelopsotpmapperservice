@@ -17,8 +17,8 @@ import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UU
 
 public class LegObjectMother {
 
-    public static Leg getGroßhausbergToFurtwangenIlbenstreetLeg() {
-        TravelPoint departure = getGroßhausbergTravelPoint();
+    public static Leg getGrosshausbergToFurtwangenIlbenstreetLeg() {
+        TravelPoint departure = getGrosshausbergTravelPoint();
         TravelPoint arrival = getFurtwangenIlbenstreetTravelPoint();
         return new Leg.LegBuilder(TEST_UUID_2)
                 .setDelay(Duration.ZERO)

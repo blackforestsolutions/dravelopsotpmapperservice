@@ -69,6 +69,5 @@ class PolylineDecodingServiceTest {
                 expectedTrack.get(1),
                 expectedTrack.get(2)
         );
-
     }
 }

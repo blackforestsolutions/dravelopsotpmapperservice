@@ -47,7 +47,7 @@ public class TrackObjectMother {
 
         track.add(new Point(8.46334d, 49.48218d));
         track.add(new Point(8.45857d, 49.48239d));
-        track.add(new Point(8.45065d, 49.4804d));
+        track.add(new Point(8.45065d, 49.48049d));
 
         return track;
     }

@@ -22,8 +22,7 @@ import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UU
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class OpenTripPlannerMapperServiceTest {
 
@@ -41,8 +40,7 @@ class OpenTripPlannerMapperServiceTest {
                 .thenReturn(TEST_UUID_4)
                 .thenReturn(TEST_UUID_5);
 
-        when(polyLineDecodingService.decode(anyString()))
-                .thenReturn(getExampleTrack());
+        doReturn(getExampleTrack()).when(polyLineDecodingService).decode(anyString());
     }
 
     @Test
@@ -132,9 +130,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> {
-                    assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5));
-                })
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 
@@ -150,9 +146,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> {
-                    assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5));
-                })
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class TravelPointObjectMother {
 
-    public static TravelPoint getGroßhausbergTravelPoint() {
+    public static TravelPoint getGrosshausbergTravelPoint() {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Am Großhausberg 8")
                 .setCoordinates(new Point(8.209972d, 48.04832d))

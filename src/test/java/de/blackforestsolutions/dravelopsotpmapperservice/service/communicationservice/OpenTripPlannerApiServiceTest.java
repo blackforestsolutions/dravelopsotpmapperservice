@@ -7,6 +7,7 @@ import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
+import de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperService;
@@ -124,26 +125,28 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_returns_failed_call_status_when_exception_is_thrown_outside_of_stream() {
+        ApiToken testData = ApiTokenObjectMother.getOpenTripPlannerApiToken();
         when(callService.get(anyString(), any(HttpHeaders.class)))
                 .thenReturn(Mono.just(new ResponseEntity<>(null, HttpStatus.OK)));
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(any(ApiToken.class));
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
         StepVerifier.create(result)
                 .assertNext(error -> {
                     assertThat(error.getStatus()).isEqualTo(Status.FAILED);
                     assertThat(error.getCalledObject()).isNull();
-                    assertThat(error.getThrowable()).isInstanceOf(NullPointerException.class);
+                    assertThat(error.getThrowable()).isInstanceOf(IllegalArgumentException.class);
                 })
                 .verifyComplete();
     }
 
     @Test
     void test_getJourneysBy_apiToken_returns_failed_call_status_when_exception_is_thrown_by_mapperService() {
+        ApiToken testData = ApiTokenObjectMother.getOpenTripPlannerApiToken();
         when(openTripPlannerMapperService.extractJourneysFrom(any(OpenTripPlannerJourneyResponse.class), anyString(), anyString()))
                 .thenThrow(NullPointerException.class);
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(any(ApiToken.class));
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
         StepVerifier.create(result)
                 .assertNext(error -> {
