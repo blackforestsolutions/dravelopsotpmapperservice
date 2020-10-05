@@ -1,0 +1,29 @@
+{
+  "requestParameters": {
+    "date": "09-30-2020",
+    "arriveBy": "false",
+    "optimize": "QUICK",
+    "fromPlace": "48.04832,8.209972",
+    "toPlace": "52.509439,13.4096",
+    "time": "13:00",
+    "locale": "de"
+  },
+  "error": {
+    "id": 404,
+    "msg": "Planung nicht m�glich. Ihr Start- oder Endpunkt k�nnte nicht erreichbar sein. Bitte stellen sie sicher, dass ihre Anfrage innerhalb der Kartendaten ist.",
+    "message": "PATH_NOT_FOUND",
+    "noPath": true
+  },
+  "debugOutput": {
+    "precalculationTime": 125,
+    "pathCalculationTime": 648,
+    "pathTimes": [],
+    "renderingTime": 0,
+    "totalTime": 773,
+    "timedOut": false
+  },
+  "elevationMetadata": {
+    "ellipsoidToGeoidDifference": 34.78946858125849,
+    "geoidElevation": false
+  }
+}

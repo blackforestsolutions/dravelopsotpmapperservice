@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
+import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
@@ -149,6 +150,24 @@ class OpenTripPlannerApiServiceTest {
                     assertThat(error.getStatus()).isEqualTo(Status.FAILED);
                     assertThat(error.getCalledObject()).isNull();
                     assertThat(error.getThrowable()).isInstanceOf(Exception.class);
+                })
+                .verifyComplete();
+    }
+
+
+    @Test
+    void test_getJourneysBy_apiToken_and_error_json_when_api_is_called_returns_call_status_with_noExternalResultFoundException() {
+        ApiToken testData = getOpenTripPlannerApiToken();
+        when(callService.get(anyString(), any(HttpHeaders.class)))
+                .thenReturn(Mono.just(new ResponseEntity<>(getResourceFileAsString("json/openTripPlannerNoJourneyFound.json"), HttpStatus.OK)));
+
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(NoExternalResultFoundException.class);
                 })
                 .verifyComplete();
     }
