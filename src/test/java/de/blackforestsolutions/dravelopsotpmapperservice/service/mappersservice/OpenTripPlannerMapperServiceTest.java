@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
+
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getExampleTrack;
@@ -119,8 +121,39 @@ class OpenTripPlannerMapperServiceTest {
     }
 
     @Test
-    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_returns_onErrorResume_mono_failed_callStatus() {
+    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_arrivalDelay() {
 
+        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        String departureTestData = "Mannheim Hbf";
+        String arrivalTestData = "Ludwigsburg Center";
+
+        testData.getPlan().getItineraries().get(0).getLegs().get(0).setArrivalDelay(300000L);
+        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
+
+        StepVerifier.create(result)
+                .assertNext(journeyCallStatus -> {
+                    assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5));
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_departureDelay() {
+
+        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        String departureTestData = "Mannheim Hbf";
+        String arrivalTestData = "Ludwigsburg Center";
+
+        testData.getPlan().getItineraries().get(0).getLegs().get(0).setDepartureDelay(300000L);
+        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
+
+        StepVerifier.create(result)
+                .assertNext(journeyCallStatus -> {
+                    assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5));
+                })
+                .verifyComplete();
     }
 }
 
