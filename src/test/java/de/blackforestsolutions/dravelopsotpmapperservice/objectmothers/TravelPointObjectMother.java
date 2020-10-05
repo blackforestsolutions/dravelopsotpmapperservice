@@ -89,7 +89,7 @@ public class TravelPointObjectMother {
     public static TravelPoint getMannheimHbfTravelPoint() {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Mannheim Hbf")
-                .setCoordinates(new Point(8.464279174804688d, 49.483628140481024d))
+                .setCoordinates(new Point(8.46427d, 49.483628140481024d))
                 .setDepartureTime(LocalDateTime.parse("2020-10-06T01:20:11"))
                 .build();
     }
@@ -104,5 +104,31 @@ public class TravelPointObjectMother {
                 .build();
     }
 
+    public static TravelPoint getBerlinerPlaceTravelPoint() {
+        return new TravelPoint.TravelPointBuilder()
+                .setName("Berliner Platz")
+                .setPlatform("B")
+                .setCoordinates(new Point(8.45065, 49.48049))
+                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:28"))
+                .setDepartureTime(LocalDateTime.parse("2020-10-06T01:28:01"))
+                .build();
+    }
 
+    public static TravelPoint getKonradAdenauerBrTravelPoint() {
+        return new TravelPoint.TravelPointBuilder()
+                .setName("Konrad-Adenauer-Br.")
+                .setPlatform("B")
+                .setCoordinates(new Point(8.458576, 49.482392))
+                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:26"))
+                .setDepartureTime(LocalDateTime.parse("2020-10-06T01:26"))
+                .build();
+    }
+
+    public static TravelPoint getLudwigsburgCenterTravelPoint() {
+        return new TravelPoint.TravelPointBuilder()
+                .setName("Ludwigsburg Center")
+                .setCoordinates(new Point(8.453147, 49.47913))
+                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:33:29"))
+                .build();
+    }
 }

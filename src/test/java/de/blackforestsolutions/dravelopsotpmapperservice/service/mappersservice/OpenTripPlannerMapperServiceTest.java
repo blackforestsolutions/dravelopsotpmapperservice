@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getExampleTrack;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UUIDObjectMother.*;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.*;
@@ -56,6 +57,24 @@ class OpenTripPlannerMapperServiceTest {
                     assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.SUCCESS);
                     assertThat(journeyCallStatus.getThrowable()).isNull();
                     assertThat(toJson(journeyCallStatus.getCalledObject())).isEqualTo(toJson(getFurtwangenToWaldkirchJourney()));
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys() {
+        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        String departureTestData = "Mannheim Hbf";
+        String arrivalTestData = "Ludwigsburg Center";
+
+        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
+
+        StepVerifier.create(result)
+                .assertNext(journeyCallStatus -> {
+                    assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.SUCCESS);
+                    assertThat(journeyCallStatus.getThrowable()).isNull();
+                    assertThat(toJson(journeyCallStatus.getCalledObject())).isEqualTo(toJson(getMannheimHbfLudwigsburgCenterJourney()));
                 })
                 .verifyComplete();
     }

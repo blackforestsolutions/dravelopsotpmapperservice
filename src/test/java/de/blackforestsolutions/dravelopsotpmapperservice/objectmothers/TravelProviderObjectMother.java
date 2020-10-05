@@ -18,14 +18,24 @@ public class TravelProviderObjectMother {
     public static TravelProvider getRnvTravelProvider() {
         return new TravelProvider.TravelProviderBuilder()
                 .setName("Rhein-Neckar-Verkehr GmbH (rnv)")
-                .setUrl()
+                .setUrl(getRnvUrl())
+                .build();
     }
 
     private static URL getSuedbadenUrl() {
         try {
             return new URL("https://www.suedbadenbus.de/suedbadenbus/view/index.shtml");
         } catch (Exception e) {
-            log.error("URL from TravelProvider was not possble to parse due to: ", e);
+            log.error("URL from TravelProvider was not possible to parse due to: ", e);
+            return null;
+        }
+    }
+
+    private static URL getRnvUrl() {
+        try {
+            return new URL("http://www.rnv-online.de");
+        } catch (Exception e) {
+            log.error("URL from TravelProvider was not possible to parse due to: ", e);
             return null;
         }
     }

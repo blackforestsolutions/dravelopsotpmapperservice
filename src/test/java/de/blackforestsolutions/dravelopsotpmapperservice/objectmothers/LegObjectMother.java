@@ -10,8 +10,8 @@ import java.time.Duration;
 import java.util.LinkedList;
 
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getExampleTrack;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getFurtwangenExampleTrack;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TravelPointObjectMother.*;
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TravelProviderObjectMother.getRnvTravelProvider;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TravelProviderObjectMother.getSuedbadenTravelProvider;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UUIDObjectMother.*;
 
@@ -96,11 +96,35 @@ public class LegObjectMother {
     }
 
     public static Leg getMannheimUniversityToMannheimBerlinerPlaceLeg() {
+        TravelPoint departure = getMannheimUniversityTravelPoint();
+        TravelPoint arrival = getBerlinerPlaceTravelPoint();
         return new Leg.LegBuilder(TEST_UUID_3)
                 .setDelay(Duration.ZERO)
                 .setDistance(new Distance(0.956d, Metrics.KILOMETERS))
                 .setVehicleType(VehicleType.TRAM)
-                .setTravelProvider()
+                .setTravelProvider(getRnvTravelProvider())
+                .setDeparture(departure)
+                .setArrival(arrival)
+                .setTrack(getExampleTrack())
+                .setDuration(Duration.between(departure.getDepartureTime(), arrival.getArrivalTime()))
+                .setIntermediateStops(getMannheimUniversityToMannheimBerlinerPlaceIntermediateStop())
+                .build();
+    }
+
+    public static Leg getBerlinerPlaceToDestinationLeg() {
+        TravelPoint departure = getBerlinerPlaceTravelPoint();
+        TravelPoint arrival = getLudwigsburgCenterTravelPoint();
+        return new Leg.LegBuilder(TEST_UUID_4)
+                .setDelay(Duration.ZERO)
+                .setDistance(new Distance(0.319d, Metrics.KILOMETERS))
+                .setVehicleType(VehicleType.WALK)
+                .setDeparture(departure)
+                .setArrival(arrival)
+                .setTrack(getExampleTrack())
+                .setDuration(Duration.between(departure.getDepartureTime(), arrival.getArrivalTime()))
+                .setIntermediateStops(getMannheimUniversityToMannheimBerlinerPlaceIntermediateStop())
+                .build();
+
     }
 
     private static LinkedList<TravelPoint> getFurtwangenIlbenStreetToBleibachIntermediateStops() {
@@ -114,6 +138,12 @@ public class LegObjectMother {
         LinkedList<TravelPoint> intermediateStops = new LinkedList<>();
         intermediateStops.add(getKollnauTrainStationTravelPoint());
         intermediateStops.add(getWaldkirchTownCenterTravelPoint());
+        return intermediateStops;
+    }
+
+    private static LinkedList<TravelPoint> getMannheimUniversityToMannheimBerlinerPlaceIntermediateStop() {
+        LinkedList<TravelPoint> intermediateStops = new LinkedList<>();
+        intermediateStops.add(getKonradAdenauerBrTravelPoint());
         return intermediateStops;
     }
 }
