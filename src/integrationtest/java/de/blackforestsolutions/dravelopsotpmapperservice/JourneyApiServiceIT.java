@@ -10,7 +10,7 @@ import org.springframework.data.geo.Point;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.getRequestToken;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
@@ -37,10 +37,10 @@ class JourneyApiServiceIT {
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
                     assertThat(actualJourney.getLegs().values())
                             .first()
-                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(LocalDateTime.from(testData.getDateTime())));
+                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(testData.getDateTime())));
                     assertThat(actualJourney.getLegs().values())
                             .last()
-                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(LocalDateTime.from(testData.getDateTime())));
+                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())));
                     assertThat(actualJourney.getLegs().values())
                             .allMatch(leg -> leg.getDelay().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistance().getValue() > 0)

@@ -3,7 +3,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice.objectmothers;
 import de.blackforestsolutions.dravelopsdatamodel.TravelPoint;
 import org.springframework.data.geo.Point;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class TravelPointObjectMother {
 
@@ -11,7 +11,7 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Am Großhausberg 8")
                 .setCoordinates(new Point(8.209972d, 48.04832d))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T13:08:13"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T13:08:13+02:00"))
                 .build();
     }
 
@@ -19,8 +19,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Furtwangen Ilbenstraße")
                 .setCoordinates(new Point(8.198995d, 48.047922d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T13:20:59"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T13:21"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T13:20:59+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T13:21+02:00"))
                 .build();
     }
 
@@ -28,8 +28,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Bleibach SEV")
                 .setCoordinates(new Point(7.998644d, 48.127233d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T14:05"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T14:12"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T14:05+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T14:12+02:00"))
                 .build();
     }
 
@@ -37,8 +37,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Gütenbach Rathaus")
                 .setCoordinates(new Point(8.138826d, 48.044378d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T13:31"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T13:31"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T13:31+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T13:31+02:00"))
                 .build();
     }
 
@@ -46,8 +46,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Simonswald Rathaus")
                 .setCoordinates(new Point(8.056936d, 48.100225d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T13:52"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T13:52"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T13:52+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T13:52+02:00"))
                 .build();
     }
 
@@ -55,8 +55,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Waldkirch Kastelberghalle")
                 .setCoordinates(new Point(7.952947d, 48.090458d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T14:29"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T14:29:01"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T14:29+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T14:29:01+02:00"))
                 .build();
     }
 
@@ -64,8 +64,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Kollnau Bf (Bus)")
                 .setCoordinates(new Point(7.972467d, 48.101665d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T14:22"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T14:22"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T14:22+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T14:22+02:00"))
                 .build();
     }
 
@@ -73,8 +73,8 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Waldkirch Stadtmitte")
                 .setCoordinates(new Point(7.961104d, 48.093896d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T14:26"))
-                .setDepartureTime(LocalDateTime.parse("2020-09-30T14:26"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T14:26+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-09-30T14:26+02:00"))
                 .build();
     }
 
@@ -82,7 +82,7 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Sick AG")
                 .setCoordinates(new Point(7.950507d, 48.088204d))
-                .setArrivalTime(LocalDateTime.parse("2020-09-30T14:34:56"))
+                .setArrivalTime(ZonedDateTime.parse("2020-09-30T14:34:56+02:00"))
                 .build();
     }
 
@@ -90,7 +90,7 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Mannheim Hbf")
                 .setCoordinates(new Point(8.464279d, 49.483628d))
-                .setDepartureTime(LocalDateTime.parse("2020-10-06T01:20:11"))
+                .setDepartureTime(ZonedDateTime.parse("2020-10-06T01:20:11+02:00"))
                 .build();
     }
 
@@ -99,8 +99,8 @@ public class TravelPointObjectMother {
                 .setName("Universität")
                 .setPlatform("C")
                 .setCoordinates(new Point(8.463348d, 49.482188d))
-                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:24:59"))
-                .setDepartureTime(LocalDateTime.parse("2020-10-06T01:25"))
+                .setArrivalTime(ZonedDateTime.parse("2020-10-06T01:24:59+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-10-06T01:25+02:00"))
                 .build();
     }
 
@@ -109,8 +109,8 @@ public class TravelPointObjectMother {
                 .setName("Berliner Platz")
                 .setPlatform("B")
                 .setCoordinates(new Point(8.45065, 49.48049))
-                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:28"))
-                .setDepartureTime(LocalDateTime.parse("2020-10-06T01:28:01"))
+                .setArrivalTime(ZonedDateTime.parse("2020-10-06T01:28+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-10-06T01:28:01+02:00"))
                 .build();
     }
 
@@ -119,8 +119,8 @@ public class TravelPointObjectMother {
                 .setName("Konrad-Adenauer-Br.")
                 .setPlatform("B")
                 .setCoordinates(new Point(8.458577, 49.482392))
-                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:26"))
-                .setDepartureTime(LocalDateTime.parse("2020-10-06T01:26"))
+                .setArrivalTime(ZonedDateTime.parse("2020-10-06T01:26+02:00"))
+                .setDepartureTime(ZonedDateTime.parse("2020-10-06T01:26+02:00"))
                 .build();
     }
 
@@ -128,7 +128,7 @@ public class TravelPointObjectMother {
         return new TravelPoint.TravelPointBuilder()
                 .setName("Ludwigsburg Center")
                 .setCoordinates(new Point(8.453147, 49.47913))
-                .setArrivalTime(LocalDateTime.parse("2020-10-06T01:33:29"))
+                .setArrivalTime(ZonedDateTime.parse("2020-10-06T01:33:29+02:00"))
                 .build();
     }
 }

@@ -6,7 +6,7 @@ import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.PolylineDecodingService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
-import de.blackforestsolutions.dravelopsotpmapperservice.utils.TimeUtils;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Currency;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -33,11 +33,13 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private final UuidService uuidService;
     private final PolylineDecodingService polylineDecodingService;
+    private final ZonedDateTimeService zonedDateTimeService;
 
     @Autowired
-    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, PolylineDecodingService polylineDecodingService) {
+    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, PolylineDecodingService polylineDecodingService, ZonedDateTimeService zonedDateTimeService) {
         this.uuidService = uuidService;
         this.polylineDecodingService = polylineDecodingService;
+        this.zonedDateTimeService = zonedDateTimeService;
     }
 
     @Override
@@ -74,8 +76,8 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
-        LocalDateTime departureTime = extractDateTime(openTripPlannerLeg.getStartTime());
-        LocalDateTime arrivalTime = extractDateTime(openTripPlannerLeg.getEndTime());
+        ZonedDateTime departureTime = zonedDateTimeService.convertEpochMillisecondsToDate(openTripPlannerLeg.getStartTime());
+        ZonedDateTime arrivalTime = zonedDateTimeService.convertEpochMillisecondsToDate(openTripPlannerLeg.getEndTime());
         return new Leg.LegBuilder(uuidService.createUUID())
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
@@ -98,6 +100,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private TravelPoint extractTravelPointFrom(Stop stop, String optionalStopName) {
+
         return new TravelPoint.TravelPointBuilder()
                 .setName(extractStopNameFrom(stop, optionalStopName))
                 .setCoordinates(new Point(convertToPointWithFixedDecimalPlaces(stop.getLon(), stop.getLat())))
@@ -114,8 +117,8 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return stop.getName();
     }
 
-    private LocalDateTime extractDateTime(long epochMilliseconds) {
-        return TimeUtils.convertEpochMillisecondsToDate(epochMilliseconds);
+    private ZonedDateTime extractDateTime(long epochMilliseconds) {
+        return zonedDateTimeService.convertEpochMillisecondsToDate(epochMilliseconds);
     }
 
     private Duration extractDelayFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg) {

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 
+import java.time.ZoneId;
 import java.util.Locale;
 
 @SpringBootConfiguration
@@ -20,6 +21,8 @@ public class OpenTripPlannerConfiguration {
     private String router;
     @Value("${otp.language}")
     private String language;
+    @Value("${otp.timeZone}")
+    private String timeZone;
 
     @Bean(name = "openTripPlannerApiToken")
     public ApiToken apiToken() {
@@ -30,5 +33,10 @@ public class OpenTripPlannerConfiguration {
                 .setRouter(router)
                 .setLanguage(Locale.forLanguageTag(language))
                 .build();
+    }
+
+    @Bean
+    public ZoneId zoneId() {
+        return ZoneId.of(timeZone);
     }
 }
