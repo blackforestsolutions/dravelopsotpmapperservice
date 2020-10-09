@@ -10,7 +10,7 @@ public class PriceObjectMother {
     public static Price getFurtwangenToWaldkirchPrice() {
         return new Price.PriceBuilder()
                 .setPriceType(PriceType.REGULAR)
-                .setCurrency(Currency.getInstance("EUR"))
+                .setCurrencyCode(Currency.getInstance("EUR"))
                 .setSmallestCurrencyValue(200L)
                 .build();
     }

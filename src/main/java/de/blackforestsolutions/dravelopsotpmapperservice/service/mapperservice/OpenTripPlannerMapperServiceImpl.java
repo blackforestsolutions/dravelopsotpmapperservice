@@ -76,14 +76,11 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
-        ZonedDateTime departureTime = zonedDateTimeService.convertEpochMillisecondsToDate(openTripPlannerLeg.getStartTime());
-        ZonedDateTime arrivalTime = zonedDateTimeService.convertEpochMillisecondsToDate(openTripPlannerLeg.getEndTime());
         return new Leg.LegBuilder(uuidService.createUUID())
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
-                .setDuration(Duration.between(departureTime, arrivalTime))
                 .setDelay(extractDelayFrom(openTripPlannerLeg))
-                .setDistance(convertMetersToKilometers(openTripPlannerLeg.getDistance()))
+                .setDistanceInKilometers(convertMetersToKilometers(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
                 .setTrack(polylineDecodingService.decode(openTripPlannerLeg.getLegGeometry().getPoints()))
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
@@ -161,7 +158,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return new Price.PriceBuilder()
                 .setPriceType(PriceType.valueOf(fare.getKey().toString().toUpperCase(Locale.GERMANY)))
                 .setSmallestCurrencyValue(fare.getValue().getCents())
-                .setCurrency(Currency.getInstance(fare.getValue().getCurrency().getCurrencyCode()))
+                .setCurrencyCode(Currency.getInstance(fare.getValue().getCurrency().getCurrencyCode()))
                 .build();
     }
 

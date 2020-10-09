@@ -43,12 +43,11 @@ class JourneyApiServiceIT {
                             .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())));
                     assertThat(actualJourney.getLegs().values())
                             .allMatch(leg -> leg.getDelay().toMillis() >= 0)
-                            .allMatch(leg -> leg.getDistance().getValue() > 0)
+                            .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
                             .allMatch(leg -> leg.getDeparture() != null)
                             .allMatch(leg -> leg.getArrival() != null)
-                            .allMatch(leg -> leg.getTrack().size() > 0)
-                            .allMatch(leg -> leg.getDuration().toMillis() > 0);
+                            .allMatch(leg -> leg.getTrack().size() > 0);
                     return true;
                 })
                 .verifyComplete();
