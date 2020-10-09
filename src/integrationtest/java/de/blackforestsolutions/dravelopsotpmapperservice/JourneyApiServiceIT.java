@@ -35,13 +35,13 @@ class JourneyApiServiceIT {
                 .thenConsumeWhile(journey -> {
                     Journey actualJourney = retrieveJsonToPojo(journey, Journey.class);
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
-                    assertThat(actualJourney.getLegs().values())
+                    assertThat(actualJourney.getLegs())
                             .first()
                             .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(testData.getDateTime())));
-                    assertThat(actualJourney.getLegs().values())
+                    assertThat(actualJourney.getLegs())
                             .last()
                             .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())));
-                    assertThat(actualJourney.getLegs().values())
+                    assertThat(actualJourney.getLegs())
                             .allMatch(leg -> leg.getDelay().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)

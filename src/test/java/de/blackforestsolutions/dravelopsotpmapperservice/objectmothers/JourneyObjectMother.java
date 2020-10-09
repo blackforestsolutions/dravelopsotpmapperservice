@@ -3,9 +3,8 @@ package de.blackforestsolutions.dravelopsotpmapperservice.objectmothers;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsdatamodel.Price;
-import de.blackforestsolutions.dravelopsdatamodel.PriceType;
 
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.UUID;
 
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.LegObjectMother.*;
@@ -32,26 +31,26 @@ public class JourneyObjectMother {
                 .build();
     }
 
-    private static LinkedHashMap<UUID, Leg> getFurtwangenToWaldkirchLegs() {
-        LinkedHashMap<UUID, Leg> legs = new LinkedHashMap<>();
-        legs.put(getGrosshausbergToFurtwangenIlbenstreetLeg().getId(), getGrosshausbergToFurtwangenIlbenstreetLeg());
-        legs.put(getFurtwangenIlbenstreetToBleibachLeg().getId(), getFurtwangenIlbenstreetToBleibachLeg());
-        legs.put(getBleibachToWaldkirchKastelberghalleLeg().getId(), getBleibachToWaldkirchKastelberghalleLeg());
-        legs.put(getWaldkirchKastelberghalleToSickLeg().getId(), getWaldkirchKastelberghalleToSickLeg());
+    private static LinkedList<Leg> getFurtwangenToWaldkirchLegs() {
+        LinkedList<Leg> legs = new LinkedList<>();
+        legs.add(getGrosshausbergToFurtwangenIlbenstreetLeg());
+        legs.add(getFurtwangenIlbenstreetToBleibachLeg());
+        legs.add(getBleibachToWaldkirchKastelberghalleLeg());
+        legs.add(getWaldkirchKastelberghalleToSickLeg());
         return legs;
     }
 
-    private static LinkedHashMap<PriceType, Price> getFurtwangenToWaldkirchPrices() {
-        LinkedHashMap<PriceType, Price> prices = new LinkedHashMap<>();
-        prices.put(getFurtwangenToWaldkirchPrice().getPriceType(), getFurtwangenToWaldkirchPrice());
+    private static LinkedList<Price> getFurtwangenToWaldkirchPrices() {
+        LinkedList<Price> prices = new LinkedList<>();
+        prices.add(getFurtwangenToWaldkirchPrice());
         return prices;
     }
 
-    private static LinkedHashMap<UUID, Leg> getMannheimHbfToLudwigsburgCenterLegs() {
-        LinkedHashMap<UUID, Leg> legs = new LinkedHashMap<>();
-        legs.put(getMannheimHbfToMannheimUniversityLeg().getId(), getMannheimHbfToMannheimUniversityLeg());
-        legs.put(getMannheimUniversityToMannheimBerlinerPlaceLeg().getId(), getMannheimUniversityToMannheimBerlinerPlaceLeg());
-        legs.put(getBerlinerPlaceToDestinationLeg().getId(), getBerlinerPlaceToDestinationLeg());
+    private static LinkedList<Leg> getMannheimHbfToLudwigsburgCenterLegs() {
+        LinkedList<Leg> legs = new LinkedList<>();
+        legs.add(getMannheimHbfToMannheimUniversityLeg());
+        legs.add(getMannheimUniversityToMannheimBerlinerPlaceLeg());
+        legs.add(getBerlinerPlaceToDestinationLeg());
         return legs;
     }
 }

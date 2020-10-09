@@ -66,13 +66,13 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         }
     }
 
-    private LinkedHashMap<UUID, Leg> extractLegsFrom(List<de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg> openTripPlannerLegs, String departure, String arrival) throws MalformedURLException {
+    private LinkedList<Leg> extractLegsFrom(List<de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg> openTripPlannerLegs, String departure, String arrival) throws MalformedURLException {
         LinkedHashMap<UUID, Leg> legs = new LinkedHashMap<>();
         for (de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg : openTripPlannerLegs) {
             Leg leg = extractLegFrom(openTripPlannerLeg, departure, arrival);
             legs.put(leg.getId(), leg);
         }
-        return legs;
+        return new LinkedList<>(legs.values());
     }
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
@@ -144,14 +144,15 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return null;
     }
 
-    private LinkedHashMap<PriceType, Price> extractPricesFrom(Itinerary itinerary) {
+    private LinkedList<Price> extractPricesFrom(Itinerary itinerary) {
         return Optional.ofNullable(itinerary.getFare())
                 .map(Fare::getFare)
                 .map(fares -> fares.entrySet().stream()
                         .map(this::extractPriceFrom)
                         .collect(Collectors.toMap(Price::getPriceType, price -> price, (prev, next) -> next, LinkedHashMap::new))
                 )
-                .orElseGet(LinkedHashMap::new);
+                .map(priceMap -> new LinkedList<>(priceMap.values()))
+                .orElseGet(LinkedList::new);
     }
 
     private Price extractPriceFrom(Map.Entry<Fare.FareType, Money> fare) {

@@ -134,7 +134,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5)))
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelay()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 
@@ -150,7 +150,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5)))
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelay()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 }
