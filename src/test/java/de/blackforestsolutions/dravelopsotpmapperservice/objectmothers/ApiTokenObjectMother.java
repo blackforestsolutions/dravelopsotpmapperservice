@@ -18,6 +18,7 @@ public class ApiTokenObjectMother {
                 .setDeparture("Am Großhausberg 8")
                 .setArrivalCoordinate(new Point(7.950507d, 48.088204d))
                 .setArrival("Sick AG")
+                .setLanguage(Locale.forLanguageTag("de"))
                 .build();
     }
 
@@ -27,7 +28,7 @@ public class ApiTokenObjectMother {
                 .setHost("localhost")
                 .setPort(8089)
                 .setRouter("bw")
-                .setLanguage(Locale.forLanguageTag("de"))
+                .setLanguage(Locale.US)
                 .build();
     }
 

@@ -16,6 +16,7 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
         builderCopy.setDateTime(request.getDateTime());
         builderCopy.setOptimize(request.getOptimize());
         builderCopy.setIsArrivalDateTime(request.getIsArrivalDateTime());
+        builderCopy.setLanguage(request.getLanguage());
         return builderCopy.build();
     }
 }
