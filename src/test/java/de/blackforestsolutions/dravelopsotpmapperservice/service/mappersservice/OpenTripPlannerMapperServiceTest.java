@@ -6,10 +6,7 @@ import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperServiceImpl;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.PolylineDecodingService;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeServiceImpl;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
@@ -32,8 +29,10 @@ class OpenTripPlannerMapperServiceTest {
     private final UuidService uuidService = mock(UuidService.class);
     private final PolylineDecodingService polyLineDecodingService = mock(PolylineDecodingService.class);
     private final ZonedDateTimeService zonedDateTimeService = new ZonedDateTimeServiceImpl(ZoneId.of("Europe/Berlin"));
+    private final CoordinateFormatterService coordinateFormatterService = new CoordinateFormatterServiceImpl();
+    private final DistanceFormatterService distanceFormatterService = new DistanceFormatterServiceImpl();
 
-    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(uuidService, polyLineDecodingService, zonedDateTimeService);
+    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(uuidService, polyLineDecodingService, zonedDateTimeService, coordinateFormatterService, distanceFormatterService);
 
     @BeforeEach
     void init() {
