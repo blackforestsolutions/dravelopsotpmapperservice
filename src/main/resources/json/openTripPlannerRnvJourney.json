@@ -1,0 +1,400 @@
+{
+  "requestParameters": {
+    "date": "10-05-2020",
+    "arriveBy": "false",
+    "optimize": "QUICK",
+    "fromPlace": "49.483628140481024,8.464279174804688",
+    "toPlace": "49.479130, 8.453147",
+    "time": "13:00pm",
+    "locale": "de"
+  },
+  "plan": {
+    "date": 1601938800000,
+    "from": {
+      "name": "Origin",
+      "lon": 8.464279174804688,
+      "lat": 49.483628140481024,
+      "orig": "",
+      "vertexType": "NORMAL"
+    },
+    "to": {
+      "name": "Destination",
+      "lon": 8.453147,
+      "lat": 49.47913,
+      "orig": "",
+      "vertexType": "NORMAL"
+    },
+    "itineraries": [
+      {
+        "duration": 798,
+        "startTime": 1601940011000,
+        "endTime": 1601940809000,
+        "walkTime": 616,
+        "transitTime": 180,
+        "waitingTime": 2,
+        "walkDistance": 639.6713082473373,
+        "walkLimitExceeded": false,
+        "elevationLost": 0.0,
+        "elevationGained": 0.0,
+        "transfers": 0,
+        "legs": [
+          {
+            "startTime": 1601940011000,
+            "endTime": 1601940299000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 319.876,
+            "pathway": false,
+            "mode": "WALK",
+            "route": "",
+            "agencyTimeZoneOffset": 7200000,
+            "interlineWithPreviousLeg": false,
+            "from": {
+              "name": "Origin",
+              "lon": 8.464279174804688,
+              "lat": 49.483628140481024,
+              "departure": 1601940011000,
+              "orig": "",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "Universität",
+              "stopId": "1:247103",
+              "platformCode": "C",
+              "lon": 8.4633481,
+              "lat": 49.4821881,
+              "arrival": 1601940299000,
+              "departure": 1601940300000,
+              "stopIndex": 26,
+              "stopSequence": 27,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "legGeometry": {
+              "points": "cw_mHgdtr@h@mBFFZVD?BIVs@Pm@Le@BDLR`@l@X\\NLNPDJDJ@D@DBJ@J?H@L?JAL?HJBCDALB?@@Ir@Gb@CV",
+              "length": 34
+            },
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 288.0,
+            "transitLeg": false,
+            "intermediateStops": [],
+            "steps": [
+              {
+                "distance": 46.064,
+                "relativeDirection": "DEPART",
+                "streetName": "Carl-Theodor-Platz",
+                "absoluteDirection": "SOUTHEAST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.464206089075525,
+                "lat": 49.48354947970786,
+                "elevation": []
+              },
+              {
+                "distance": 26.814,
+                "relativeDirection": "RIGHT",
+                "streetName": "Fußweg",
+                "absoluteDirection": "SOUTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.464752,
+                "lat": 49.4833354,
+                "elevation": []
+              },
+              {
+                "distance": 61.685,
+                "relativeDirection": "LEFT",
+                "streetName": "way 289802319 from 0",
+                "absoluteDirection": "SOUTHEAST",
+                "stayOn": true,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.464598800000001,
+                 "lat": 49.483120500000005,
+                "elevation": []
+              },
+              {
+                "distance": 125.293,
+                "relativeDirection": "RIGHT",
+                "streetName": "Otto-Selz-Straße",
+                "absoluteDirection": "SOUTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.4653235,
+                "lat": 49.482828700000006,
+                "elevation": []
+              },
+              {
+                "distance": 14.507000000000001,
+                "relativeDirection": "LEFT",
+                "streetName": "Fußweg",
+                "absoluteDirection": "SOUTH",
+                "stayOn": false,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.4640553,
+                "lat": 49.482167000000004,
+                "elevation": []
+              },
+              {
+                "distance": 45.513000000000005,
+                "relativeDirection": "LEFT",
+                "streetName": "Plattform 3",
+                "absoluteDirection": "SOUTH",
+                "stayOn": false,
+                "area": true,
+                "bogusName": false,
+                "lon": 8.4639374,
+                "lat": 49.482133600000004,
+                "elevation": []
+              }
+            ]
+          },
+          {
+            "startTime": 1601940300000,
+            "endTime": 1601940480000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 955.9015148942804,
+            "pathway": false,
+            "mode": "TRAM",
+            "route": "4",
+            "agencyName": "Rhein-Neckar-Verkehr GmbH (rnv)",
+            "agencyUrl": "http://www.rnv-online.de",
+            "agencyTimeZoneOffset": 7200000,
+            "routeColor": "E30613",
+            "routeType": 0,
+            "routeId": "1:4",
+            "routeTextColor": "FFFFFF",
+            "interlineWithPreviousLeg": false,
+            "headsign": "LU Hauptbahnhof",
+            "agencyId": "19",
+            "tripId": "1:4-280-4004-89100",
+            "serviceDate": "20201005",
+            "from": {
+              "name": "Universität",
+              "stopId": "1:247103",
+              "platformCode": "C",
+              "lon": 8.4633481,
+              "lat": 49.4821881,
+              "arrival": 1601940299000,
+              "departure": 1601940300000,
+              "stopIndex": 26,
+              "stopSequence": 27,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "to": {
+              "name": "Berliner Platz",
+              "stopId": "1:206602",
+              "platformCode": "B",
+              "lon": 8.45065,
+              "lat": 49.48049,
+              "arrival": 1601940480000,
+              "departure": 1601940481000,
+              "stopIndex": 28,
+              "stopSequence": 29,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "legGeometry": {
+              "points": "sn_mH{~sr@i@x\\zJnp@",
+              "length": 3
+            },
+            "routeShortName": "4",
+            "routeLongName": "Bad Dürkheim - LU Oggersheim - LU Hbf - Berliner Platz - MA Hbf - Wasserturm - Paradeplatz - Alte Feuerwache - Schafweide - Universitätsklinikum - Bonafitiuskirche - Ulmenweg - Waldfriedhof",
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 180.0,
+            "transitLeg": true,
+            "intermediateStops": [
+              {
+                "name": "Konrad-Adenauer-Br.",
+                "stopId": "1:242602",
+                "platformCode": "B",
+                "lon": 8.4585767,
+                "lat": 49.4823922,
+                "arrival": 1601940360000,
+                "departure": 1601940360000,
+                "stopIndex": 27,
+                "stopSequence": 28,
+                "vertexType": "TRANSIT",
+                "boardAlightType": "DEFAULT"
+              }
+            ],
+            "steps": []
+          },
+          {
+            "startTime": 1601940481000,
+            "endTime": 1601940809000,
+            "departureDelay": 0,
+            "arrivalDelay": 0,
+            "realTime": false,
+            "distance": 319.07199999999995,
+            "pathway": false,
+            "mode": "WALK",
+            "route": "",
+            "agencyTimeZoneOffset": 7200000,
+            "interlineWithPreviousLeg": false,
+            "from": {
+              "name": "Berliner Platz",
+              "stopId": "1:206602",
+              "platformCode": "B",
+              "lon": 8.45065,
+              "lat": 49.48049,
+              "arrival": 1601940480000,
+              "departure": 1601940481000,
+              "stopIndex": 28,
+              "stopSequence": 29,
+              "vertexType": "TRANSIT",
+              "boardAlightType": "DEFAULT"
+            },
+            "to": {
+              "name": "Destination",
+              "lon": 8.453147,
+              "lat": 49.47913,
+              "arrival": 1601940809000,
+              "orig": "",
+              "vertexType": "NORMAL"
+            },
+            "legGeometry": {
+              "points": "ad_mHsoqr@E@?AG@AICKGBCSBCPOAE^UJEDCJK@BFIFMDMDO@O@M@QAWCUGa@Is@BGrAAfA{A@A@CNS?C@?BER[@F",
+              "length": 38
+            },
+            "rentedBike": false,
+            "flexDrtAdvanceBookMin": 0.0,
+            "duration": 328.0,
+            "transitLeg": false,
+            "intermediateStops": [],
+            "steps": [
+              {
+                "distance": 4.851,
+                "relativeDirection": "DEPART",
+                "streetName": "Plattform",
+                "absoluteDirection": "NORTH",
+                "stayOn": false,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.450660820416,
+                "lat": 49.48049146412645,
+                "elevation": []
+              },
+              {
+                "distance": 13.445,
+                "relativeDirection": "LEFT",
+                "streetName": "Fußweg",
+                "absoluteDirection": "NORTH",
+                "stayOn": true,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.450669600000001,
+                "lat": 49.4805246,
+                "elevation": []
+              },
+              {
+                "distance": 4.415,
+                "relativeDirection": "LEFT",
+                "streetName": "Ludwigstraße",
+                "absoluteDirection": "NORTH",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.450767,
+                "lat": 49.4805946,
+                "elevation": []
+              },
+              {
+                "distance": 160.30700000000004,
+                "relativeDirection": "RIGHT",
+                "streetName": "Berliner Platz",
+                "absoluteDirection": "EAST",
+                "stayOn": false,
+                "area": true,
+                "bogusName": false,
+                "lon": 8.4507448,
+                "lat": 49.4806316,
+                "elevation": []
+              },
+              {
+                "distance": 46.824,
+                "relativeDirection": "RIGHT",
+                "streetName": "Heny-Roos-Passage",
+                "absoluteDirection": "SOUTH",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.4523899,
+                "lat": 49.480164900000005,
+                "elevation": []
+              },
+              {
+                "distance": 86.421,
+                "relativeDirection": "SLIGHTLY_LEFT",
+                "streetName": "Fußweg",
+                "absoluteDirection": "SOUTHEAST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": true,
+                "lon": 8.4523933,
+                "lat": 49.4797438,
+                "elevation": []
+              },
+              {
+                "distance": 2.809,
+                "relativeDirection": "RIGHT",
+                "streetName": "Weg",
+                "absoluteDirection": "SOUTHWEST",
+                "stayOn": false,
+                "area": false,
+                "bogusName": false,
+                "lon": 8.4531708,
+                "lat": 49.479153200000006,
+                "elevation": []
+              }
+            ]
+          }
+        ],
+        "tooSloped": false
+      }
+     ]
+  },
+  "debugOutput": {
+    "precalculationTime": 125,
+    "pathCalculationTime": 754,
+    "pathTimes": [
+      89,
+      61,
+      25,
+      29,
+      34,
+      35,
+      31,
+      47,
+      33,
+      35,
+      37,
+      32,
+      33,
+      31,
+      35,
+      36,
+      32,
+      36,
+      36,
+      27
+    ],
+    "renderingTime": 33,
+    "totalTime": 912,
+    "timedOut": false
+  },
+  "elevationMetadata": {
+    "ellipsoidToGeoidDifference": 49.23816858679739,
+    "geoidElevation": false
+  }
+}
