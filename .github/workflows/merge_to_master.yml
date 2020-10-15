@@ -3,7 +3,7 @@ name: 'merge to master'
 on:
   push:
     branches: [ master ]
-#1
+
 jobs:
   docker:
     name: Publish - Docker Hub
