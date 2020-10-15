@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-#  docker:
+  #  docker:
   #    name: Publish - Docker Hub
   #    runs-on: ubuntu-18.04
   #    env:
@@ -27,6 +27,8 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    env:
+      REPO: ${{ secrets.DOCKER_REPO }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
