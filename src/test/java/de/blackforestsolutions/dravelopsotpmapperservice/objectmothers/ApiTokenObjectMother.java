@@ -47,4 +47,12 @@ public class ApiTokenObjectMother {
                 .setArrivalCoordinate(new Point(7.950507d, 48.088204d))
                 .build();
     }
+
+    public static ApiToken getConfiguredPeliasApiToken() {
+        return new ApiToken.ApiTokenBuilder()
+                .setApiVersion("v1")
+                .setMaxResults(2)
+                .setLanguage(Locale.forLanguageTag("de"))
+                .build();
+    }
 }

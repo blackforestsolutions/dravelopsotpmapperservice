@@ -2,41 +2,38 @@ package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.time.ZoneId;
 import java.util.Locale;
 
-@SpringBootConfiguration
-public class OpenTripPlannerConfiguration {
+@SpringBootApplication
+public class PeliasConfiguration {
 
-    @Value("${otp.protocol}")
+    @Value("${pelias.protocol}")
     private String protocol;
-    @Value("${otp.host}")
+    @Value("${pelias.host}")
     private String host;
-    @Value("${otp.port}")
+    @Value("${pelias.port}")
     private int port;
-    @Value("${otp.router}")
-    private String router;
+    @Value("${pelias.apiVersion}")
+    private String apiVersion;
+    @Value("${pelias.maxResults}")
+    private int maxResults;
     @Value("${language}")
     private String language;
-    @Value("${otp.timeZone}")
-    private String timeZone;
 
-    @Bean(name = "openTripPlannerApiToken")
+    @Bean(name = "peliasApiToken")
     public ApiToken apiToken() {
         return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)
                 .setPort(port)
-                .setRouter(router)
+                .setApiVersion(apiVersion)
+                .setMaxResults(maxResults)
                 .setLanguage(Locale.forLanguageTag(language))
                 .build();
+
     }
 
-    @Bean
-    public ZoneId zoneId() {
-        return ZoneId.of(timeZone);
-    }
 }
