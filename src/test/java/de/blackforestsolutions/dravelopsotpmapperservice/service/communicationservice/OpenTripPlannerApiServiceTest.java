@@ -7,7 +7,6 @@ import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
-import de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperService;
@@ -71,6 +70,7 @@ class OpenTripPlannerApiServiceTest {
         ApiToken testData = getOpenTripPlannerApiToken();
         ArgumentCaptor<ApiToken> apiTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<String> urlArg = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<HttpHeaders> httpHeadersArg = ArgumentCaptor.forClass(HttpHeaders.class);
         ArgumentCaptor<OpenTripPlannerJourneyResponse> responseArg = ArgumentCaptor.forClass(OpenTripPlannerJourneyResponse.class);
         ArgumentCaptor<String> departureArg = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> arrivalArg = ArgumentCaptor.forClass(String.class);
@@ -79,11 +79,12 @@ class OpenTripPlannerApiServiceTest {
 
         InOrder inOrder = inOrder(openTripPlannerHttpCallBuilderService, callService, openTripPlannerMapperService);
         inOrder.verify(openTripPlannerHttpCallBuilderService, times(1)).buildOpenTripPlannerJourneyPathWith(apiTokenArg.capture());
-        inOrder.verify(callService, times(1)).get(urlArg.capture(), any(HttpHeaders.class));
+        inOrder.verify(callService, times(1)).get(urlArg.capture(), httpHeadersArg.capture());
         inOrder.verify(openTripPlannerMapperService, times(1)).extractJourneysFrom(responseArg.capture(), departureArg.capture(), arrivalArg.capture());
         inOrder.verifyNoMoreInteractions();
         assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByField(getOpenTripPlannerApiToken());
         assertThat(urlArg.getValue()).isEqualTo("http://localhost:8089");
+        assertThat(httpHeadersArg.getValue()).isEqualTo(HttpHeaders.EMPTY);
         assertThat(responseArg.getValue()).isInstanceOf(OpenTripPlannerJourneyResponse.class);
         assertThat(departureArg.getValue()).isEqualTo("Am Großhausberg 8");
         assertThat(arrivalArg.getValue()).isEqualTo("Sick AG");
@@ -107,11 +108,11 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_returns_failed_call_status_when_call_failed() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
+        ApiToken testData = getOpenTripPlannerApiToken();
         when(callService.get(anyString(), any(HttpHeaders.class)))
                 .thenReturn(Mono.just(new ResponseEntity<>("error", HttpStatus.BAD_REQUEST)));
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData.build());
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
 
         StepVerifier.create(result)
@@ -124,8 +125,8 @@ class OpenTripPlannerApiServiceTest {
     }
 
     @Test
-    void test_getJourneysBy_apiToken_returns_failed_call_status_when_exception_is_thrown_outside_of_stream() {
-        ApiToken testData = ApiTokenObjectMother.getOpenTripPlannerApiToken();
+    void test_getJourneysBy_apiToken_returns_failed_call_status_when_exception_is_thrown_inside_of_stream() {
+        ApiToken testData = getOpenTripPlannerApiToken();
         when(callService.get(anyString(), any(HttpHeaders.class)))
                 .thenReturn(Mono.just(new ResponseEntity<>(null, HttpStatus.OK)));
 
@@ -141,8 +142,22 @@ class OpenTripPlannerApiServiceTest {
     }
 
     @Test
+    void test_getJourneysBy_apiToken_as_null_returns_failed_call_status_when_exception_is_thrown_outside_of_stream() {
+
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(null);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(NullPointerException.class);
+                })
+                .verifyComplete();
+    }
+
+    @Test
     void test_getJourneysBy_apiToken_returns_failed_call_status_when_exception_is_thrown_by_mapperService() {
-        ApiToken testData = ApiTokenObjectMother.getOpenTripPlannerApiToken();
+        ApiToken testData = getOpenTripPlannerApiToken();
         when(openTripPlannerMapperService.extractJourneysFrom(any(OpenTripPlannerJourneyResponse.class), anyString(), anyString()))
                 .thenThrow(NullPointerException.class);
 

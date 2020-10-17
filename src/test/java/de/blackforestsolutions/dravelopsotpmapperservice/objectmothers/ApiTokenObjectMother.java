@@ -50,6 +50,9 @@ public class ApiTokenObjectMother {
 
     public static ApiToken getConfiguredPeliasApiToken() {
         return new ApiToken.ApiTokenBuilder()
+                .setProtocol("http")
+                .setHost("localhost")
+                .setPort(4000)
                 .setApiVersion("v1")
                 .setMaxResults(2)
                 .setLanguage(Locale.forLanguageTag("de"))
