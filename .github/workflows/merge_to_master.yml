@@ -3,20 +3,22 @@ name: 'merge to master'
 on:
   push:
     branches: [ master ]
-
-jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
-    env:
-      REPO: ${{ secrets.DOCKER_REPO }}
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-      - name: Push to Docker Hub
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASS }}
-          repository: $REPO
-          tag_with_ref: true
+      jobs:
+        build:
+          runs-on: ubuntu-latest
+          env:
+            REPO: ${{ secrets.DOCKER_REPO }}
+          steps:
+            - uses: actions/checkout@v2
+            - name: docker login
+              env:
+                DOCKER_USER: ${{ secrets.DOCKER_USER }}
+                DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS }}
+              run: |
+                docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+            - name: docker build project
+              run: |
+                docker build $REPO
+            - name: docker push
+              run: |
+                docker push $REPO
