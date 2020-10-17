@@ -34,16 +34,16 @@ jobs:
           registry: docker.io# optional
           # Docker repository to tag the image with
           repository: blackforestsolutions/dravelopsotpmapperservice
-    # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
-    #tags: # optional
-    # Automatically tags the built image with the git reference as per the readme
-    #tag_with_ref: # optional
-    # Automatically tags the built image with the git short SHA as per the readme
-    #tag_with_sha: # optional
-    # Path to the build context
-    #path: # optional, default is .
-    # Path to the Dockerfile (Default is '{path}/Dockerfile')
-    #dockerfile: # optional
+          # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
+          #tags: # optional
+          # Automatically tags the built image with the git reference as per the readme
+          #tag_with_ref: # optional
+          # Automatically tags the built image with the git short SHA as per the readme
+          #tag_with_sha: # optional
+          # Path to the build context
+          #path: # optional, default is .
+          # Path to the Dockerfile (Default is '{path}/Dockerfile')
+          dockerfile: ./Dockerfile  # optional
     # Sets the target stage to build
     #target: # optional
     # Always attempt to pull a newer version of the image
