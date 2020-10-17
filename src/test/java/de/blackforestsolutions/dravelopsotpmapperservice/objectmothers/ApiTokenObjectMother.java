@@ -2,10 +2,12 @@ package de.blackforestsolutions.dravelopsotpmapperservice.objectmothers;
 
 import de.blackforestsolutions.dravelopsdatamodel.Optimization;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import org.springframework.data.geo.Point;
 
 import java.time.ZonedDateTime;
 import java.util.Locale;
+
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getAmGrosshausbergPoint;
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
 
 public class ApiTokenObjectMother {
 
@@ -14,8 +16,8 @@ public class ApiTokenObjectMother {
                 .setOptimize(Optimization.QUICK)
                 .setIsArrivalDateTime(false)
                 .setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"))
-                .setDepartureCoordinate(new Point(8.209198d, 48.048381d))
-                .setArrivalCoordinate(new Point( 7.891595d, 48.087517d))
+                .setDepartureCoordinate(getAmGrosshausbergPoint())
+                .setArrivalCoordinate(getSickAgPoint())
                 .build();
     }
 
@@ -40,9 +42,9 @@ public class ApiTokenObjectMother {
                 .setIsArrivalDateTime(false)
                 .setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"))
                 .setDeparture("Am Großhausberg 8")
-                .setDepartureCoordinate(new Point(8.209198d, 48.048381d))
+                .setDepartureCoordinate(getAmGrosshausbergPoint())
                 .setArrival("Sick AG")
-                .setArrivalCoordinate(new Point( 7.891595d, 48.087517d))
+                .setArrivalCoordinate(getSickAgPoint())
                 .build();
     }
 
