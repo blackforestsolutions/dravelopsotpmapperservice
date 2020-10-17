@@ -22,6 +22,10 @@ public class PeliasConfiguration {
     private int maxResults;
     @Value("${language}")
     private String language;
+    @Value("${pelias.departurePlaceholder}")
+    private String departurePlaceholder;
+    @Value("${pelias.arrivalPlaceholder}")
+    private String arrivalPlaceholder;
 
     @Bean(name = "peliasApiToken")
     public ApiToken apiToken() {
@@ -32,6 +36,8 @@ public class PeliasConfiguration {
                 .setApiVersion(apiVersion)
                 .setMaxResults(maxResults)
                 .setLanguage(Locale.forLanguageTag(language))
+                .setDeparture(departurePlaceholder)
+                .setArrival(arrivalPlaceholder)
                 .build();
 
     }

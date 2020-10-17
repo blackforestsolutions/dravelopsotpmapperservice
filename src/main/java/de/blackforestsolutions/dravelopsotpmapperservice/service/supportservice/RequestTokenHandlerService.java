@@ -1,7 +1,8 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import reactor.core.publisher.Mono;
 
 public interface RequestTokenHandlerService {
-    ApiToken getRequestApiTokenWith(ApiToken request, ApiToken configuredRequestData);
+    Mono<ApiToken> getRequestApiTokenWith(ApiToken request, ApiToken configuredRequestData);
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.*;
@@ -34,17 +35,17 @@ class JourneyApiServiceTest {
     @BeforeEach
     void init() {
         when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
-                .thenReturn(getOpenTripPlannerApiToken());
+                .thenReturn(Mono.just(getOpenTripPlannerApiToken()));
 
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class))).thenReturn(Flux.just(
                         new CallStatus<>(getJourneyWithEmptyFields(TEST_UUID_1), Status.SUCCESS, null),
                         new CallStatus<>(null, Status.FAILED, new Exception())
-                ));
+        ));
     }
 
     @Test
     void test_retrieveJourneysFromApiServices_with_userApiToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_as_json_asynchronously_and_sort_out_journeys() {
-        String userRequestTokenTestData = toJson(getRequestToken());
+        String userRequestTokenTestData = toJson(getOtpRequestToken());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(userRequestTokenTestData);
 
@@ -59,7 +60,7 @@ class JourneyApiServiceTest {
         ArgumentCaptor<ApiToken> configuredTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<ApiToken> mergedTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<CallStatus<Journey>> journeyArg = ArgumentCaptor.forClass(CallStatus.class);
-        String userRequestTokenTestData = toJson(getRequestToken());
+        String userRequestTokenTestData = toJson(getOtpRequestToken());
 
         classUnderTest.retrieveJourneysFromApiService(userRequestTokenTestData).collectList().block();
 
@@ -68,7 +69,7 @@ class JourneyApiServiceTest {
         inOrder.verify(openTripPlannerApiService, times(1)).getJourneysBy(mergedTokenArg.capture());
         inOrder.verify(exceptionHandlerService, times(2)).handleExceptions(journeyArg.capture());
         inOrder.verifyNoMoreInteractions();
-        assertThat(userRequestTokenArg.getValue()).isEqualToComparingFieldByField(getRequestToken());
+        assertThat(userRequestTokenArg.getValue()).isEqualToComparingFieldByField(getOtpRequestToken());
         assertThat(configuredTokenArg.getValue()).isEqualToComparingFieldByField(getOpenTripPlannerConfiguredApiToken());
         assertThat(mergedTokenArg.getValue()).isEqualToComparingFieldByField(getOpenTripPlannerApiToken());
         assertThat(journeyArg.getAllValues().size()).isEqualTo(2);
@@ -91,7 +92,7 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_handles_distinct_exception_correctly() {
-        String userRequestTokenTestData = toJson(getRequestToken());
+        String userRequestTokenTestData = toJson(getOtpRequestToken());
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class))).thenReturn(Flux.just(
                 new CallStatus<>(getJourneyWithEmptyFields(null), Status.SUCCESS, null)
         ));

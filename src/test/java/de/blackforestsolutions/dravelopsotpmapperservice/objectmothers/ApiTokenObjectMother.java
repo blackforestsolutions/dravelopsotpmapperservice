@@ -9,15 +9,13 @@ import java.util.Locale;
 
 public class ApiTokenObjectMother {
 
-    public static ApiToken getRequestToken() {
+    public static ApiToken getOtpRequestToken() {
         return new ApiToken.ApiTokenBuilder()
                 .setOptimize(Optimization.QUICK)
                 .setIsArrivalDateTime(false)
                 .setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"))
-                .setDepartureCoordinate(new Point(8.209972d, 48.048320d))
-                .setDeparture("Am Großhausberg 8")
-                .setArrivalCoordinate(new Point(7.950507d, 48.088204d))
-                .setArrival("Sick AG")
+                .setDepartureCoordinate(new Point(8.209198d, 48.048381d))
+                .setArrivalCoordinate(new Point( 7.891595d, 48.087517d))
                 .build();
     }
 
@@ -42,9 +40,9 @@ public class ApiTokenObjectMother {
                 .setIsArrivalDateTime(false)
                 .setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"))
                 .setDeparture("Am Großhausberg 8")
-                .setDepartureCoordinate(new Point(8.209972d, 48.048320d))
+                .setDepartureCoordinate(new Point(8.209198d, 48.048381d))
                 .setArrival("Sick AG")
-                .setArrivalCoordinate(new Point(7.950507d, 48.088204d))
+                .setArrivalCoordinate(new Point( 7.891595d, 48.087517d))
                 .build();
     }
 
@@ -56,6 +54,8 @@ public class ApiTokenObjectMother {
                 .setApiVersion("v1")
                 .setMaxResults(2)
                 .setLanguage(Locale.forLanguageTag("de"))
+                .setDeparture("Start")
+                .setArrival("Ziel")
                 .build();
     }
 }
