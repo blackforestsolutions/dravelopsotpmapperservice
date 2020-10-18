@@ -1,4 +1,4 @@
-name: build and push to dockerhub on merge in master
+name: build and push to dockerhub on merge to master
 
 on:
   push:
