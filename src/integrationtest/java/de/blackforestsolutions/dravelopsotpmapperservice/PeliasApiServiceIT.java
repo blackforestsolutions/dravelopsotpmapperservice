@@ -11,7 +11,7 @@ import org.springframework.data.geo.Point;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.PointObjectMother.getSickAgPoint;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

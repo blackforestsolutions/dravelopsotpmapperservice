@@ -12,7 +12,7 @@ import reactor.test.StepVerifier;
 
 import java.time.ZonedDateTime;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.getOtpRequestToken;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.ApiTokenObjectMother.getOtpRequestToken;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;

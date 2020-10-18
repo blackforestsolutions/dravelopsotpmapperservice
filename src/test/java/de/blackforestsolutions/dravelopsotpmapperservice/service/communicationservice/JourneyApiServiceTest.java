@@ -16,9 +16,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.*;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UUIDObjectMother.TEST_UUID_1;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.ApiTokenObjectMother.*;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

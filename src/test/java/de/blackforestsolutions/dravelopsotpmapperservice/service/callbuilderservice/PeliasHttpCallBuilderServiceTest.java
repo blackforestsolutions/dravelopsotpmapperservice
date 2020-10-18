@@ -4,8 +4,8 @@ import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.geo.Point;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.getConfiguredPeliasApiToken;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.ApiTokenObjectMother.getConfiguredPeliasApiToken;
+import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.PointObjectMother.getSickAgPoint;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

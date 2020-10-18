@@ -1,0 +1,3 @@
+[submodule "dravelopstestdatamodel"]
+	path = dravelopstestdatamodel
+	url = https://github.com/blackforestsolutions/dravelopstestdatamodel.git
