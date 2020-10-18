@@ -27,5 +27,11 @@ jobs:
       - name: Login Docker Hub
         run: echo "${{ secrets.DOCKER_PASS }}" | docker login docker.io -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
+      - name: Docker Login
+        uses: docker/login-action@v1.5.0
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
       - name: Push latest Docker Image
         run: docker push ${{ secrets.DOCKER_REPO }}:latest
