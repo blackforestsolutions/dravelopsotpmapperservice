@@ -19,7 +19,7 @@ public class OpenTripPlannerConfiguration {
     private int port;
     @Value("${otp.router}")
     private String router;
-    @Value("${otp.language}")
+    @Value("${language}")
     private String language;
     @Value("${otp.timeZone}")
     private String timeZone;
