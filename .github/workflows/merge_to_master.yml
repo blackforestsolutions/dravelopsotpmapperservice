@@ -1,4 +1,4 @@
-name: build and push to dockerhub on merge to master
+name: build and push to dockerhub on merge in master
 
 on:
   push:
@@ -23,12 +23,12 @@ jobs:
 
       - name: Build latest Docker Image
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_REPO }}:latest
-        if: github.base_ref == 'master'
+      # if: github.base_ref == 'master'
 
       - name: Login Docker Hub
         run: echo "${{ secrets.DOCKER_PASS }}" | docker login docker.io -u "${{ secrets.DOCKER_USER }}" --password-stdin
-        if: github.base_ref == 'master'
+      #  if: github.base_ref == 'master'
 
       - name: Push latest Docker Image
         run: docker push ${{ secrets.DOCKER_REPO }}:latest
-        if: github.base_ref == 'master'
+      # if: github.base_ref == 'master'
