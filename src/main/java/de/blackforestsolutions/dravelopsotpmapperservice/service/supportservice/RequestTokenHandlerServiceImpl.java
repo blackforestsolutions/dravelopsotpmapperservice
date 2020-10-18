@@ -51,9 +51,4 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
                 .switchIfEmpty(Mono.just(travelPointNamePlaceholder));
     }
 
-
-
-
-
-
 }
