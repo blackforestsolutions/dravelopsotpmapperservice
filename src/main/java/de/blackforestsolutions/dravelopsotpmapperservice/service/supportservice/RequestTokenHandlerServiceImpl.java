@@ -1,8 +1,9 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsExceptionHandler;
+import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.PeliasApiService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -13,11 +14,13 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
 
     private final ApiToken peliasApiToken;
     private final PeliasApiService peliasApiService;
-    private final DravelOpsExceptionHandler exceptionHandlerService = new DravelOpsExceptionHandler();
+    private final ExceptionHandlerService exceptionHandlerService;
 
-    public RequestTokenHandlerServiceImpl(ApiToken peliasApiToken, PeliasApiService peliasApiService) {
+    @Autowired
+    public RequestTokenHandlerServiceImpl(ApiToken peliasApiToken, PeliasApiService peliasApiService, ExceptionHandlerService exceptionHandlerService) {
         this.peliasApiToken = peliasApiToken;
         this.peliasApiService = peliasApiService;
+        this.exceptionHandlerService = exceptionHandlerService;
     }
 
     @Override
