@@ -24,7 +24,7 @@ import reactor.test.StepVerifier;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.getResourceFileAsString;
+import static de.blackforestsolutions.dravelopstestdatamodel.testutils.TestUtils.getResourceFileAsString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;

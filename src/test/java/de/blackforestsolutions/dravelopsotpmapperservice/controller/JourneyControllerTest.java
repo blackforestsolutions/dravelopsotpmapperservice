@@ -14,7 +14,7 @@ import reactor.test.StepVerifier;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.ApiTokenObjectMother.getOtpRequestToken;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.toJson;
+import static de.blackforestsolutions.dravelopstestdatamodel.testutils.TestUtils.toJson;
 import static org.apache.commons.lang.StringUtils.deleteWhitespace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

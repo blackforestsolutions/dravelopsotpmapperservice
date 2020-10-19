@@ -19,7 +19,7 @@ import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.Journ
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.TrackObjectMother.getExampleTrack;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.UUIDObjectMother.*;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.*;
+import static de.blackforestsolutions.dravelopstestdatamodel.testutils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;

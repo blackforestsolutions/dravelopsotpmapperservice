@@ -25,8 +25,8 @@ import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.ApiTokenObjectMother.getConfiguredPeliasApiToken;
 import static de.blackforestsolutions.dravelopstestdatamodel.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.getResourceFileAsString;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
+import static de.blackforestsolutions.dravelopstestdatamodel.testutils.TestUtils.getResourceFileAsString;
+import static de.blackforestsolutions.dravelopstestdatamodel.testutils.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
