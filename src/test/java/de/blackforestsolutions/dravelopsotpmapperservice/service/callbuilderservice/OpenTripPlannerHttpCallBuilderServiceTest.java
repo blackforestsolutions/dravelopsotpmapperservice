@@ -19,7 +19,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData);
 
-        assertThat(result).isEqualTo("/otp/routers/bw/plan?locale=de&optimize=QUICK&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.04832,8.209972&toPlace=48.088204,7.950507");
+        assertThat(result).isEqualTo("/otp/routers/bw/plan?locale=de&optimize=QUICK&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595");
     }
 
     @Test

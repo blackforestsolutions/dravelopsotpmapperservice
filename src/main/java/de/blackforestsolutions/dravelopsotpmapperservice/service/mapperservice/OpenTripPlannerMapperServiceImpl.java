@@ -4,9 +4,7 @@ import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsdatamodel.Price;
 import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.PolylineDecodingService;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
@@ -22,9 +20,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.utils.CoordinateUtils.convertToPointWithFixedDecimalPlaces;
-import static de.blackforestsolutions.dravelopsotpmapperservice.utils.DistanceUtils.convertMetersToKilometers;
-
 @Service
 public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperService {
 
@@ -34,12 +29,16 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     private final UuidService uuidService;
     private final PolylineDecodingService polylineDecodingService;
     private final ZonedDateTimeService zonedDateTimeService;
+    private final CoordinateFormatterService coordinateFormatterService;
+    private final DistanceFormatterService distanceFormatterService;
 
     @Autowired
-    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, PolylineDecodingService polylineDecodingService, ZonedDateTimeService zonedDateTimeService) {
+    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, PolylineDecodingService polylineDecodingService, ZonedDateTimeService zonedDateTimeService, CoordinateFormatterService coordinateFormatterService, DistanceFormatterService distanceFormatterService) {
         this.uuidService = uuidService;
         this.polylineDecodingService = polylineDecodingService;
         this.zonedDateTimeService = zonedDateTimeService;
+        this.coordinateFormatterService = coordinateFormatterService;
+        this.distanceFormatterService = distanceFormatterService;
     }
 
     @Override
@@ -80,7 +79,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
                 .setDelay(extractDelayFrom(openTripPlannerLeg))
-                .setDistanceInKilometers(convertMetersToKilometers(openTripPlannerLeg.getDistance()))
+                .setDistanceInKilometers(distanceFormatterService.convertToKilometers(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
                 .setTrack(polylineDecodingService.decode(openTripPlannerLeg.getLegGeometry().getPoints()))
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
@@ -100,7 +99,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
         return new TravelPoint.TravelPointBuilder()
                 .setName(extractStopNameFrom(stop, optionalStopName))
-                .setCoordinates(new Point(convertToPointWithFixedDecimalPlaces(stop.getLon(), stop.getLat())))
+                .setCoordinates(new Point(coordinateFormatterService.convertToPointWithFixedDecimalPlaces(stop.getLon(), stop.getLat())))
                 .setDepartureTime(Optional.ofNullable(stop.getDeparture()).map(this::extractDateTime).orElse(null))
                 .setArrivalTime(Optional.ofNullable(stop.getArrival()).map(this::extractDateTime).orElse(null))
                 .setPlatform(Optional.ofNullable(stop.getPlatformCode()).orElse(""))

@@ -8,10 +8,13 @@ import java.util.LinkedList;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getFurtwangenExampleTrack;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getMannheimUniversityToMannheimBerlinerPlatzTrack;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 
 class PolylineDecodingServiceTest {
 
-    private final PolylineDecodingService classUnderTest = new PolylineDecodingServiceImpl();
+    private final CoordinateFormatterService coordinateFormatterService = spy(CoordinateFormatterServiceImpl.class);
+
+    private final PolylineDecodingService classUnderTest = new PolylineDecodingServiceImpl(coordinateFormatterService);
 
     @Test
     void test_decode_with_encoded_polyline_from_furtwangen_return_correct_track() {

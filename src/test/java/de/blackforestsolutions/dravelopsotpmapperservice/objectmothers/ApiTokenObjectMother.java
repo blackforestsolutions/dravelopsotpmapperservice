@@ -2,23 +2,23 @@ package de.blackforestsolutions.dravelopsotpmapperservice.objectmothers;
 
 import de.blackforestsolutions.dravelopsdatamodel.Optimization;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import org.springframework.data.geo.Point;
 
 import java.time.ZonedDateTime;
 import java.util.Locale;
 
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getAmGrosshausbergPoint;
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
+
 public class ApiTokenObjectMother {
 
-    public static ApiToken getRequestToken() {
+    public static ApiToken getOtpRequestToken() {
         return new ApiToken.ApiTokenBuilder()
                 .setOptimize(Optimization.QUICK)
                 .setIsArrivalDateTime(false)
                 .setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"))
-                .setDepartureCoordinate(new Point(8.209972d, 48.048320d))
-                .setDeparture("Am Großhausberg 8")
-                .setArrivalCoordinate(new Point(7.950507d, 48.088204d))
-                .setArrival("Sick AG")
                 .setLanguage(Locale.forLanguageTag("de"))
+                .setDepartureCoordinate(getAmGrosshausbergPoint())
+                .setArrivalCoordinate(getSickAgPoint())
                 .build();
     }
 
@@ -43,9 +43,22 @@ public class ApiTokenObjectMother {
                 .setIsArrivalDateTime(false)
                 .setDateTime(ZonedDateTime.parse("2020-09-30T13:00:00+02:00"))
                 .setDeparture("Am Großhausberg 8")
-                .setDepartureCoordinate(new Point(8.209972d, 48.048320d))
+                .setDepartureCoordinate(getAmGrosshausbergPoint())
                 .setArrival("Sick AG")
-                .setArrivalCoordinate(new Point(7.950507d, 48.088204d))
+                .setArrivalCoordinate(getSickAgPoint())
+                .build();
+    }
+
+    public static ApiToken getConfiguredPeliasApiToken() {
+        return new ApiToken.ApiTokenBuilder()
+                .setProtocol("http")
+                .setHost("localhost")
+                .setPort(4000)
+                .setApiVersion("v1")
+                .setMaxResults(2)
+                .setLanguage(Locale.forLanguageTag("de"))
+                .setDeparture("Start")
+                .setArrival("Ziel")
                 .build();
     }
 }

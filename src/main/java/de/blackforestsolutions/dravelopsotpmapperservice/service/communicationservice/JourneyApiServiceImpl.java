@@ -32,7 +32,7 @@ public class JourneyApiServiceImpl implements JourneyApiService {
     public Flux<String> retrieveJourneysFromApiService(String userRequestToken) {
         return Mono.just(userRequestToken)
                 .flatMap(dravelOpsJsonMapper::mapJsonToApiToken)
-                .map(userToken -> requestTokenHandlerService.getRequestApiTokenWith(userToken, openTripPlannerApiToken))
+                .flatMap(userToken -> requestTokenHandlerService.getRequestApiTokenWith(userToken, openTripPlannerApiToken))
                 .flatMapMany(openTripPlannerApiService::getJourneysBy)
                 .flatMap(dravelOpsExceptionHandler::handleExceptions)
                 .distinct(Journey::getId)

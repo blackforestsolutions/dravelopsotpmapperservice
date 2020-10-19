@@ -45,8 +45,8 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
             return Mono.just(apiToken)
                     .map(this::getJourneyRequestString)
                     .flatMap(url -> callService.get(url, HttpHeaders.EMPTY))
-                    .flatMap(httpResponse -> convert(httpResponse.getBody()))
-                    .flatMap(this::filterErrors)
+                    .flatMap(httpResponse -> convertToPojo(httpResponse.getBody()))
+                    .flatMap(this::handleEmptyResponse)
                     .flatMapMany(openTripPlannerJourney -> openTripPlannerMapperService.extractJourneysFrom(openTripPlannerJourney, apiToken.getDeparture(), apiToken.getArrival()))
                     .onErrorResume(e -> Flux.just(new CallStatus<>(null, Status.FAILED, e)));
         } catch (Exception e) {
@@ -61,12 +61,12 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
         return requestUrl.toString();
     }
 
-    private Mono<OpenTripPlannerJourneyResponse> convert(String json) {
+    private Mono<OpenTripPlannerJourneyResponse> convertToPojo(String json) {
         DravelOpsJsonMapper mapper = new DravelOpsJsonMapper();
         return mapper.mapJsonToPojo(json, OpenTripPlannerJourneyResponse.class);
     }
 
-    private Mono<OpenTripPlannerJourneyResponse> filterErrors(OpenTripPlannerJourneyResponse response) {
+    private Mono<OpenTripPlannerJourneyResponse> handleEmptyResponse(OpenTripPlannerJourneyResponse response) {
         Optional<Error> optionalError = Optional.ofNullable(response.getError());
         if (optionalError.isPresent() && optionalError.get().getId() == ERROR_404 && optionalError.get().getMessage().equals(NO_PATH_FOUND_ERROR)) {
             return Mono.error(new NoExternalResultFoundException());
