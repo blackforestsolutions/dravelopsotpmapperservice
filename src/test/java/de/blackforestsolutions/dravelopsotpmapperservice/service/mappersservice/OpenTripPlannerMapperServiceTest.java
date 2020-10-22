@@ -88,10 +88,9 @@ class OpenTripPlannerMapperServiceTest {
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
-
         testData.getPlan().getItineraries().get(0).setLegs(null);
-        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
+        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
                 .assertNext(journeyCallStatus -> {
@@ -108,8 +107,8 @@ class OpenTripPlannerMapperServiceTest {
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
-
         testData.setPlan(null);
+
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
@@ -123,13 +122,12 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_arrivalDelay() {
-
         String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
-
         testData.getPlan().getItineraries().get(0).getLegs().get(0).setArrivalDelay(300000L);
+
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
@@ -139,7 +137,6 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_departureDelay() {
-
         String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
