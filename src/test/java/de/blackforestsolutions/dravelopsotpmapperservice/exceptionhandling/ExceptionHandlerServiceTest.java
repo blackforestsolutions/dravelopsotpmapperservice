@@ -3,7 +3,6 @@ package de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsExceptionHandler;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -15,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExceptionHandlerServiceTest {
 
 
-    private final DravelOpsExceptionHandler classUnderTest = new DravelOpsExceptionHandler();
+    private final ExceptionHandlerService classUnderTest = new ExceptionHandlerServiceImpl();
 
     @Test
     void test_handleExceptions_with_calledObject_as_null_status_as_null_exception_as_null_returns_emptyMono() {

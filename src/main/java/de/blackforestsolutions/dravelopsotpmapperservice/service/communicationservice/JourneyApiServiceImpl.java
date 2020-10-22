@@ -2,8 +2,8 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsExceptionHandler;
 import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsJsonMapper;
+import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,15 @@ import reactor.core.publisher.Mono;
 public class JourneyApiServiceImpl implements JourneyApiService {
 
     private final DravelOpsJsonMapper dravelOpsJsonMapper = new DravelOpsJsonMapper();
-    private final DravelOpsExceptionHandler dravelOpsExceptionHandler = new DravelOpsExceptionHandler();
     private final RequestTokenHandlerService requestTokenHandlerService;
+    private final ExceptionHandlerService exceptionHandlerService;
     private final ApiToken openTripPlannerApiToken;
     private final OpenTripPlannerApiService openTripPlannerApiService;
 
     @Autowired
-    public JourneyApiServiceImpl(RequestTokenHandlerService requestTokenHandlerService, ApiToken openTripPlannerApiToken, OpenTripPlannerApiService openTripPlannerApiService) {
+    public JourneyApiServiceImpl(RequestTokenHandlerService requestTokenHandlerService, ExceptionHandlerService exceptionHandlerService, ApiToken openTripPlannerApiToken, OpenTripPlannerApiService openTripPlannerApiService) {
         this.requestTokenHandlerService = requestTokenHandlerService;
+        this.exceptionHandlerService = exceptionHandlerService;
         this.openTripPlannerApiToken = openTripPlannerApiToken;
         this.openTripPlannerApiService = openTripPlannerApiService;
     }
@@ -34,10 +35,10 @@ public class JourneyApiServiceImpl implements JourneyApiService {
                 .flatMap(dravelOpsJsonMapper::mapJsonToApiToken)
                 .flatMap(userToken -> requestTokenHandlerService.getRequestApiTokenWith(userToken, openTripPlannerApiToken))
                 .flatMapMany(openTripPlannerApiService::getJourneysBy)
-                .flatMap(dravelOpsExceptionHandler::handleExceptions)
+                .flatMap(exceptionHandlerService::handleExceptions)
                 .distinct(Journey::getId)
                 .flatMap(dravelOpsJsonMapper::map)
-                .onErrorResume(dravelOpsExceptionHandler::handleExceptions);
+                .onErrorResume(exceptionHandlerService::handleExceptions);
     }
 
 }
