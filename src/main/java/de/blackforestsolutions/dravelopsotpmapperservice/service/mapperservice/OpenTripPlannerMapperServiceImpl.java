@@ -4,9 +4,10 @@ import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsdatamodel.Price;
 import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.*;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -27,18 +28,14 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     private static final String DESTINATION_PLACEHOLDER = "Destination";
 
     private final UuidService uuidService;
-    private final PolylineDecodingService polylineDecodingService;
+    private final GeocodingService geocodingService;
     private final ZonedDateTimeService zonedDateTimeService;
-    private final CoordinateFormatterService coordinateFormatterService;
-    private final DistanceFormatterService distanceFormatterService;
 
     @Autowired
-    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, PolylineDecodingService polylineDecodingService, ZonedDateTimeService zonedDateTimeService, CoordinateFormatterService coordinateFormatterService, DistanceFormatterService distanceFormatterService) {
+    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService) {
         this.uuidService = uuidService;
-        this.polylineDecodingService = polylineDecodingService;
+        this.geocodingService = geocodingService;
         this.zonedDateTimeService = zonedDateTimeService;
-        this.coordinateFormatterService = coordinateFormatterService;
-        this.distanceFormatterService = distanceFormatterService;
     }
 
     @Override
@@ -82,9 +79,9 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
                 .setDuration(Duration.between(departureTime, arrivalTime))
                 .setDelay(extractDelayFrom(openTripPlannerLeg))
-                .setDistance(distanceFormatterService.convertToKilometers(openTripPlannerLeg.getDistance()))
+                .setDistance(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
-                .setTrack(polylineDecodingService.decode(openTripPlannerLeg.getLegGeometry().getPoints()))
+                .setTrack(geocodingService.decodePolylineFrom(openTripPlannerLeg.getLegGeometry().getPoints()))
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
                 .setVehicleNumber(Optional.ofNullable(openTripPlannerLeg.getRouteShortName()).orElse(""))
                 .setVehicleName(Optional.ofNullable(openTripPlannerLeg.getRouteLongName()).orElse(""))
@@ -102,7 +99,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
         return new TravelPoint.TravelPointBuilder()
                 .setName(extractStopNameFrom(stop, optionalStopName))
-                .setCoordinates(new Point(coordinateFormatterService.convertToPointWithFixedDecimalPlaces(stop.getLon(), stop.getLat())))
+                .setCoordinates(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(stop.getLon(), stop.getLat()))
                 .setDepartureTime(Optional.ofNullable(stop.getDeparture()).map(this::extractDateTime).orElse(null))
                 .setArrivalTime(Optional.ofNullable(stop.getArrival()).map(this::extractDateTime).orElse(null))
                 .setPlatform(Optional.ofNullable(stop.getPlatformCode()).orElse(""))
