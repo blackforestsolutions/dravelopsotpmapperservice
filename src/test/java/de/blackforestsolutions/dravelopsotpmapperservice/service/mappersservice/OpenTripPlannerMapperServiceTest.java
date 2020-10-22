@@ -15,11 +15,11 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.time.ZoneId;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getExampleTrack;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UUIDObjectMother.*;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.TrackObjectMother.getExampleTrack;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.*;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;

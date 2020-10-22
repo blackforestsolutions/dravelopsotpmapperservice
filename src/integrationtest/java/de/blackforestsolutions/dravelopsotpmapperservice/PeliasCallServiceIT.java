@@ -1,5 +1,6 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
+import de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
@@ -14,9 +15,10 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getSickAgPoint;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,13 +30,10 @@ public class PeliasCallServiceIT {
     @Autowired
     private CallService callService;
 
-    @Autowired
-    private ApiToken peliasApiToken;
-
     @Test
     void test_travelPointName() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasApiToken);
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasApiToken());
         testData.setPath(httpCallBuilderService.buildPeliasTravelPointNamePathWith(testData.build(), testPoint));
 
         Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY);

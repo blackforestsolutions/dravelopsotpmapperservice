@@ -23,10 +23,10 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.getConfiguredPeliasApiToken;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.getResourceFileAsString;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.getResourceFileAsString;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -50,7 +50,7 @@ class PeliasApiServiceTest {
 
     @Test
     void test_extractTravelPointNameFrom_apiToken_and_coordinate_returns_correct_travelPointName() {
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
         Point testPoint = getStuttgarterStreetPoint();
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
@@ -66,7 +66,7 @@ class PeliasApiServiceTest {
 
     @Test
     void test_extractTravelPointNameFrom_is_executed_correctly() {
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
         Point testPoint = getStuttgarterStreetPoint();
         ArgumentCaptor<ApiToken> apiTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<Point> pointArg = ArgumentCaptor.forClass(Point.class);
@@ -79,7 +79,7 @@ class PeliasApiServiceTest {
         inOrder.verify(peliasHttpCallBuilderService, times(1)).buildPeliasTravelPointNamePathWith(apiTokenArg.capture(), pointArg.capture());
         inOrder.verify(callService, times(1)).get(urlArg.capture(), httpHeadersArg.capture());
         inOrder.verifyNoMoreInteractions();
-        assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByField(getConfiguredPeliasApiToken());
+        assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByField(getPeliasApiToken());
         assertThat(pointArg.getValue()).isEqualToComparingFieldByField(getStuttgarterStreetPoint());
         assertThat(urlArg.getValue()).isEqualTo("http://localhost:4000");
         assertThat(httpHeadersArg.getValue()).isEqualTo(HttpHeaders.EMPTY);
@@ -88,7 +88,7 @@ class PeliasApiServiceTest {
     @Test
     void test_extractTravelPointNameFrom_apiToken_host_as_null_and_point_returns_failed_call_status() {
         Point testPoint = getStuttgarterStreetPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getConfiguredPeliasApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasApiToken());
         testData.setHost(null);
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData.build(), testPoint);
@@ -105,7 +105,7 @@ class PeliasApiServiceTest {
     @Test
     void test_extractTravelPointNameFrom_apiToken_and_point_returns_failed_call_status_when_call_failed() {
         Point testPoint = getStuttgarterStreetPoint();
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
         when(callService.get(anyString(), any(HttpHeaders.class)))
                 .thenReturn(Mono.just(new ResponseEntity<>("error", HttpStatus.BAD_REQUEST)));
 
@@ -123,7 +123,7 @@ class PeliasApiServiceTest {
     @Test
     void test_extractTravelPointNameFrom_apiToken_and_point_throws_exception_when_name_is_null() throws JsonProcessingException {
         Point testPoint = getStuttgarterStreetPoint();
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
         String peliasJson = getResourceFileAsString("json/peliasResult.json");
         PeliasTravelPointResponse travelPointResponse = retrieveJsonToPojo(peliasJson, PeliasTravelPointResponse.class);
         travelPointResponse.getFeatures().get(0).getProperties().setName(null);
@@ -145,7 +145,7 @@ class PeliasApiServiceTest {
     @Test
     void test_extractTravelPointNameFrom_apiToken_testPoint_and_emptyResponse_returns_noExternalResultFoundException() {
         Point testPoint = getStuttgarterStreetPoint();
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
         when(callService.get(anyString(), any(HttpHeaders.class)))
                 .thenReturn(Mono.just(new ResponseEntity<>(getResourceFileAsString("json/peliasNoResult.json"), HttpStatus.OK)));
 

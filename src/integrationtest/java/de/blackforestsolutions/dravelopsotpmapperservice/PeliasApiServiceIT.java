@@ -11,23 +11,22 @@ import org.springframework.data.geo.Point;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getSickAgPoint;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PeliasApiServiceIT {
 
     @Autowired
-    private ApiToken peliasApiToken;
-
-    @Autowired
     private PeliasApiService classUnderTest;
 
     @Test
-    void test_extractTravelPointNameFrom_returnscorrectTravelPoint() {
+    void test_extractTravelPointNameFrom_returns_correct_travelPoint() {
+        ApiToken testData = getPeliasApiToken();
         Point testPoint = getSickAgPoint();
 
-        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(peliasApiToken, testPoint);
+        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
         StepVerifier.create(result)
                 .assertNext(travelPointName -> {

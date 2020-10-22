@@ -5,8 +5,8 @@ import org.springframework.data.geo.Point;
 
 import java.util.LinkedList;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getFurtwangenExampleTrack;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getMannheimUniversityToMannheimBerlinerPlatzTrack;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.TrackObjectMother.getFurtwangenExampleTrack;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.TrackObjectMother.getMannheimUniversityToMannheimBerlinerPlatzTrack;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 

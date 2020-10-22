@@ -26,17 +26,24 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
     @Override
     public Mono<ApiToken> getRequestApiTokenWith(ApiToken request, ApiToken otpConfiguredRequestData) {
         try {
+            ApiToken peliasRequestToken = buildPeliasApiTokenWith(request, peliasApiToken);
             return Mono.zip(
-                    extractTravelPointNameFrom(request.getDepartureCoordinate(), peliasApiToken.getDeparture()),
-                    extractTravelPointNameFrom(request.getArrivalCoordinate(), peliasApiToken.getArrival())
-            ).map(departureArrivalTuple -> buildApiTokenWith(request, otpConfiguredRequestData, departureArrivalTuple.getT1(), departureArrivalTuple.getT2()));
+                    extractTravelPointNameFrom(peliasRequestToken, request.getDepartureCoordinate(), peliasRequestToken.getDeparture()),
+                    extractTravelPointNameFrom(peliasRequestToken, request.getArrivalCoordinate(), peliasRequestToken.getArrival())
+            ).map(departureArrivalTuple -> buildOpenTripPlannerApiTokenWith(request, otpConfiguredRequestData, departureArrivalTuple.getT1(), departureArrivalTuple.getT2()));
         } catch (Exception e) {
             return Mono.error(e);
         }
     }
 
-    private ApiToken buildApiTokenWith(ApiToken request, ApiToken configuredRequestData, String departure, String arrival) {
-        ApiToken.ApiTokenBuilder builderCopy = new ApiToken.ApiTokenBuilder(configuredRequestData);
+    private ApiToken buildPeliasApiTokenWith(ApiToken request, ApiToken peliasApiToken) {
+        ApiToken.ApiTokenBuilder builderCopy = new ApiToken.ApiTokenBuilder(peliasApiToken);
+        builderCopy.setLanguage(request.getLanguage());
+        return builderCopy.build();
+    }
+
+    private ApiToken buildOpenTripPlannerApiTokenWith(ApiToken request, ApiToken configuredOtpData, String departure, String arrival) {
+        ApiToken.ApiTokenBuilder builderCopy = new ApiToken.ApiTokenBuilder(configuredOtpData);
         builderCopy.setArrival(arrival);
         builderCopy.setArrivalCoordinate(request.getArrivalCoordinate());
         builderCopy.setDeparture(departure);
@@ -48,7 +55,7 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
         return builderCopy.build();
     }
 
-    private Mono<String> extractTravelPointNameFrom(Point travelPointCoordinate, String travelPointNamePlaceholder) {
+    private Mono<String> extractTravelPointNameFrom(ApiToken peliasApiToken, Point travelPointCoordinate, String travelPointNamePlaceholder) {
         return peliasApiService.extractTravelPointNameFrom(peliasApiToken, travelPointCoordinate)
                 .flatMap(exceptionHandlerService::handleExceptions)
                 .switchIfEmpty(Mono.just(travelPointNamePlaceholder));

@@ -4,8 +4,8 @@ import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.geo.Point;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.getConfiguredPeliasApiToken;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.PointObjectMother.getSickAgPoint;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getSickAgPoint;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -16,7 +16,7 @@ class PeliasHttpCallBuilderServiceTest {
 
     @Test
     void test_buildPeliasTravelPointNamePathWith_apiToken_and_coordinate_returns_valid_path() {
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
         Point testPoint = getSickAgPoint();
 
         String result = classUnderTest.buildPeliasTravelPointNamePathWith(testData, testPoint);
@@ -26,7 +26,7 @@ class PeliasHttpCallBuilderServiceTest {
 
     @Test
     void test_buildPeliasTravelPointNamePathWith_apiToken_and_coordinate_as_null_throws_exception() {
-        ApiToken testData = getConfiguredPeliasApiToken();
+        ApiToken testData = getPeliasApiToken();
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasTravelPointNamePathWith(testData, null));
     }
@@ -34,7 +34,7 @@ class PeliasHttpCallBuilderServiceTest {
     @Test
     void buildPeliasTravelPointNamePathWith_apiToken_apiVersion_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getConfiguredPeliasApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasApiToken());
         testData.setApiVersion(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasTravelPointNamePathWith(testData.build(), testPoint));
@@ -43,7 +43,7 @@ class PeliasHttpCallBuilderServiceTest {
     @Test
     void buildPeliasTravelPointNamePathWith_apiToken_maxResults_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getConfiguredPeliasApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasApiToken());
         testData.setMaxResults(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasTravelPointNamePathWith(testData.build(), testPoint));
@@ -52,7 +52,7 @@ class PeliasHttpCallBuilderServiceTest {
     @Test
     void buildPeliasTravelPointNamePathWith_apiToken_language_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getConfiguredPeliasApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasApiToken());
         testData.setLanguage(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasTravelPointNamePathWith(testData.build(), testPoint));
