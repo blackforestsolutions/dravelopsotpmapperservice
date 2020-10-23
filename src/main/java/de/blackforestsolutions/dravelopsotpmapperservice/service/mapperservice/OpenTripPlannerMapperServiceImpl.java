@@ -78,7 +78,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return new Leg.LegBuilder(uuidService.createUUID())
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
-                .setDelay(extractDelayFrom(openTripPlannerLeg))
+                .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
                 .setDistanceInKilometers(distanceFormatterService.convertToKilometers(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
                 .setTrack(polylineDecodingService.decode(openTripPlannerLeg.getLegGeometry().getPoints()))
