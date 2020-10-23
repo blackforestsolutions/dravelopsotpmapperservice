@@ -1,10 +1,8 @@
-name: build and push to dockerhub on merge in master
+name: JAVA & DOCKER CICD
 
-#on:
-#  push:
-#    branches: [ master ]
-
-on: [push]
+on:
+  push:
+    branches: [ master ]
 
 jobs:
   build:
@@ -22,7 +20,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Read active profile from properties
+      - name: Read Active Profile from Properties
         id: read_profile
         uses: christian-draeger/read-properties@1.0.1
         with:
