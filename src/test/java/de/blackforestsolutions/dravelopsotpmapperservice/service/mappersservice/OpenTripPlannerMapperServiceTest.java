@@ -17,8 +17,8 @@ import java.time.ZoneId;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.TrackObjectMother.getExampleTrack;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getExampleWaypoints;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -43,7 +43,7 @@ class OpenTripPlannerMapperServiceTest {
                 .thenReturn(TEST_UUID_4)
                 .thenReturn(TEST_UUID_5);
 
-        doReturn(getExampleTrack()).when(polyLineDecodingService).decode(anyString());
+        doReturn(getExampleWaypoints()).when(polyLineDecodingService).decode(anyString());
     }
 
     @Test
@@ -133,7 +133,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelay()).isEqualTo(Duration.ofMinutes(5)))
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelayInMinutes()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 
@@ -149,7 +149,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelay()).isEqualTo(Duration.ofMinutes(5)))
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelayInMinutes()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 }

@@ -81,7 +81,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
                 .setDistanceInKilometers(distanceFormatterService.convertToKilometers(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
-                .setTrack(polylineDecodingService.decode(openTripPlannerLeg.getLegGeometry().getPoints()))
+                .setWaypoints(polylineDecodingService.decode(openTripPlannerLeg.getLegGeometry().getPoints()))
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
                 .setVehicleNumber(Optional.ofNullable(openTripPlannerLeg.getRouteShortName()).orElse(""))
                 .setVehicleName(Optional.ofNullable(openTripPlannerLeg.getRouteLongName()).orElse(""))
@@ -99,7 +99,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
         return new TravelPoint.TravelPointBuilder()
                 .setName(extractStopNameFrom(stop, optionalStopName))
-                .setCoordinates(new Point(coordinateFormatterService.convertToPointWithFixedDecimalPlaces(stop.getLon(), stop.getLat())))
+                .setPoint(new Point(coordinateFormatterService.convertToPointWithFixedDecimalPlaces(stop.getLon(), stop.getLat())))
                 .setDepartureTime(Optional.ofNullable(stop.getDeparture()).map(this::extractDateTime).orElse(null))
                 .setArrivalTime(Optional.ofNullable(stop.getArrival()).map(this::extractDateTime).orElse(null))
                 .setPlatform(Optional.ofNullable(stop.getPlatformCode()).orElse(""))

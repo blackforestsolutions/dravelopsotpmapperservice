@@ -44,12 +44,12 @@ class JourneyApiServiceIT {
                             .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
                             .matches(leg -> leg.getArrival().getName().equals("SICK AG"));
                     assertThat(actualJourney.getLegs())
-                            .allMatch(leg -> leg.getDelay().toMillis() >= 0)
+                            .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
                             .allMatch(leg -> leg.getDeparture() != null)
                             .allMatch(leg -> leg.getArrival() != null)
-                            .allMatch(leg -> leg.getTrack().size() > 0);
+                            .allMatch(leg -> leg.getWaypoints().size() > 0);
                     return true;
                 })
                 .verifyComplete();
