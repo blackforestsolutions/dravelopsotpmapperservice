@@ -96,7 +96,7 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_with_userRequestToken_and_error_by_mocked_service_returns_zero_journeys() {
-        String userRequestTokenTestData = toJson(getOtpRequestToken());
+        String userRequestTokenTestData = toJson(getUserRequestToken());
         when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
                 .thenReturn(Mono.error(new Exception()));
 
@@ -110,7 +110,7 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_with_userRequesttoken_returns_zero_journeys_when_apiService_failed() {
-        String userRequestTokenTestData = toJson(getOtpRequestToken());
+        String userRequestTokenTestData = toJson(getUserRequestToken());
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.error(new Exception()));
 
@@ -124,7 +124,7 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_with_userRequestToken_returns_zero_journeys_when_apiService_failed() {
-        String userRequestTokenTestData = toJson(getOtpRequestToken());
+        String userRequestTokenTestData = toJson(getUserRequestToken());
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.just(new CallStatus<>(null, Status.FAILED, new Exception())));
 
