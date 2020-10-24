@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.getResourceFileAsString;
@@ -165,6 +166,42 @@ class PeliasApiServiceTest {
         Point testPoint = getStuttgarterStreetPoint();
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(null, testPoint);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(NullPointerException.class);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_getJourneysBy_apiToken_and_error_by_callService_returns_failed_callStatus() {
+        ApiToken testData = getOpenTripPlannerApiToken();
+        Point testPoint = getStuttgarterStreetPoint();
+        when(callService.get(anyString(), any(HttpHeaders.class)))
+                .thenReturn(Mono.error(new Exception()));
+
+        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(Exception.class);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_extractTravelPointNameFrom_apiToken_point_and_thrown_exception_by_httpCallBuilder_returns_failed_call_status() {
+        ApiToken testData = getOpenTripPlannerApiToken();
+        Point testPoint = getStuttgarterStreetPoint();
+        when(peliasHttpCallBuilderService.buildPeliasTravelPointNamePathWith(any(ApiToken.class), any(Point.class)))
+                .thenThrow(NullPointerException.class);
+
+        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
         StepVerifier.create(result)
                 .assertNext(error -> {

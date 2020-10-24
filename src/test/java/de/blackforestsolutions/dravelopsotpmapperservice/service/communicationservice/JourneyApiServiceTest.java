@@ -93,4 +93,46 @@ class JourneyApiServiceTest {
                 .expectNextCount(0L)
                 .verifyComplete();
     }
+
+    @Test
+    void test_retrieveJourneysFromApiService_with_userRequestToken_and_error_by_mocked_service_returns_zero_journeys() {
+        String userRequestTokenTestData = toJson(getOtpRequestToken());
+        when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
+                .thenReturn(Mono.error(new Exception()));
+
+        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(userRequestTokenTestData);
+
+        StepVerifier.create(result)
+                .expectNextCount(0L)
+                .verifyComplete();
+        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
+    }
+
+    @Test
+    void test_retrieveJourneysFromApiService_with_userRequesttoken_returns_zero_journeys_when_apiService_failed() {
+        String userRequestTokenTestData = toJson(getOtpRequestToken());
+        when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
+                .thenReturn(Flux.error(new Exception()));
+
+        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(userRequestTokenTestData);
+
+        StepVerifier.create(result)
+                .expectNextCount(0L)
+                .verifyComplete();
+        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
+    }
+
+    @Test
+    void test_retrieveJourneysFromApiService_with_userRequestToken_returns_zero_journeys_when_apiService_failed() {
+        String userRequestTokenTestData = toJson(getOtpRequestToken());
+        when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
+                .thenReturn(Flux.just(new CallStatus<>(null, Status.FAILED, new Exception())));
+
+        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(userRequestTokenTestData);
+
+        StepVerifier.create(result)
+                .expectNextCount(0L)
+                .verifyComplete();
+        verify(exceptionHandlerService, times(1)).handleExceptions(any(CallStatus.class));
+    }
 }

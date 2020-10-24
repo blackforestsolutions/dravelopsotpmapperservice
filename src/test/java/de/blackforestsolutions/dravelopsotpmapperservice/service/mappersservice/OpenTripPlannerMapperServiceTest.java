@@ -27,12 +27,10 @@ import static org.mockito.Mockito.*;
 class OpenTripPlannerMapperServiceTest {
 
     private final UuidService uuidService = mock(UuidService.class);
-    private final PolylineDecodingService polyLineDecodingService = mock(PolylineDecodingService.class);
+    private final GeocodingService geocodingService = spy(GeocodingServiceImpl.class);
     private final ZonedDateTimeService zonedDateTimeService = new ZonedDateTimeServiceImpl(ZoneId.of("Europe/Berlin"));
-    private final CoordinateFormatterService coordinateFormatterService = new CoordinateFormatterServiceImpl();
-    private final DistanceFormatterService distanceFormatterService = new DistanceFormatterServiceImpl();
 
-    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(uuidService, polyLineDecodingService, zonedDateTimeService, coordinateFormatterService, distanceFormatterService);
+    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(uuidService, geocodingService, zonedDateTimeService);
 
     @BeforeEach
     void init() {
@@ -43,7 +41,7 @@ class OpenTripPlannerMapperServiceTest {
                 .thenReturn(TEST_UUID_4)
                 .thenReturn(TEST_UUID_5);
 
-        doReturn(getExampleWaypoints()).when(polyLineDecodingService).decode(anyString());
+        doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
     }
 
     @Test

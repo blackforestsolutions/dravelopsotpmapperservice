@@ -172,7 +172,6 @@ class OpenTripPlannerApiServiceTest {
                 .verifyComplete();
     }
 
-
     @Test
     void test_getJourneysBy_apiToken_and_error_json_when_api_is_called_returns_call_status_with_noExternalResultFoundException() {
         ApiToken testData = getOpenTripPlannerApiToken();
@@ -186,6 +185,57 @@ class OpenTripPlannerApiServiceTest {
                     assertThat(error.getStatus()).isEqualTo(Status.FAILED);
                     assertThat(error.getCalledObject()).isNull();
                     assertThat(error.getThrowable()).isInstanceOf(NoExternalResultFoundException.class);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_getJourneysBy_apiToken_and_error_by_callService_returns_failed_callStatus() {
+        ApiToken testData = getOpenTripPlannerApiToken();
+        when(callService.get(anyString(), any(HttpHeaders.class)))
+                .thenReturn(Mono.error(new Exception()));
+
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(Exception.class);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_getJourneysBy_apiToken_and_failed_call_status_by_mapper_returns_failed_callStatus() {
+        ApiToken testData = getOpenTripPlannerApiToken();
+        when(openTripPlannerMapperService.extractJourneysFrom(any(OpenTripPlannerJourneyResponse.class), anyString(), anyString()))
+                .thenReturn(Flux.just(new CallStatus<>(null, Status.FAILED, new Exception())));
+
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(Exception.class);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_getJourneysBy_apiToken_and_thrown_excpetion_by_httpCallBuiler_returns_failed_callStatus() {
+        ApiToken testData = getOpenTripPlannerApiToken();
+        when(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerJourneyPathWith(any(ApiToken.class)))
+                .thenThrow(NullPointerException.class);
+
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
+
+        StepVerifier.create(result)
+                .assertNext(error -> {
+                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
+                    assertThat(error.getCalledObject()).isNull();
+                    assertThat(error.getThrowable()).isInstanceOf(NullPointerException.class);
                 })
                 .verifyComplete();
     }
