@@ -23,6 +23,16 @@ jobs:
         with:
           java-version: 1.11
 
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
       - name: Bump version and push tag
         uses: ChloePlanet/github-tag-action@master
         id: tag-version
@@ -33,16 +43,6 @@ jobs:
 
       - name: echo new tag
         run: echo ${{ steps.tag-version.outputs.new_tag }}
-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
 
       - name: Read Active Profile from Properties
         id: read_profile
