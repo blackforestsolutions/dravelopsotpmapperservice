@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Locale;
-
 @SpringBootApplication
 public class PeliasConfiguration {
 
@@ -20,8 +18,6 @@ public class PeliasConfiguration {
     private String apiVersion;
     @Value("${pelias.maxResults}")
     private int maxResults;
-    @Value("${language}")
-    private String language;
     @Value("${pelias.departurePlaceholder}")
     private String departurePlaceholder;
     @Value("${pelias.arrivalPlaceholder}")
@@ -35,11 +31,9 @@ public class PeliasConfiguration {
                 .setPort(port)
                 .setApiVersion(apiVersion)
                 .setMaxResults(maxResults)
-                .setLanguage(Locale.forLanguageTag(language))
                 .setDeparture(departurePlaceholder)
                 .setArrival(arrivalPlaceholder)
                 .build();
-
     }
 
 }
