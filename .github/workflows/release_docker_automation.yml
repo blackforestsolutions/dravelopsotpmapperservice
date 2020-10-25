@@ -42,10 +42,11 @@ jobs:
 
       - name: Bump version and push tag
         uses: ChloePlanet/github-tag-action@master
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            WITH_V: true
-            RELEASE_BRANCHES: master
+        id: tag-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          RELEASE_BRANCHES: master
 
       - name: Docker Login
         uses: docker/login-action@v1.5.0
