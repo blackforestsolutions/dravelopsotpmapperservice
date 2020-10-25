@@ -31,6 +31,9 @@ jobs:
           WITH_V: true
           RELEASE_BRANCHES: master
 
+      - name: echo new tag
+        run: echo ${{ steps.tag-version.outputs.new_tag }}
+
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
@@ -47,10 +50,6 @@ jobs:
         with:
           path: './src/main/resources/application.properties'
           property: 'spring.profiles.active'
-
-      - name: echo new tag
-        run: echo ${{ steps.tag-version.outputs.new_tag }}
-
 
       - name: Docker Login
         uses: docker/login-action@v1.5.0
