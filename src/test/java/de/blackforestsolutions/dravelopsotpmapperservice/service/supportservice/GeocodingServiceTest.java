@@ -7,8 +7,8 @@ import org.springframework.data.geo.Point;
 
 import java.util.LinkedList;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getFurtwangenExampleTrack;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getMannheimUniversityToMannheimBerlinerPlatzTrack;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getFurtwangenExampleWaypoints;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getMannheimUniversityToMannheimBerlinerPlatzWaypoints;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GeocodingServiceTest {
@@ -52,7 +52,7 @@ class GeocodingServiceTest {
     @Test
     void test_decodePolylineFrom_encoded_polyline_in_furtwangen_return_correct_track() {
         String encodedPolylineTestData = "mtodHyhpo@@HVbDPVHlABAl@QRIDN|@Sd@Gx@Ob@EDp@FfAD~@@JDd@Fd@@JPt@v@{@LM";
-        LinkedList<Point> expectedTrack = getFurtwangenExampleTrack();
+        LinkedList<Point> expectedTrack = getFurtwangenExampleWaypoints();
 
         LinkedList<Point> result = classUnderTest.decodePolylineFrom(encodedPolylineTestData);
 
@@ -95,7 +95,7 @@ class GeocodingServiceTest {
     @Test
     void test_decodePolylineFrom_polyline_returns_track_between_mannheim_university_and_mannheim_berlin_place() {
         String encodedPolylineTestData = "sn_mH{~sr@i@x\\zJnp@";
-        LinkedList<Point> expectedTrack = getMannheimUniversityToMannheimBerlinerPlatzTrack();
+        LinkedList<Point> expectedTrack = getMannheimUniversityToMannheimBerlinerPlatzWaypoints();
 
         LinkedList<Point> result = classUnderTest.decodePolylineFrom(encodedPolylineTestData);
 

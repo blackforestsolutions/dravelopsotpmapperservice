@@ -16,15 +16,15 @@ import reactor.core.publisher.Mono;
 public class JourneyApiServiceImpl implements JourneyApiService {
 
     private final DravelOpsJsonMapper dravelOpsJsonMapper = new DravelOpsJsonMapper();
-    private final ExceptionHandlerService exceptionHandlerService;
     private final RequestTokenHandlerService requestTokenHandlerService;
+    private final ExceptionHandlerService exceptionHandlerService;
     private final ApiToken openTripPlannerApiToken;
     private final OpenTripPlannerApiService openTripPlannerApiService;
 
     @Autowired
-    public JourneyApiServiceImpl(ExceptionHandlerService exceptionHandlerService, RequestTokenHandlerService requestTokenHandlerService, ApiToken openTripPlannerApiToken, OpenTripPlannerApiService openTripPlannerApiService) {
-        this.exceptionHandlerService = exceptionHandlerService;
+    public JourneyApiServiceImpl(RequestTokenHandlerService requestTokenHandlerService, ExceptionHandlerService exceptionHandlerService, ApiToken openTripPlannerApiToken, OpenTripPlannerApiService openTripPlannerApiService) {
         this.requestTokenHandlerService = requestTokenHandlerService;
+        this.exceptionHandlerService = exceptionHandlerService;
         this.openTripPlannerApiToken = openTripPlannerApiToken;
         this.openTripPlannerApiService = openTripPlannerApiService;
     }

@@ -62,26 +62,23 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         }
     }
 
-    private LinkedHashMap<UUID, Leg> extractLegsFrom(List<de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg> openTripPlannerLegs, String departure, String arrival) throws MalformedURLException {
+    private LinkedList<Leg> extractLegsFrom(List<de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg> openTripPlannerLegs, String departure, String arrival) throws MalformedURLException {
         LinkedHashMap<UUID, Leg> legs = new LinkedHashMap<>();
         for (de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg : openTripPlannerLegs) {
             Leg leg = extractLegFrom(openTripPlannerLeg, departure, arrival);
             legs.put(leg.getId(), leg);
         }
-        return legs;
+        return new LinkedList<>(legs.values());
     }
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
-        ZonedDateTime departureTime = zonedDateTimeService.convertEpochMillisecondsToDate(openTripPlannerLeg.getStartTime());
-        ZonedDateTime arrivalTime = zonedDateTimeService.convertEpochMillisecondsToDate(openTripPlannerLeg.getEndTime());
         return new Leg.LegBuilder(uuidService.createUUID())
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
-                .setDuration(Duration.between(departureTime, arrivalTime))
-                .setDelay(extractDelayFrom(openTripPlannerLeg))
-                .setDistance(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
+                .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
+                .setDistanceInKilometers(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
-                .setTrack(geocodingService.decodePolylineFrom(openTripPlannerLeg.getLegGeometry().getPoints()))
+                .setWaypoints(geocodingService.decodePolylineFrom(openTripPlannerLeg.getLegGeometry().getPoints()))
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
                 .setVehicleNumber(Optional.ofNullable(openTripPlannerLeg.getRouteShortName()).orElse(""))
                 .setVehicleName(Optional.ofNullable(openTripPlannerLeg.getRouteLongName()).orElse(""))
@@ -99,7 +96,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
         return new TravelPoint.TravelPointBuilder()
                 .setName(extractStopNameFrom(stop, optionalStopName))
-                .setCoordinates(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(stop.getLon(), stop.getLat()))
+                .setPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(stop.getLon(), stop.getLat()))
                 .setDepartureTime(Optional.ofNullable(stop.getDeparture()).map(this::extractDateTime).orElse(null))
                 .setArrivalTime(Optional.ofNullable(stop.getArrival()).map(this::extractDateTime).orElse(null))
                 .setPlatform(Optional.ofNullable(stop.getPlatformCode()).orElse(""))
@@ -143,21 +140,22 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return null;
     }
 
-    private LinkedHashMap<PriceType, Price> extractPricesFrom(Itinerary itinerary) {
+    private LinkedList<Price> extractPricesFrom(Itinerary itinerary) {
         return Optional.ofNullable(itinerary.getFare())
                 .map(Fare::getFare)
                 .map(fares -> fares.entrySet().stream()
                         .map(this::extractPriceFrom)
                         .collect(Collectors.toMap(Price::getPriceType, price -> price, (prev, next) -> next, LinkedHashMap::new))
                 )
-                .orElseGet(LinkedHashMap::new);
+                .map(priceMap -> new LinkedList<>(priceMap.values()))
+                .orElseGet(LinkedList::new);
     }
 
     private Price extractPriceFrom(Map.Entry<Fare.FareType, Money> fare) {
         return new Price.PriceBuilder()
                 .setPriceType(PriceType.valueOf(fare.getKey().toString().toUpperCase(Locale.GERMANY)))
                 .setSmallestCurrencyValue(fare.getValue().getCents())
-                .setCurrency(Currency.getInstance(fare.getValue().getCurrency().getCurrencyCode()))
+                .setCurrencyCode(Currency.getInstance(fare.getValue().getCurrency().getCurrencyCode()))
                 .build();
     }
 

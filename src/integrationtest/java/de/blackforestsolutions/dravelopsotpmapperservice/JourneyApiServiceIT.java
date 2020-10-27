@@ -12,9 +12,9 @@ import reactor.test.StepVerifier;
 
 import java.time.ZonedDateTime;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.ApiTokenObjectMother.getOtpRequestToken;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.retrieveJsonToPojo;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.toJson;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getUserRequestToken;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -25,7 +25,7 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        ApiToken testData = getOtpRequestToken();
+        ApiToken testData = getUserRequestToken();
         String jsonTestData = toJson(testData);
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
@@ -35,22 +35,21 @@ class JourneyApiServiceIT {
                 .thenConsumeWhile(journey -> {
                     Journey actualJourney = retrieveJsonToPojo(journey, Journey.class);
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
-                    assertThat(actualJourney.getLegs().values())
+                    assertThat(actualJourney.getLegs())
                             .first()
                             .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
                             .matches(leg -> leg.getDeparture().getName().equals("Am Großhausberg"));
-                    assertThat(actualJourney.getLegs().values())
+                    assertThat(actualJourney.getLegs())
                             .last()
                             .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
                             .matches(leg -> leg.getArrival().getName().equals("SICK AG"));
-                    assertThat(actualJourney.getLegs().values())
-                            .allMatch(leg -> leg.getDelay().toMillis() >= 0)
-                            .allMatch(leg -> leg.getDistance().getValue() > 0)
+                    assertThat(actualJourney.getLegs())
+                            .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
+                            .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
                             .allMatch(leg -> leg.getDeparture() != null)
                             .allMatch(leg -> leg.getArrival() != null)
-                            .allMatch(leg -> leg.getTrack().size() > 0)
-                            .allMatch(leg -> leg.getDuration().toMillis() > 0);
+                            .allMatch(leg -> leg.getWaypoints().size() > 0);
                     return true;
                 })
                 .verifyComplete();
@@ -58,11 +57,12 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpRequestToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getUserRequestToken());
         testData.setArrival("Berlin Mitte");
         testData.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        String jsonTestData = toJson(testData.build());
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(toJson(testData.build()));
+        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
         StepVerifier.create(result)
                 .expectNextCount(0L)

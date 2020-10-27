@@ -58,6 +58,7 @@ public class ExceptionHandlerServiceImpl implements ExceptionHandlerService {
         log.warn("No Exception for failed CallStatus found");
     }
 
+
     private static void logMissingCalledObject() {
         log.warn("No CalledObject for failed CallStatus found");
     }

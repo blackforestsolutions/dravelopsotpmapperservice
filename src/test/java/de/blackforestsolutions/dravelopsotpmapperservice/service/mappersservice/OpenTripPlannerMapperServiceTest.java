@@ -15,11 +15,11 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.time.ZoneId;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.TrackObjectMother.getExampleTrack;
-import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.UUIDObjectMother.*;
-import static de.blackforestsolutions.dravelopsotpmapperservice.testutils.TestUtils.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getExampleWaypoints;
+import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -41,7 +41,7 @@ class OpenTripPlannerMapperServiceTest {
                 .thenReturn(TEST_UUID_4)
                 .thenReturn(TEST_UUID_5);
 
-        doReturn(getExampleTrack()).when(geocodingService).decodePolylineFrom(anyString());
+        doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
     }
 
     @Test
@@ -86,9 +86,10 @@ class OpenTripPlannerMapperServiceTest {
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
-        testData.getPlan().getItineraries().get(0).setLegs(null);
 
+        testData.getPlan().getItineraries().get(0).setLegs(null);
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
+
 
         StepVerifier.create(result)
                 .assertNext(journeyCallStatus -> {
@@ -105,8 +106,8 @@ class OpenTripPlannerMapperServiceTest {
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
-        testData.setPlan(null);
 
+        testData.setPlan(null);
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
@@ -120,21 +121,23 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_arrivalDelay() {
+
         String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
-        testData.getPlan().getItineraries().get(0).getLegs().get(0).setArrivalDelay(300000L);
 
+        testData.getPlan().getItineraries().get(0).getLegs().get(0).setArrivalDelay(300000L);
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5)))
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelayInMinutes()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_departureDelay() {
+
         String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
@@ -144,7 +147,7 @@ class OpenTripPlannerMapperServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 
         StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(TEST_UUID_2).getDelay()).isEqualTo(Duration.ofMinutes(5)))
+                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelayInMinutes()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 }
