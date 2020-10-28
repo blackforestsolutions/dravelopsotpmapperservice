@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 class RequestTokenHandlerServiceTest {
 
-    private final ApiToken peliasApiToken = getConfiguredPeliasApiToken();
+    private final ApiToken peliasApiToken = getConfiguredPeliasReverseApiToken();
     private final PeliasApiService peliasApiService = mock(PeliasApiService.class);
     private final ExceptionHandlerService exceptionHandlerService = spy(ExceptionHandlerServiceImpl.class);
 
@@ -37,7 +37,7 @@ class RequestTokenHandlerServiceTest {
     @Test
     void test_getRequestApiTokenWith_configured_token_and_user_token_returns_correct_call_token() {
         ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
-        ApiToken requestTestData = getUserRequestToken();
+        ApiToken requestTestData = getOtpMapperApiToken();
 
         Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
 
@@ -49,7 +49,7 @@ class RequestTokenHandlerServiceTest {
     @Test
     void test_getRequestApiTokenWith_requestToken_and_otpToken_is_executed_correctly() {
         ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
-        ApiToken requestTestData = getUserRequestToken();
+        ApiToken requestTestData = getOtpMapperApiToken();
         ArgumentCaptor<ApiToken> peliasApiTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<Point> pointArg = ArgumentCaptor.forClass(Point.class);
         ArgumentCaptor<CallStatus<String>> callStatusArg = ArgumentCaptor.forClass(CallStatus.class);
@@ -63,8 +63,8 @@ class RequestTokenHandlerServiceTest {
         assertThat(peliasApiTokenArg.getAllValues().size()).isEqualTo(2);
         assertThat(pointArg.getAllValues().size()).isEqualTo(2);
         assertThat(callStatusArg.getAllValues().size()).isEqualTo(2);
-        assertThat(peliasApiTokenArg.getAllValues().get(0)).isEqualToComparingFieldByField(getPeliasApiToken());
-        assertThat(peliasApiTokenArg.getAllValues().get(1)).isEqualToComparingFieldByField(getPeliasApiToken());
+        assertThat(peliasApiTokenArg.getAllValues().get(0)).isEqualToComparingFieldByField(getPeliasReverseApiToken());
+        assertThat(peliasApiTokenArg.getAllValues().get(1)).isEqualToComparingFieldByField(getPeliasReverseApiToken());
         assertThat(pointArg.getAllValues().get(0)).isEqualToComparingFieldByField(requestTestData.getDepartureCoordinate());
         assertThat(pointArg.getAllValues().get(1)).isEqualToComparingFieldByField(requestTestData.getArrivalCoordinate());
         assertThat(callStatusArg.getAllValues().get(0).getStatus()).isEqualTo(Status.SUCCESS);
@@ -74,7 +74,7 @@ class RequestTokenHandlerServiceTest {
     @Test
     void test_getRequestApiTokenWith_configured_token_and_user_token_returns_apiToken_with_placeholders_when_pelias_call_was_not_successfull() {
         ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
-        ApiToken requestTestData = getUserRequestToken();
+        ApiToken requestTestData = getOtpMapperApiToken();
         when(peliasApiService.extractTravelPointNameFrom(any(ApiToken.class), any(Point.class)))
                 .thenReturn(Mono.just(new CallStatus<>(null, Status.FAILED, new Exception())));
 
@@ -92,7 +92,7 @@ class RequestTokenHandlerServiceTest {
     @Test
     void test_getRequestApiTokenWith__configured_token_and_user_tokengetOtpRequestToken_returns_error_when_exception_is_thrown() {
         ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
-        ApiToken.ApiTokenBuilder reqeustTestData = new ApiToken.ApiTokenBuilder(getUserRequestToken());
+        ApiToken.ApiTokenBuilder reqeustTestData = new ApiToken.ApiTokenBuilder(getOtpMapperApiToken());
         reqeustTestData.setDepartureCoordinate(null);
 
         Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(reqeustTestData.build(), configuredTestData);
