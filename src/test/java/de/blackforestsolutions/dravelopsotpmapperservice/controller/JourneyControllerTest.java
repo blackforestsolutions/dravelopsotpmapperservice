@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getUserRequestToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOtpMapperApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
@@ -38,7 +38,7 @@ class JourneyControllerTest {
         Flux<String> result = classUnderTest
                 .post()
                 .uri("/otp/journeys/get")
-                .body(Mono.just(toJson(getUserRequestToken())), String.class)
+                .body(Mono.just(toJson(getOtpMapperApiToken())), String.class)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .expectStatus()
@@ -48,7 +48,7 @@ class JourneyControllerTest {
 
 
         verify(journeyApiService, times(1)).retrieveJourneysFromApiService(requestToken.capture());
-        assertThat(requestToken.getValue()).isEqualTo(toJson(getUserRequestToken()));
+        assertThat(requestToken.getValue()).isEqualTo(toJson(getOtpMapperApiToken()));
         StepVerifier.create(result)
                 .assertNext(journey -> assertThat(deleteWhitespace(journey)).isEqualTo(deleteWhitespace(toJson(getJourneyWithEmptyFields(TEST_UUID_1)))))
                 .verifyComplete();
@@ -61,7 +61,7 @@ class JourneyControllerTest {
         Flux<String> result = classUnderTest
                 .post()
                 .uri("/otp/journeys/get")
-                .body(Mono.just(toJson(getUserRequestToken())), String.class)
+                .body(Mono.just(toJson(getOtpMapperApiToken())), String.class)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .expectStatus()

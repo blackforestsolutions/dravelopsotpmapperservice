@@ -11,7 +11,7 @@ import org.springframework.data.geo.Point;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasReverseApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getSickAgPoint;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,7 @@ public class PeliasApiServiceIT {
 
     @Test
     void test_extractTravelPointNameFrom_returns_correct_travelPoint() {
-        ApiToken testData = getPeliasApiToken();
+        ApiToken testData = getPeliasReverseApiToken();
         Point testPoint = getSickAgPoint();
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);

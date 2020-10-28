@@ -12,7 +12,7 @@ import reactor.test.StepVerifier;
 
 import java.time.ZonedDateTime;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getUserRequestToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOtpMapperApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +25,7 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        ApiToken testData = getUserRequestToken();
+        ApiToken testData = getOtpMapperApiToken();
         String jsonTestData = toJson(testData);
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
@@ -57,7 +57,7 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getUserRequestToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpMapperApiToken());
         testData.setArrival("Berlin Mitte");
         testData.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
         String jsonTestData = toJson(testData.build());
