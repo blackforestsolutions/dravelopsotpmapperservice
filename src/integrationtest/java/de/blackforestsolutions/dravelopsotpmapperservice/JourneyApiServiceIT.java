@@ -24,14 +24,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JourneyApiServiceIT {
 
     @Autowired
-    private ApiToken.ApiTokenBuilder otpMapperApiToken;
+    private ApiToken otpMapperApiToken;
 
     @Autowired
     private JourneyApiService classUnderTest;
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        String jsonTestData = toJson(otpMapperApiToken);
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
