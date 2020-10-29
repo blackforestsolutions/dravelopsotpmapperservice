@@ -2,13 +2,18 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsotpmapperservice.configuration.TestConfig;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
+import de.blackforestsolutions.dravelopsotpmapperservice.testutils.ZonedDateTimeConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.geo.Point;
+import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -19,19 +24,18 @@ import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retr
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import(TestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class JourneyApiServiceIT {
 
     @Autowired
-    private ApiToken otpMapperApiToken;
+    private ApiToken.ApiTokenBuilder otpMapperApiToken;
 
     @Autowired
     private JourneyApiService classUnderTest;
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        String jsonTestData = toJson(otpMapperApiToken);
+        String jsonTestData = toJson(otpMapperApiToken.build());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
