@@ -2,18 +2,13 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.BwApiTokenConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
-import de.blackforestsolutions.dravelopsotpmapperservice.testutils.ZonedDateTimeConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
-import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -24,18 +19,21 @@ import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retr
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Import(BwApiTokenConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class JourneyApiServiceIT {
 
     @Autowired
-    private ApiToken.ApiTokenBuilder otpMapperApiToken;
+    private JourneyApiService classUnderTest;
 
     @Autowired
-    private JourneyApiService classUnderTest;
+    private BwApiTokenConfiguration bwApiTokenConfiguration;
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        ApiToken testData = bwApiTokenConfiguration.setOtpMapperApiTokenConfiguration();
+        //ApiToken testData = getOtpMapperApiToken();
+        String jsonTestData = toJson(new ApiToken.ApiTokenBuilder().build());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
@@ -46,12 +44,12 @@ class JourneyApiServiceIT {
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
                     assertThat(actualJourney.getLegs())
                             .first()
-                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(otpMapperApiToken.getDateTime())))
-                            .matches(leg -> !leg.getDeparture().getName().isEmpty());
+                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
+                            .matches(leg -> leg.getDeparture().getName().equals("Am Großhausberg"));
                     assertThat(actualJourney.getLegs())
                             .last()
-                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(otpMapperApiToken.getDateTime())))
-                            .matches(leg -> !leg.getArrival().getName().isEmpty());
+                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
+                            .matches(leg -> leg.getArrival().getName().equals("SICK AG"));
                     assertThat(actualJourney.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)

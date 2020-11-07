@@ -2,10 +2,8 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.Optimization;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
-import de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.OpenTripPlannerApiService;
 import org.junit.jupiter.api.Test;
@@ -14,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.geo.Point;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
-
-import java.time.ZonedDateTime;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
 import static org.assertj.core.api.Assertions.assertThat;
