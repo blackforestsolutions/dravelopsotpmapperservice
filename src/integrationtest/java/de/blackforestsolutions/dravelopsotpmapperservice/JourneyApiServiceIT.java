@@ -32,7 +32,7 @@ class JourneyApiServiceIT {
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
         ApiToken testData = bwApiTokenConfiguration.setOtpMapperApiTokenConfiguration();
-        //ApiToken testData = getOtpMapperApiToken();
+
         String jsonTestData = toJson(new ApiToken.ApiTokenBuilder().build());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
