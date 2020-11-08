@@ -38,8 +38,8 @@ public class JourneyApiApiTokenConfiguration {
     @Value("${test.apitokens.otpmapper.language}")
     private Locale language;
 
-    @Bean("otpMapperApiToken")
-    public ApiToken.ApiTokenBuilder otpMapperApiToken() {
+    @Bean("otpMapperApiTokenIT")
+    public ApiToken.ApiTokenBuilder otpMapperApiTokenIT() {
         return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)
@@ -53,5 +53,3 @@ public class JourneyApiApiTokenConfiguration {
                 .setLanguage(language);
     }
 }
-
-// todo für die weiteren Klassen jeweil eine neue config klasse?

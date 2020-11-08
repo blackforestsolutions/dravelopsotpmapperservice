@@ -26,12 +26,12 @@ class JourneyApiServiceIT {
     private JourneyApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder otpMapperApiToken;
+    private ApiToken.ApiTokenBuilder otpMapperApiTokenIT;
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
 
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        String jsonTestData = toJson(otpMapperApiTokenIT.build());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
@@ -42,11 +42,11 @@ class JourneyApiServiceIT {
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
                     assertThat(actualJourney.getLegs())
                             .first()
-                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(otpMapperApiToken.getDateTime())))
+                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(otpMapperApiTokenIT.getDateTime())))
                             .matches(leg -> leg.getDeparture().getName().equals("Am Großhausberg"));
                     assertThat(actualJourney.getLegs())
                             .last()
-                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(otpMapperApiToken.getDateTime())))
+                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(otpMapperApiTokenIT.getDateTime())))
                             .matches(leg -> leg.getArrival().getName().equals("SICK AG"));
                     assertThat(actualJourney.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
@@ -62,9 +62,9 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        otpMapperApiToken.setArrival("Berlin Mitte");
-        otpMapperApiToken.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        otpMapperApiTokenIT.setArrival("Berlin Mitte");
+        otpMapperApiTokenIT.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        String jsonTestData = toJson(otpMapperApiTokenIT.build());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
@@ -72,6 +72,4 @@ class JourneyApiServiceIT {
                 .expectNextCount(0L)
                 .verifyComplete();
     }
-
-
 }

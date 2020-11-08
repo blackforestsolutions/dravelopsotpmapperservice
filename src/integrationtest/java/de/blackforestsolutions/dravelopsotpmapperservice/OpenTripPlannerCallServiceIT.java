@@ -2,11 +2,13 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripPlannerApiApiTokenConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retr
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Import(OpenTripPlannerApiApiTokenConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OpenTripPlannerCallServiceIT {
 
@@ -26,6 +29,9 @@ class OpenTripPlannerCallServiceIT {
 
     @Autowired
     private CallService callService;
+
+    @Autowired
+    private ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT;
 
     @Test
     void test_journey() {
@@ -41,5 +47,12 @@ class OpenTripPlannerCallServiceIT {
                     assertThat(retrieveJsonToPojo(response.getBody(), OpenTripPlannerJourneyResponse.class).getPlan().getItineraries().size()).isGreaterThan(0);
                 })
                 .verifyComplete();
+    }
+
+    @Test
+    public void test() {
+        String New = toJson(openTripPlannerApiTokenIT);
+        String Old = toJson(getOpenTripPlannerApiToken());
+        assertThat(otpMapperApiToken).isEqualToComparingFieldByField(getOtpMapperApiToken());
     }
 }

@@ -4,11 +4,11 @@ import de.blackforestsolutions.dravelopsdatamodel.Optimization;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.geo.Point;
 
 import java.time.ZonedDateTime;
 import java.util.Locale;
+
 // todo
 @TestConfiguration
 public class OpenTripPlannerCallApiTokenConfiguration {
@@ -38,8 +38,8 @@ public class OpenTripPlannerCallApiTokenConfiguration {
     @Value("${test.apitokens.otpmapper.language}")
     private Locale language;
 
-    @Bean("otpMapperApiToken")
-    public ApiToken.ApiTokenBuilder otpMapperApiToken() {
+    //    @Bean("openTripPlannerApiTokenIT")
+    public ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT() {
         return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)
