@@ -2,7 +2,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsotpmapperservice.configuration.BwApiTokenConfiguration;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.ApiTokenConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retr
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import(BwApiTokenConfiguration.class)
+@Import(ApiTokenConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class JourneyApiServiceIT {
 
@@ -27,13 +27,12 @@ class JourneyApiServiceIT {
     private JourneyApiService classUnderTest;
 
     @Autowired
-    private BwApiTokenConfiguration bwApiTokenConfiguration;
+    private ApiToken otpMapperApiToken;
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        ApiToken testData = bwApiTokenConfiguration.setOtpMapperApiTokenConfiguration();
 
-        String jsonTestData = toJson(new ApiToken.ApiTokenBuilder().build());
+        String jsonTestData = toJson(otpMapperApiToken);
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
@@ -44,11 +43,11 @@ class JourneyApiServiceIT {
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
                     assertThat(actualJourney.getLegs())
                             .first()
-                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
+                            .matches(leg -> leg.getDeparture().getDepartureTime().isAfter(ZonedDateTime.from(otpMapperApiToken.getDateTime())))
                             .matches(leg -> leg.getDeparture().getName().equals("Am Großhausberg"));
                     assertThat(actualJourney.getLegs())
                             .last()
-                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(testData.getDateTime())))
+                            .matches(leg -> leg.getArrival().getArrivalTime().isAfter(ZonedDateTime.from(otpMapperApiToken.getDateTime())))
                             .matches(leg -> leg.getArrival().getName().equals("SICK AG"));
                     assertThat(actualJourney.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)

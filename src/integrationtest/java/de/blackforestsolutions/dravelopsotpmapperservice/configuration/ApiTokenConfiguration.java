@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 
 @TestConfiguration
-public class BwApiTokenConfiguration {
+public class ApiTokenConfiguration {
 
     @Value("${protocol}")
     private String protocol;
@@ -38,10 +38,9 @@ public class BwApiTokenConfiguration {
     @Value("${language}")
     private Locale language;
 
-    @Bean("OtpMapperApiTokenConfiguration")
-    public ApiToken setOtpMapperApiTokenConfiguration() {
-        System.out.println(port);
-        return (new ApiToken.ApiTokenBuilder())
+    @Bean("otpMapperApiToken")
+    public ApiToken otpMapperApiToken() {
+        return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)
                 .setPort(port)
