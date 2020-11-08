@@ -25,14 +25,14 @@ class OpenTripPlannerApiServiceIT {
     private OpenTripPlannerApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT;
+    private ApiToken.ApiTokenBuilder openTripPlannerApiAndCallTokenIT;
 
     @Test
     void test_getJourneysBy_with_incorrect_apiToken_returns_noExternalResultFoundException() {
-        openTripPlannerApiTokenIT.setArrival("Berlin Mitte");
-        openTripPlannerApiTokenIT.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        openTripPlannerApiAndCallTokenIT.setArrival("Berlin Mitte");
+        openTripPlannerApiAndCallTokenIT.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(openTripPlannerApiTokenIT.build());
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(openTripPlannerApiAndCallTokenIT.build());
 
         StepVerifier.create(result)
                 .assertNext(journey -> {

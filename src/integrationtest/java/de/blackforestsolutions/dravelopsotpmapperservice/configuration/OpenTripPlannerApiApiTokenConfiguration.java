@@ -13,11 +13,11 @@ import java.util.Locale;
 @TestConfiguration
 public class OpenTripPlannerApiApiTokenConfiguration {
 
-    @Value("${test.apitokens.opentripplanner.protocol}")
+    @Value("${otp.protocol}")
     private String protocol;
-    @Value("${test.apitokens.opentripplanner.host}")
+    @Value("${otp.host}")
     private String host;
-    @Value("${test.apitokens.opentripplanner.port}")
+    @Value("${otp.port}")
     private int port;
     @Value("${otp.router}")
     private String router;
@@ -42,8 +42,8 @@ public class OpenTripPlannerApiApiTokenConfiguration {
     @Value("${test.apitokens.opentripplanner.language}")
     private Locale language;
 
-    @Bean("openTripPlannerApiTokenIT")
-    public ApiToken.ApiTokenBuilder openTripPlannerApiToken() {
+    @Bean("openTripPlannerApiAndCallTokenIT")
+    public ApiToken.ApiTokenBuilder openTripPlannerApiAndCallTokenIT() {
         return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)

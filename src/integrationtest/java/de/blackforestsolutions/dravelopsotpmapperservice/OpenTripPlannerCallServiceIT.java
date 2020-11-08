@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,14 +30,13 @@ class OpenTripPlannerCallServiceIT {
     private CallService callService;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT;
+    private ApiToken.ApiTokenBuilder openTripPlannerApiAndCallTokenIT;
 
     @Test
     void test_journey() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
-        testData.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()));
+        openTripPlannerApiAndCallTokenIT.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(openTripPlannerApiAndCallTokenIT.build()));
 
-        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY);
+        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(openTripPlannerApiAndCallTokenIT.build()).toString(), HttpHeaders.EMPTY);
 
         StepVerifier.create(result)
                 .assertNext(response -> {
@@ -47,12 +45,5 @@ class OpenTripPlannerCallServiceIT {
                     assertThat(retrieveJsonToPojo(response.getBody(), OpenTripPlannerJourneyResponse.class).getPlan().getItineraries().size()).isGreaterThan(0);
                 })
                 .verifyComplete();
-    }
-
-    @Test
-    public void test() {
-        String New = toJson(openTripPlannerApiTokenIT);
-        String Old = toJson(getOpenTripPlannerApiToken());
-        assertThat(otpMapperApiToken).isEqualToComparingFieldByField(getOtpMapperApiToken());
     }
 }
