@@ -38,20 +38,25 @@ class JourneyApiServiceIT {
                     Journey actualJourney = retrieveJsonToPojo(journey, Journey.class);
                     assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
                     assertThat(actualJourney.getLegs())
-                            .first()
-                            .matches(leg -> leg.getDeparture().getDepartureTime() != null)
-                            .matches(leg -> leg.getDeparture().getName() != null);
-                    assertThat(actualJourney.getLegs())
-                            .last()
-                            .matches(leg -> leg.getArrival().getArrivalTime() != null)
-                            .matches(leg -> leg.getArrival().getName() != null);
-                    assertThat(actualJourney.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
+                            .allMatch(leg -> leg.getWaypoints().size() > 0)
+                            .allMatch(leg -> leg.getIntermediateStops().size() == 0 || leg.getIntermediateStops().size() > 0)
+                            .allMatch(leg -> leg.getVehicleName() != null)
+                            .allMatch(leg -> leg.getVehicleNumber() != null)
                             .allMatch(leg -> leg.getDeparture() != null)
+                            .allMatch(leg -> !leg.getDeparture().getName().isEmpty())
+                            .allMatch(leg -> leg.getDeparture().getPoint() != null)
                             .allMatch(leg -> leg.getArrival() != null)
-                            .allMatch(leg -> leg.getWaypoints().size() > 0);
+                            .allMatch(leg -> !leg.getArrival().getName().isEmpty())
+                            .allMatch(leg -> leg.getArrival().getPoint() != null);
+                    assertThat(actualJourney.getLegs())
+                            .first()
+                            .matches(leg -> leg.getDeparture().getArrivalTime() == null);
+                    assertThat(actualJourney.getLegs())
+                            .last()
+                            .matches(leg -> leg.getArrival().getDepartureTime() == null);
                     return true;
                 })
                 .verifyComplete();
