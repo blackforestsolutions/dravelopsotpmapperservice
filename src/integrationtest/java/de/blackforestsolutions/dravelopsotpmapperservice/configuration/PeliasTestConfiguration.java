@@ -9,7 +9,7 @@ import org.springframework.data.geo.Point;
 import java.util.Locale;
 
 @TestConfiguration
-public class PeliasApiApiTokenConfiguration {
+public class PeliasTestConfiguration {
 
     @Value("${pelias.protocol}")
     private String protocol;
@@ -17,23 +17,23 @@ public class PeliasApiApiTokenConfiguration {
     private String host;
     @Value("${pelias.port}")
     private int port;
-    @Value("${test.apitokens.pelias.apiversion}")
+    @Value("${pelias.apiVersion}")
     private String apiVersion;
-    @Value("${test.apitokens.pelias.maxresult}")
+    @Value("${pelias.maxResults}")
     private int maxResult;
-    @Value("${test.apitokens.pelias.departure}")
+    @Value("${pelias.departurePlaceholder}")
     private String departure;
-    @Value("${test.apitokens.pelias.arrival}")
+    @Value("${pelias.arrivalPlaceholder}")
     private String arrival;
     @Value("${test.apitokens.pelias.language}")
     private Locale language;
-    @Value("${test.apitokens.pelias.coordinate_x}")
-    private double coordinate_x;
-    @Value("${test.apitokens.pelias.coordinate_y}")
-    private double coordinate_y;
+    @Value("${test.apitokens.pelias.coordinateLongitude}")
+    private double coordinateLongitude;
+    @Value("${test.apitokens.pelias.coordinateLatitude}")
+    private double coordinateLatitude;
 
-    @Bean("peliasApiApiTokenIT")
-    public ApiToken.ApiTokenBuilder peliasApiApiTokenIT() {
+    @Bean
+    public ApiToken.ApiTokenBuilder peliasReverseApiToken() {
         return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)
@@ -47,6 +47,6 @@ public class PeliasApiApiTokenConfiguration {
 
     @Bean(name = "peliasPoint")
     public Point point() {
-        return new Point(coordinate_x, coordinate_y);
+        return new Point(coordinateLongitude, coordinateLatitude);
     }
 }

@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 
 @TestConfiguration
-public class OpenTripPlannerApiApiTokenConfiguration {
+public class OpenTripPlannerTestConfiguration {
 
     @Value("${otp.protocol}")
     private String protocol;
@@ -29,21 +29,21 @@ public class OpenTripPlannerApiApiTokenConfiguration {
     private String dateTime;
     @Value("${test.apitokens.opentripplanner.departure}")
     private String departure;
-    @Value("${test.apitokens.opentripplanner.departureCoordinate_x}")
-    private Double departureCoordinate_x;
-    @Value("${test.apitokens.opentripplanner.departureCoordinate_y}")
-    private Double departureCoordinate_y;
+    @Value("${test.apitokens.opentripplanner.departureCoordinateLongitude}")
+    private Double departureCoordinateLongitude;
+    @Value("${test.apitokens.opentripplanner.departureCoordinateLatitude}")
+    private Double departureCoordinateLatitude;
     @Value("${test.apitokens.opentripplanner.arrival}")
     private String arrival;
-    @Value("${test.apitokens.opentripplanner.arrivalCoordinate_x}")
-    private Double arrivalCoordinate_x;
-    @Value("${test.apitokens.opentripplanner.arrivalCoordinate_y}")
-    private Double arrivalCoordinate_y;
+    @Value("${test.apitokens.opentripplanner.arrivalCoordinateLongitude}")
+    private Double arrivalCoordinateLongitude;
+    @Value("${test.apitokens.opentripplanner.arrivalCoordinateLatitude}")
+    private Double arrivalCoordinateLatitude;
     @Value("${test.apitokens.opentripplanner.language}")
     private Locale language;
 
-    @Bean("openTripPlannerApiAndCallTokenIT")
-    public ApiToken.ApiTokenBuilder openTripPlannerApiAndCallTokenIT() {
+    @Bean
+    public ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT() {
         return new ApiToken.ApiTokenBuilder()
                 .setProtocol(protocol)
                 .setHost(host)
@@ -53,9 +53,9 @@ public class OpenTripPlannerApiApiTokenConfiguration {
                 .setIsArrivalDateTime(isArrivalDateTime)
                 .setDateTime(ZonedDateTime.parse(dateTime))
                 .setDeparture(departure)
-                .setDepartureCoordinate(new Point(departureCoordinate_x, departureCoordinate_y))
+                .setDepartureCoordinate(new Point(departureCoordinateLongitude, departureCoordinateLatitude))
                 .setArrival(arrival)
-                .setArrivalCoordinate(new Point(arrivalCoordinate_x, arrivalCoordinate_y))
+                .setArrivalCoordinate(new Point(arrivalCoordinateLongitude, arrivalCoordinateLatitude))
                 .setLanguage(language);
     }
 }

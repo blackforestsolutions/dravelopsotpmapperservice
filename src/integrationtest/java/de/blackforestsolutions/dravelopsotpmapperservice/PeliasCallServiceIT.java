@@ -2,7 +2,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
-import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasApiApiTokenConfiguration;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retr
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import(PeliasApiApiTokenConfiguration.class)
+@Import(PeliasTestConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PeliasCallServiceIT {
 

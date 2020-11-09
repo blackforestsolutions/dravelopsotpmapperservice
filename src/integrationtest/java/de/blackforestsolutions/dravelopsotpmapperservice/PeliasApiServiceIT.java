@@ -3,7 +3,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasApiApiTokenConfiguration;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.PeliasApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import(PeliasApiApiTokenConfiguration.class)
+@Import(PeliasTestConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PeliasApiServiceIT {
 
@@ -23,14 +23,14 @@ public class PeliasApiServiceIT {
     private PeliasApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder peliasApiApiTokenIT;
+    private ApiToken.ApiTokenBuilder peliasReverseApiToken;
 
     @Autowired
     private Point peliasPoint;
 
     @Test
     void test_extractTravelPointNameFrom_returns_correct_travelPoint() {
-        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(peliasApiApiTokenIT.build(), peliasPoint);
+        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(peliasReverseApiToken.build(), peliasPoint);
 
         StepVerifier.create(result)
                 .assertNext(travelPointName -> {

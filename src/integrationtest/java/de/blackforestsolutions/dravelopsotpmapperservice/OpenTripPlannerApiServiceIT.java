@@ -5,7 +5,7 @@ import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripPlannerApiApiTokenConfiguration;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripPlannerTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.OpenTripPlannerApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import(OpenTripPlannerApiApiTokenConfiguration.class)
+@Import(OpenTripPlannerTestConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OpenTripPlannerApiServiceIT {
 
@@ -25,14 +25,14 @@ class OpenTripPlannerApiServiceIT {
     private OpenTripPlannerApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder openTripPlannerApiAndCallTokenIT;
+    private ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT;
 
     @Test
     void test_getJourneysBy_with_incorrect_apiToken_returns_noExternalResultFoundException() {
-        openTripPlannerApiAndCallTokenIT.setArrival("Berlin Mitte");
-        openTripPlannerApiAndCallTokenIT.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        openTripPlannerApiTokenIT.setArrival("Berlin Mitte");
+        openTripPlannerApiTokenIT.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(openTripPlannerApiAndCallTokenIT.build());
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(openTripPlannerApiTokenIT.build());
 
         StepVerifier.create(result)
                 .assertNext(journey -> {
