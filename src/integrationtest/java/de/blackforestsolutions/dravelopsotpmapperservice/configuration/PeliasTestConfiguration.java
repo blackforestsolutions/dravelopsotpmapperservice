@@ -25,11 +25,11 @@ public class PeliasTestConfiguration {
     private String departure;
     @Value("${pelias.arrivalPlaceholder}")
     private String arrival;
-    @Value("${test.apitokens.pelias.language}")
+    @Value("${test.apitokens[0].language}")
     private Locale language;
-    @Value("${test.apitokens.pelias.coordinateLongitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLongitude}")
     private double coordinateLongitude;
-    @Value("${test.apitokens.pelias.coordinateLatitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLatitude}")
     private double coordinateLatitude;
 
     @Bean

@@ -11,23 +11,23 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 
 @TestConfiguration
-public class JourneyApiServiceTestConfiguration {
+public class JourneyApiServiceConfiguration {
 
-    @Value("${test.apitokens.otpmapper.optimize}")
+    @Value("${test.apitokens[0].optimize}")
     private Optimization optimize;
-    @Value("${test.apitokens.otpmapper.isArrivalDateTime}")
+    @Value("${test.apitokens[0].isArrivalDateTime}")
     private boolean isArrivalDateTime;
-    @Value("${test.apitokens.otpmapper.dateTime}")
+    @Value("${test.apitokens[0].dateTime}")
     private String dateTime;
-    @Value("${test.apitokens.otpmapper.departureCoordinateLongitude}")
+    @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
-    @Value("${test.apitokens.otpmapper.departureCoordinateLatitude}")
+    @Value("${test.apitokens[0].departureCoordinateLatitude}")
     private Double departureCoordinateLatitude;
-    @Value("${test.apitokens.otpmapper.arrivalCoordinateLongitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLongitude}")
     private Double arrivalCoordinateLongitude;
-    @Value("${test.apitokens.otpmapper.arrivalCoordinateLatitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLatitude}")
     private Double arrivalCoordinateLatitude;
-    @Value("${test.apitokens.otpmapper.language}")
+    @Value("${test.apitokens[0].language}")
     private Locale language;
 
     @Bean

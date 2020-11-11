@@ -31,16 +31,17 @@ public class PeliasCallServiceIT {
     private CallService callService;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder peliasApiApiTokenIT;
+    private ApiToken.ApiTokenBuilder peliasReverseApiToken;
 
     @Autowired
     private Point peliasPoint;
 
     @Test
     void test_travelPointName() {
-        peliasApiApiTokenIT.setPath(httpCallBuilderService.buildPeliasTravelPointNamePathWith(peliasApiApiTokenIT.build(), peliasPoint));
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasReverseApiToken.build());
+        testData.setPath(httpCallBuilderService.buildPeliasTravelPointNamePathWith(testData.build(), peliasPoint));
 
-        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(peliasApiApiTokenIT.build()).toString(), HttpHeaders.EMPTY);
+        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY);
 
         StepVerifier.create(result)
                 .assertNext(response -> {

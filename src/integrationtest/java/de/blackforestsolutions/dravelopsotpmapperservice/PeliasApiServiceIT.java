@@ -36,7 +36,8 @@ public class PeliasApiServiceIT {
                 .assertNext(travelPointName -> {
                     assertThat(travelPointName.getStatus()).isEqualTo(Status.SUCCESS);
                     assertThat(travelPointName.getThrowable()).isNull();
-                    assertThat(travelPointName.getCalledObject()).isEqualTo("SICK AG");
+                    assertThat(travelPointName.getCalledObject()).isNotEmpty();
+                    assertThat(travelPointName.getCalledObject()).isInstanceOf(String.class);
                 })
                 .verifyComplete();
     }
