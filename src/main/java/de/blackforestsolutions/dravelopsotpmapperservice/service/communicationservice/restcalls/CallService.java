@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
 public interface CallService {
-    Mono<ResponseEntity<String>> get(String url, HttpHeaders httpHeaders);
+    <T> Mono<T> getOne(String url, HttpHeaders httpHeaders, Class<T> returnType);
 }

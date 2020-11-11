@@ -46,8 +46,7 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerSuedbadenJourney_correctly_to_journeys() {
-        String testDataJson = getResourceFileAsString("json/openTripPlannerSuedbadenJourney.json");
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/openTripPlannerSuedbadenJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Am Großhausberg 8";
         String arrivalTestData = "Sick AG";
 
@@ -64,8 +63,7 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys() {
-        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/openTripPlannerRnvJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
 
@@ -82,8 +80,7 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_returns_failed_CallStatus() {
-        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/openTripPlannerRnvJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
 
@@ -102,8 +99,7 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_returns_onErrorResume_mono_failed_callStatus() {
-        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/openTripPlannerRnvJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
 
@@ -121,9 +117,7 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_arrivalDelay() {
-
-        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/openTripPlannerRnvJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
 
@@ -137,9 +131,7 @@ class OpenTripPlannerMapperServiceTest {
 
     @Test
     void test_extractJourneysFrom_maps_openTripPlannerRnvJourney_correctly_to_journeys_with_departureDelay() {
-
-        String testDataJson = getResourceFileAsString("json/openTripPlannerRnvJourney.json");
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo(testDataJson, OpenTripPlannerJourneyResponse.class);
+        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/openTripPlannerRnvJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
 

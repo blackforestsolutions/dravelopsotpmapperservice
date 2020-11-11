@@ -11,12 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,23 +28,20 @@ public class PeliasCallServiceIT {
     private CallService callService;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder peliasApiApiTokenIT;
+    private ApiToken.ApiTokenBuilder peliasReverseApiToken;
 
     @Autowired
     private Point peliasPoint;
 
     @Test
     void test_travelPointName() {
-        peliasApiApiTokenIT.setPath(httpCallBuilderService.buildPeliasTravelPointNamePathWith(peliasApiApiTokenIT.build(), peliasPoint));
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasReverseApiToken);
+        testData.setPath(httpCallBuilderService.buildPeliasTravelPointNamePathWith(peliasReverseApiToken.build(), peliasPoint));
 
-        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(peliasApiApiTokenIT.build()).toString(), HttpHeaders.EMPTY);
+        Mono<PeliasTravelPointResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, PeliasTravelPointResponse.class);
 
         StepVerifier.create(result)
-                .assertNext(response -> {
-                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-                    assertThat(response.getBody()).isNotEmpty();
-                    assertThat(retrieveJsonToPojo(response.getBody(), PeliasTravelPointResponse.class).getFeatures().size()).isGreaterThan(0);
-                })
+                .assertNext(peliasTravelPointResponse -> assertThat(peliasTravelPointResponse.getFeatures().size()).isGreaterThan(0))
                 .verifyComplete();
     }
 }

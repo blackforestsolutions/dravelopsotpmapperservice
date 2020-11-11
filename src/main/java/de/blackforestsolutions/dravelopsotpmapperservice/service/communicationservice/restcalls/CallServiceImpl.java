@@ -18,12 +18,12 @@ public class CallServiceImpl implements CallService {
     }
 
     @Override
-    public Mono<ResponseEntity<String>> get(String url, HttpHeaders httpHeaders) {
+    public <T> Mono<T> getOne(String url, HttpHeaders httpHeaders, Class<T> returnType) {
         return webClient
                 .get()
                 .uri(url)
                 .headers(headers -> httpHeaders.forEach(headers::addAll))
-                .exchange()
-                .flatMap(clientResponse -> clientResponse.toEntity(String.class));
+                .retrieve()
+                .bodyToMono(returnType);
     }
 }

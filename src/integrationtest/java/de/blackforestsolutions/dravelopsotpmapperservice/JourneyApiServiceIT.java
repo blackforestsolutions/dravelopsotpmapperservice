@@ -12,8 +12,6 @@ import org.springframework.data.geo.Point;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
-import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JourneyApiServiceTestConfiguration.class)
@@ -28,16 +26,15 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        ApiToken testData = otpMapperApiToken.build();
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(testData);
 
         StepVerifier.create(result)
                 .expectNextCount(1L)
                 .thenConsumeWhile(journey -> {
-                    Journey actualJourney = retrieveJsonToPojo(journey, Journey.class);
-                    assertThat(actualJourney.getLegs().size()).isGreaterThan(0);
-                    assertThat(actualJourney.getLegs())
+                    assertThat(journey.getLegs().size()).isGreaterThan(0);
+                    assertThat(journey.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
@@ -51,10 +48,10 @@ class JourneyApiServiceIT {
                             .allMatch(leg -> leg.getArrival() != null)
                             .allMatch(leg -> !leg.getArrival().getName().isEmpty())
                             .allMatch(leg -> leg.getArrival().getPoint() != null);
-                    assertThat(actualJourney.getLegs())
+                    assertThat(journey.getLegs())
                             .first()
                             .matches(leg -> leg.getDeparture().getArrivalTime() == null);
-                    assertThat(actualJourney.getLegs())
+                    assertThat(journey.getLegs())
                             .last()
                             .matches(leg -> leg.getArrival().getDepartureTime() == null);
                     return true;
@@ -64,11 +61,11 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        otpMapperApiToken.setArrival("Berlin Mitte");
-        otpMapperApiToken.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(otpMapperApiToken);
+        testData.setArrival("Berlin Mitte");
+        testData.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(testData.build());
 
         StepVerifier.create(result)
                 .expectNextCount(0L)

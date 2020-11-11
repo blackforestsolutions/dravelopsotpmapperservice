@@ -5,7 +5,6 @@ import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsJsonMapper;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Error;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
@@ -44,8 +43,7 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
         try {
             return Mono.just(apiToken)
                     .map(this::getJourneyRequestString)
-                    .flatMap(url -> callService.get(url, HttpHeaders.EMPTY))
-                    .flatMap(httpResponse -> convertToPojo(httpResponse.getBody()))
+                    .flatMap(url -> callService.getOne(url, HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class))
                     .flatMap(this::handleEmptyResponse)
                     .flatMapMany(openTripPlannerJourney -> openTripPlannerMapperService.extractJourneysFrom(openTripPlannerJourney, apiToken.getDeparture(), apiToken.getArrival()))
                     .onErrorResume(e -> Flux.just(new CallStatus<>(null, Status.FAILED, e)));
@@ -59,11 +57,6 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
         builder.setPath(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerJourneyPathWith(apiToken));
         URL requestUrl = buildUrlWith(builder.build());
         return requestUrl.toString();
-    }
-
-    private Mono<OpenTripPlannerJourneyResponse> convertToPojo(String json) {
-        DravelOpsJsonMapper mapper = new DravelOpsJsonMapper();
-        return mapper.mapJsonToPojo(json, OpenTripPlannerJourneyResponse.class);
     }
 
     private Mono<OpenTripPlannerJourneyResponse> handleEmptyResponse(OpenTripPlannerJourneyResponse response) {

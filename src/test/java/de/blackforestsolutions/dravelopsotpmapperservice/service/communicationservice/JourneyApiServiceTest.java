@@ -44,12 +44,12 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiServices_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_as_json_asynchronously_and_sort_out_journeys() {
-        String otpMapperTestToken = toJson(getOtpMapperApiToken());
+        ApiToken otpMapperTestToken = getOtpMapperApiToken();
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectNext(toJson(getJourneyWithEmptyFields(TEST_UUID_1)))
+                .assertNext(journey -> assertThat(toJson(journey)).isEqualTo(toJson(getJourneyWithEmptyFields(TEST_UUID_1))))
                 .verifyComplete();
     }
 
@@ -59,7 +59,7 @@ class JourneyApiServiceTest {
         ArgumentCaptor<ApiToken> configuredTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<ApiToken> mergedTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<CallStatus<Journey>> callStatusArg = ArgumentCaptor.forClass(CallStatus.class);
-        String otpMapperTestToken = toJson(getOtpMapperApiToken());
+        ApiToken otpMapperTestToken = getOtpMapperApiToken();
 
         classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken).collectList().block();
 
@@ -81,58 +81,56 @@ class JourneyApiServiceTest {
     }
 
     @Test
-    void test_retrieveJourneysFromApiService_handles_distinct_exception_correctly() {
-        String otpMapperTestToken = toJson(getOtpMapperApiToken());
+    void test_retrieveJourneysFromApiService_handles_distinct_exception_correctly_with_error() {
+        ApiToken otpMapperTestToken = getOtpMapperApiToken();
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class))).thenReturn(Flux.just(
                 new CallStatus<>(getJourneyWithEmptyFields(null), Status.SUCCESS, null)
         ));
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectNextCount(0L)
-                .verifyComplete();
+                .expectError(Exception.class)
+                .verify();
     }
 
     @Test
-    void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_by_mocked_service_returns_zero_journeys() {
-        String otpMapperTestToken = toJson(getOtpMapperApiToken());
+    void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_by_mocked_returns_error() {
+        ApiToken otpMapperTestToken = getOtpMapperApiToken();
         when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
                 .thenReturn(Mono.error(new Exception()));
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectNextCount(0L)
-                .verifyComplete();
-        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
+                .expectError(Exception.class)
+                .verify();
     }
 
     @Test
-    void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_returns_zero_journeys_when_apiService_failed() {
-        String otpMapperTestToken = toJson(getOtpMapperApiToken());
+    void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_by_mocked_service_returns_error() {
+        ApiToken otpMapperTestToken = getOtpMapperApiToken();
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.error(new Exception()));
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectNextCount(0L)
-                .verifyComplete();
-        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
+                .expectError(Exception.class)
+                .verify();
     }
 
     @Test
     void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_call_status_returns_zero_journeys_when_apiService_failed() {
-        String otpMapperTestToken = toJson(getOtpMapperApiToken());
+        ApiToken otpMapperTestToken = getOtpMapperApiToken();
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.just(new CallStatus<>(null, Status.FAILED, new Exception())));
 
-        Flux<String> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
+        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
                 .expectNextCount(0L)
                 .verifyComplete();
-        verify(exceptionHandlerService, times(1)).handleExceptions(any(CallStatus.class));
+
     }
 }
