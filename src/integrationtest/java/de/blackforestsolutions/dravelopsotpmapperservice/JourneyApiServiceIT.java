@@ -64,9 +64,10 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        otpMapperApiToken.setArrival("Berlin Mitte");
-        otpMapperApiToken.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
-        String jsonTestData = toJson(otpMapperApiToken.build());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(otpMapperApiToken.build());
+        testData.setArrival("Berlin Mitte");
+        testData.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        String jsonTestData = toJson(testData.build());
 
         Flux<String> result = classUnderTest.retrieveJourneysFromApiService(jsonTestData);
 
