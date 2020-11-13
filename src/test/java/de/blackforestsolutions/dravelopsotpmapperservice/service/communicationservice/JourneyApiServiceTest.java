@@ -90,8 +90,9 @@ class JourneyApiServiceTest {
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectError(Exception.class)
-                .verify();
+                .expectNextCount(0L)
+                .verifyComplete();
+        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
     }
 
     @Test
@@ -103,8 +104,9 @@ class JourneyApiServiceTest {
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectError(Exception.class)
-                .verify();
+                .expectNextCount(0L)
+                .verifyComplete();
+        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
     }
 
     @Test
@@ -116,8 +118,9 @@ class JourneyApiServiceTest {
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .expectError(Exception.class)
-                .verify();
+                .expectNextCount(0L)
+                .verifyComplete();
+        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
     }
 
     @Test

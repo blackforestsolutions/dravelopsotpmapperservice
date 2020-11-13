@@ -33,7 +33,8 @@ public class JourneyApiServiceImpl implements JourneyApiService {
                 .flatMap(userToken -> requestTokenHandlerService.getRequestApiTokenWith(userToken, openTripPlannerApiToken))
                 .flatMapMany(openTripPlannerApiService::getJourneysBy)
                 .flatMap(exceptionHandlerService::handleExceptions)
-                .distinct(Journey::getId);
+                .distinct(Journey::getId)
+                .onErrorResume(exceptionHandlerService::handleExceptions);
     }
 
 }
