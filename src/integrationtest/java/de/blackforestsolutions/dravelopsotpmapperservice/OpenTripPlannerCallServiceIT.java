@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -31,12 +32,26 @@ class OpenTripPlannerCallServiceIT {
 
     @Test
     void test_journey() {
-        openTripPlannerApiTokenIT.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(openTripPlannerApiTokenIT.build()));
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+        testData.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()));
 
-        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(openTripPlannerApiTokenIT.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
+        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
 
         StepVerifier.create(result)
                 .assertNext(openTripPlannerJourneyResponse -> assertThat(openTripPlannerJourneyResponse.getPlan().getItineraries().size()).isGreaterThan(0))
                 .verifyComplete();
+    }
+
+    @Test
+    void test_journey_with_wrong_path() {
+        String testUrl = "/otp/routers/b";
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+        testData.setPath(testUrl);
+
+        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
+
+        StepVerifier.create(result)
+                .expectError(WebClientResponseException.class)
+                .verify();
     }
 }

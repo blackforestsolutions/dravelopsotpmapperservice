@@ -2,7 +2,6 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsJsonMapper;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
 import lombok.extern.slf4j.Slf4j;

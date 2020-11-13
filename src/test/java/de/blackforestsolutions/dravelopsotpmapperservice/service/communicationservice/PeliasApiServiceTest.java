@@ -97,46 +97,6 @@ class PeliasApiServiceTest {
                 .verifyComplete();
     }
 
-//    @Test
-//    void test_extractTravelPointNameFrom_apiToken_and_point_returns_failed_call_status_when_call_failed() {
-//        Point testPoint = getStuttgarterStreetPoint();
-//        ApiToken testData = getPeliasReverseApiToken();
-//        when(callService.getOne(anyString(), any(HttpHeaders.class), PeliasTravelPointResponse.class))
-//                .thenReturn(Mono.just(new ResponseEntity<>("error", HttpStatus.BAD_REQUEST)));
-//
-//        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
-//
-//        StepVerifier.create(result)
-//                .assertNext(error -> {
-//                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
-//                    assertThat(error.getCalledObject()).isNull();
-//                    assertThat(error.getThrowable()).isInstanceOf(JsonParseException.class);
-//                })
-//                .verifyComplete();
-//    }
-
-//    @Test
-//    void test_extractTravelPointNameFrom_apiToken_and_point_throws_exception_when_name_is_null() throws JsonProcessingException {
-//        Point testPoint = getStuttgarterStreetPoint();
-//        ApiToken testData = getPeliasReverseApiToken();
-//        String peliasJson = getResourceFileAsString("json/peliasResult.json");
-//        PeliasTravelPointResponse travelPointResponse = retrieveJsonToPojo(peliasJson, PeliasTravelPointResponse.class);
-//        travelPointResponse.getFeatures().get(0).getProperties().setName(null);
-//        peliasJson = new ObjectMapper().writeValueAsString(travelPointResponse);
-//        when(callService.get(anyString(), any(HttpHeaders.class)))
-//                .thenReturn(Mono.just(new ResponseEntity<>(peliasJson, HttpStatus.OK)));
-//
-//        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
-//
-//        StepVerifier.create(result)
-//                .assertNext(error -> {
-//                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
-//                    assertThat(error.getCalledObject()).isNull();
-//                    assertThat(error.getThrowable()).isInstanceOf(NullPointerException.class);
-//                })
-//                .verifyComplete();
-//    }
-
     @Test
     void test_extractTravelPointNameFrom_apiToken_testPoint_and_emptyResponse_returns_noExternalResultFoundException() {
         Point testPoint = getStuttgarterStreetPoint();

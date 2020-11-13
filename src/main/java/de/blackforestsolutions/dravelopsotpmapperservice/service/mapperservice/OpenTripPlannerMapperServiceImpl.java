@@ -93,7 +93,6 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private TravelPoint extractTravelPointFrom(Stop stop, String optionalStopName) {
-
         return new TravelPoint.TravelPointBuilder()
                 .setName(extractStopNameFrom(stop, optionalStopName))
                 .setPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(stop.getLon(), stop.getLat()))
