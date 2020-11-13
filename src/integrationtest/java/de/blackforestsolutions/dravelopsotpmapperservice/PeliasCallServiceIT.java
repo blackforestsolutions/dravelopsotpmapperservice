@@ -1,6 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -43,5 +45,18 @@ public class PeliasCallServiceIT {
         StepVerifier.create(result)
                 .assertNext(peliasTravelPointResponse -> assertThat(peliasTravelPointResponse.getFeatures().size()).isGreaterThan(0))
                 .verifyComplete();
+    }
+
+    @Test
+    void test_travelPointName_with_wrong_path() {
+        String testUrl = "wrongPath";
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasReverseApiToken.build());
+        testData.setPath(testUrl);
+
+        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
+
+        StepVerifier.create(result)
+                .expectError(WebClientResponseException.class)
+                .verify();
     }
 }
