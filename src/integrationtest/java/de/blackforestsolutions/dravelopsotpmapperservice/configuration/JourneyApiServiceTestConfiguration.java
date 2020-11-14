@@ -1,43 +1,32 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
-import de.blackforestsolutions.dravelopsdatamodel.Optimization;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
 
-import java.time.ZonedDateTime;
-import java.util.Locale;
-
 @TestConfiguration
+@Import(ZonedDateTimeConfiguration.class)
 public class JourneyApiServiceTestConfiguration {
 
-    @Value("${test.apitokens.otpmapper.optimize}")
-    private Optimization optimize;
-    @Value("${test.apitokens.otpmapper.isArrivalDateTime}")
-    private boolean isArrivalDateTime;
-    @Value("${test.apitokens.otpmapper.dateTime}")
-    private String dateTime;
-    @Value("${test.apitokens.otpmapper.departureCoordinateLongitude}")
+    @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
-    @Value("${test.apitokens.otpmapper.departureCoordinateLatitude}")
+    @Value("${test.apitokens[0].departureCoordinateLatitude}")
     private Double departureCoordinateLatitude;
-    @Value("${test.apitokens.otpmapper.arrivalCoordinateLongitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLongitude}")
     private Double arrivalCoordinateLongitude;
-    @Value("${test.apitokens.otpmapper.arrivalCoordinateLatitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLatitude}")
     private Double arrivalCoordinateLatitude;
-    @Value("${test.apitokens.otpmapper.language}")
-    private Locale language;
 
     @Bean
+    @ConfigurationProperties(prefix = "test.apitokens[0]")
     public ApiToken.ApiTokenBuilder otpMapperApiToken() {
         return new ApiToken.ApiTokenBuilder()
-                .setOptimize(optimize)
-                .setIsArrivalDateTime(isArrivalDateTime)
-                .setDateTime(ZonedDateTime.parse(dateTime))
                 .setDepartureCoordinate(new Point(departureCoordinateLongitude, departureCoordinateLatitude))
-                .setArrivalCoordinate(new Point(arrivalCoordinateLongitude, arrivalCoordinateLatitude))
-                .setLanguage(language);
+                .setArrivalCoordinate(new Point(arrivalCoordinateLongitude, arrivalCoordinateLatitude));
     }
+
 }

@@ -2,44 +2,33 @@ package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
 
 import java.util.Locale;
 
+@Import(ZonedDateTimeConfiguration.class)
 @TestConfiguration
 public class PeliasTestConfiguration {
 
-    @Value("${pelias.protocol}")
-    private String protocol;
-    @Value("${pelias.host}")
-    private String host;
-    @Value("${pelias.port}")
-    private int port;
-    @Value("${pelias.apiVersion}")
-    private String apiVersion;
-    @Value("${pelias.maxResults}")
-    private int maxResult;
     @Value("${pelias.departurePlaceholder}")
     private String departure;
     @Value("${pelias.arrivalPlaceholder}")
     private String arrival;
-    @Value("${test.apitokens.pelias.language}")
+    @Value("${test.apitokens[0].language}")
     private Locale language;
-    @Value("${test.apitokens.pelias.coordinateLongitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLongitude}")
     private double coordinateLongitude;
-    @Value("${test.apitokens.pelias.coordinateLatitude}")
+    @Value("${test.apitokens[0].arrivalCoordinateLatitude}")
     private double coordinateLatitude;
 
     @Bean
+    @ConfigurationProperties(prefix = "pelias")
     public ApiToken.ApiTokenBuilder peliasReverseApiToken() {
         return new ApiToken.ApiTokenBuilder()
-                .setProtocol(protocol)
-                .setHost(host)
-                .setPort(port)
-                .setApiVersion(apiVersion)
-                .setMaxResults(maxResult)
                 .setDeparture(departure)
                 .setArrival(arrival)
                 .setLanguage(language);
