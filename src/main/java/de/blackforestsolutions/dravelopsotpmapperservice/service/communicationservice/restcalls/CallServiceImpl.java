@@ -2,7 +2,6 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -18,12 +17,12 @@ public class CallServiceImpl implements CallService {
     }
 
     @Override
-    public Mono<ResponseEntity<String>> get(String url, HttpHeaders httpHeaders) {
+    public <T> Mono<T> getOne(String url, HttpHeaders httpHeaders, Class<T> returnType) {
         return webClient
                 .get()
                 .uri(url)
                 .headers(headers -> httpHeaders.forEach(headers::addAll))
-                .exchange()
-                .flatMap(clientResponse -> clientResponse.toEntity(String.class));
+                .retrieve()
+                .bodyToMono(returnType);
     }
 }

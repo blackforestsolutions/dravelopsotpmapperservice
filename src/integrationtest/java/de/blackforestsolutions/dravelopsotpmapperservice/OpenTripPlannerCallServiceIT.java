@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,16 +32,26 @@ class OpenTripPlannerCallServiceIT {
 
     @Test
     void test_journey() {
-        openTripPlannerApiTokenIT.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(openTripPlannerApiTokenIT.build()));
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+        testData.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()));
 
-        Mono<ResponseEntity<String>> result = callService.get(buildUrlWith(openTripPlannerApiTokenIT.build()).toString(), HttpHeaders.EMPTY);
+        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
 
         StepVerifier.create(result)
-                .assertNext(response -> {
-                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-                    assertThat(response.getBody()).isNotEmpty();
-                    assertThat(retrieveJsonToPojo(response.getBody(), OpenTripPlannerJourneyResponse.class).getPlan().getItineraries().size()).isGreaterThan(0);
-                })
+                .assertNext(openTripPlannerJourneyResponse -> assertThat(openTripPlannerJourneyResponse.getPlan().getItineraries().size()).isGreaterThan(0))
                 .verifyComplete();
+    }
+
+    @Test
+    void test_journey_with_wrong_path() {
+        String testUrl = "/otp/routers/b";
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+        testData.setPath(testUrl);
+
+        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
+
+        StepVerifier.create(result)
+                .expectError(WebClientResponseException.class)
+                .verify();
     }
 }

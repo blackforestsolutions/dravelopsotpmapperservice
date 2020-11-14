@@ -2,7 +2,6 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsJsonMapper;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import reactor.core.publisher.Mono;
 @Service
 public class JourneyApiServiceImpl implements JourneyApiService {
 
-    private final DravelOpsJsonMapper dravelOpsJsonMapper = new DravelOpsJsonMapper();
     private final RequestTokenHandlerService requestTokenHandlerService;
     private final ExceptionHandlerService exceptionHandlerService;
     private final ApiToken openTripPlannerApiToken;
@@ -30,14 +28,12 @@ public class JourneyApiServiceImpl implements JourneyApiService {
     }
 
     @Override
-    public Flux<String> retrieveJourneysFromApiService(String userRequestToken) {
+    public Flux<Journey> retrieveJourneysFromApiService(ApiToken userRequestToken) {
         return Mono.just(userRequestToken)
-                .flatMap(dravelOpsJsonMapper::mapJsonToApiToken)
                 .flatMap(userToken -> requestTokenHandlerService.getRequestApiTokenWith(userToken, openTripPlannerApiToken))
                 .flatMapMany(openTripPlannerApiService::getJourneysBy)
                 .flatMap(exceptionHandlerService::handleExceptions)
                 .distinct(Journey::getId)
-                .flatMap(dravelOpsJsonMapper::map)
                 .onErrorResume(exceptionHandlerService::handleExceptions);
     }
 

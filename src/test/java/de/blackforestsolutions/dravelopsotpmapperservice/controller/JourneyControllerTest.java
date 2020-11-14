@@ -1,14 +1,11 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.controller;
 
+import de.blackforestsolutions.dravelopsdatamodel.Journey;
+import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOtpMapperApiToken;
@@ -23,51 +20,29 @@ class JourneyControllerTest {
 
     private final JourneyApiService journeyApiService = mock(JourneyApiService.class);
 
-    private final WebTestClient classUnderTest = WebTestClient.bindToController(new JourneyController(journeyApiService)).build();
-
-    @BeforeEach
-    void init() {
-        MockitoAnnotations.initMocks(this);
-    }
+    private final JourneyController classUnderTest = new JourneyController(journeyApiService);
 
     @Test
-    void test_if_call_is_executed_correctly_and_return_journeys() {
-        ArgumentCaptor<String> requestToken = ArgumentCaptor.forClass(String.class);
-        when(journeyApiService.retrieveJourneysFromApiService(anyString())).thenReturn(Flux.just(toJson(getJourneyWithEmptyFields(TEST_UUID_1))));
+    void test_retrieveOpenTripPlannerJourneys_is_executed_correctly_and_return_journeys() {
+        ApiToken testData = getOtpMapperApiToken();
+        ArgumentCaptor<ApiToken> requestArg = ArgumentCaptor.forClass(ApiToken.class);
+        when(journeyApiService.retrieveJourneysFromApiService(any(ApiToken.class))).thenReturn(Flux.just(getJourneyWithEmptyFields(TEST_UUID_1)));
 
-        Flux<String> result = classUnderTest
-                .post()
-                .uri("/otp/journeys/get")
-                .body(Mono.just(toJson(getOtpMapperApiToken())), String.class)
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .returnResult(String.class)
-                .getResponseBody();
+        Flux<Journey> result = classUnderTest.retrieveOpenTripPlannerJourneys(testData);
 
-
-        verify(journeyApiService, times(1)).retrieveJourneysFromApiService(requestToken.capture());
-        assertThat(requestToken.getValue()).isEqualTo(toJson(getOtpMapperApiToken()));
+        verify(journeyApiService, times(1)).retrieveJourneysFromApiService(requestArg.capture());
+        assertThat(requestArg.getValue()).isEqualToComparingFieldByField(getOtpMapperApiToken());
         StepVerifier.create(result)
-                .assertNext(journey -> assertThat(deleteWhitespace(journey)).isEqualTo(deleteWhitespace(toJson(getJourneyWithEmptyFields(TEST_UUID_1)))))
+                .assertNext(journey -> assertThat(deleteWhitespace(toJson(journey))).isEqualTo(deleteWhitespace(toJson(getJourneyWithEmptyFields(TEST_UUID_1)))))
                 .verifyComplete();
     }
 
     @Test
-    void test_if_call_is_executed_correctly_when_no_results_are_available() {
-        when(journeyApiService.retrieveJourneysFromApiService(anyString())).thenReturn(Flux.empty());
+    void test_retrieveOpenTripPlannerJourneys_is_executed_correctly_when_no_results_are_available() {
+        ApiToken testData = getOtpMapperApiToken();
+        when(journeyApiService.retrieveJourneysFromApiService(any(ApiToken.class))).thenReturn(Flux.empty());
 
-        Flux<String> result = classUnderTest
-                .post()
-                .uri("/otp/journeys/get")
-                .body(Mono.just(toJson(getOtpMapperApiToken())), String.class)
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .returnResult(String.class)
-                .getResponseBody();
+        Flux<Journey> result = classUnderTest.retrieveOpenTripPlannerJourneys(testData);
 
         StepVerifier.create(result)
                 .expectNextCount(0L)
@@ -75,3 +50,5 @@ class JourneyControllerTest {
     }
 
 }
+
+
