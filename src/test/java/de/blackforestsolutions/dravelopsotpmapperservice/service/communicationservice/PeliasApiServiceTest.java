@@ -1,8 +1,5 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
@@ -18,14 +15,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasReverseApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
-import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.getResourceFileAsString;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,8 +39,8 @@ class PeliasApiServiceTest {
         when(peliasHttpCallBuilderService.buildPeliasTravelPointNamePathWith(any(ApiToken.class), any(Point.class)))
                 .thenReturn("");
 
-        when(callService.get(anyString(), any(HttpHeaders.class)))
-                .thenReturn(Mono.just(new ResponseEntity<>(getResourceFileAsString("json/peliasResult.json"), HttpStatus.OK)));
+        when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
+                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasResult.json", PeliasTravelPointResponse.class)));
     }
 
     @Test
@@ -77,7 +72,7 @@ class PeliasApiServiceTest {
 
         InOrder inOrder = inOrder(peliasHttpCallBuilderService, callService);
         inOrder.verify(peliasHttpCallBuilderService, times(1)).buildPeliasTravelPointNamePathWith(apiTokenArg.capture(), pointArg.capture());
-        inOrder.verify(callService, times(1)).get(urlArg.capture(), httpHeadersArg.capture());
+        inOrder.verify(callService, times(1)).getOne(urlArg.capture(), httpHeadersArg.capture(), eq(PeliasTravelPointResponse.class));
         inOrder.verifyNoMoreInteractions();
         assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByField(getPeliasReverseApiToken());
         assertThat(pointArg.getValue()).isEqualToComparingFieldByField(getStuttgarterStreetPoint());
@@ -103,51 +98,11 @@ class PeliasApiServiceTest {
     }
 
     @Test
-    void test_extractTravelPointNameFrom_apiToken_and_point_returns_failed_call_status_when_call_failed() {
-        Point testPoint = getStuttgarterStreetPoint();
-        ApiToken testData = getPeliasReverseApiToken();
-        when(callService.get(anyString(), any(HttpHeaders.class)))
-                .thenReturn(Mono.just(new ResponseEntity<>("error", HttpStatus.BAD_REQUEST)));
-
-        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
-
-        StepVerifier.create(result)
-                .assertNext(error -> {
-                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
-                    assertThat(error.getCalledObject()).isNull();
-                    assertThat(error.getThrowable()).isInstanceOf(JsonParseException.class);
-                })
-                .verifyComplete();
-    }
-
-    @Test
-    void test_extractTravelPointNameFrom_apiToken_and_point_throws_exception_when_name_is_null() throws JsonProcessingException {
-        Point testPoint = getStuttgarterStreetPoint();
-        ApiToken testData = getPeliasReverseApiToken();
-        String peliasJson = getResourceFileAsString("json/peliasResult.json");
-        PeliasTravelPointResponse travelPointResponse = retrieveJsonToPojo(peliasJson, PeliasTravelPointResponse.class);
-        travelPointResponse.getFeatures().get(0).getProperties().setName(null);
-        peliasJson = new ObjectMapper().writeValueAsString(travelPointResponse);
-        when(callService.get(anyString(), any(HttpHeaders.class)))
-                .thenReturn(Mono.just(new ResponseEntity<>(peliasJson, HttpStatus.OK)));
-
-        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
-
-        StepVerifier.create(result)
-                .assertNext(error -> {
-                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
-                    assertThat(error.getCalledObject()).isNull();
-                    assertThat(error.getThrowable()).isInstanceOf(NullPointerException.class);
-                })
-                .verifyComplete();
-    }
-
-    @Test
     void test_extractTravelPointNameFrom_apiToken_testPoint_and_emptyResponse_returns_noExternalResultFoundException() {
         Point testPoint = getStuttgarterStreetPoint();
         ApiToken testData = getPeliasReverseApiToken();
-        when(callService.get(anyString(), any(HttpHeaders.class)))
-                .thenReturn(Mono.just(new ResponseEntity<>(getResourceFileAsString("json/peliasNoResult.json"), HttpStatus.OK)));
+        when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
+                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasNoResult.json", PeliasTravelPointResponse.class)));
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
@@ -179,7 +134,7 @@ class PeliasApiServiceTest {
     void test_getJourneysBy_apiToken_and_error_by_callService_returns_failed_callStatus() {
         ApiToken testData = getOpenTripPlannerApiToken();
         Point testPoint = getStuttgarterStreetPoint();
-        when(callService.get(anyString(), any(HttpHeaders.class)))
+        when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
                 .thenReturn(Mono.error(new Exception()));
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);

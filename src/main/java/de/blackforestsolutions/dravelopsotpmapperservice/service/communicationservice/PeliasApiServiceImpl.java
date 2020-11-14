@@ -4,7 +4,6 @@ import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsJsonMapper;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
@@ -46,8 +45,7 @@ public class PeliasApiServiceImpl implements PeliasApiService {
     private Mono<String> executeCallWith(ApiToken apiToken, Point coordinate) {
         return Mono.just(apiToken)
                 .map(token -> getTravelPointNameString(token, coordinate))
-                .flatMap(url -> callService.get(url, HttpHeaders.EMPTY))
-                .flatMap(httpResponse -> convertToPojo(httpResponse.getBody()))
+                .flatMap(url -> callService.getOne(url, HttpHeaders.EMPTY, PeliasTravelPointResponse.class))
                 .flatMap(this::handleEmptyResponse)
                 .map(this::extractTravelPointNameFrom);
     }
@@ -57,11 +55,6 @@ public class PeliasApiServiceImpl implements PeliasApiService {
         builder.setPath(peliasHttpCallBuilderService.buildPeliasTravelPointNamePathWith(apiToken, coordinate));
         URL requestUrl = buildUrlWith(builder.build());
         return requestUrl.toString();
-    }
-
-    private Mono<PeliasTravelPointResponse> convertToPojo(String json) {
-        DravelOpsJsonMapper mapper = new DravelOpsJsonMapper();
-        return mapper.mapJsonToPojo(json, PeliasTravelPointResponse.class);
     }
 
     private String extractTravelPointNameFrom(PeliasTravelPointResponse response) {
