@@ -28,4 +28,5 @@ class ZonedDateTimeServiceTest {
 
         assertThat(result).isEqualTo(ZonedDateTime.parse("2020-12-05T09:09:05+01:00[Europe/Berlin]"));
     }
+
 }
