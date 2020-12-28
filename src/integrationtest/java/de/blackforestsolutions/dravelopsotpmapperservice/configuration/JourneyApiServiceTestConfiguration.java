@@ -8,14 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
 
-import java.util.Locale;
-
 @TestConfiguration
 @Import(ZonedDateTimeConfiguration.class)
 public class JourneyApiServiceTestConfiguration {
 
-    @Value("${test.apitokens[0].language}")
-    private Locale language;
     @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
     @Value("${test.apitokens[0].departureCoordinateLatitude}")
@@ -29,7 +25,6 @@ public class JourneyApiServiceTestConfiguration {
     @ConfigurationProperties(prefix = "test.apitokens[0]")
     public ApiToken.ApiTokenBuilder otpMapperApiToken() {
         return new ApiToken.ApiTokenBuilder()
-                .setLanguage(language)
                 .setDepartureCoordinate(new Point(departureCoordinateLongitude, departureCoordinateLatitude))
                 .setArrivalCoordinate(new Point(arrivalCoordinateLongitude, arrivalCoordinateLatitude));
     }
