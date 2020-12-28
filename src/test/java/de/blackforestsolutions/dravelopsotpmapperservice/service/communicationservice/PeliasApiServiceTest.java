@@ -3,7 +3,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderServiceImpl;

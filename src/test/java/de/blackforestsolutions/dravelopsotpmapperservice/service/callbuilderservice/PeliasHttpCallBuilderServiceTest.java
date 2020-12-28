@@ -1,6 +1,6 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.geo.Point;
 
@@ -21,7 +21,7 @@ class PeliasHttpCallBuilderServiceTest {
 
         String result = classUnderTest.buildPeliasTravelPointNamePathWith(testData, testPoint);
 
-        assertThat(result).isEqualTo("/v1/reverse?point.lat=48.087517&point.lon=7.891595&size=1&lang=de");
+        assertThat(result).isEqualTo("/v1/reverse?point.lat=48.087517&point.lon=7.891595&size=1&lang=de-DE");
     }
 
     @Test

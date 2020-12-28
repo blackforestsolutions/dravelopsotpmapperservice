@@ -1,6 +1,6 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;

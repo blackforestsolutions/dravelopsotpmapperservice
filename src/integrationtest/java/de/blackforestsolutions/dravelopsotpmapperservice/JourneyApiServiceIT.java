@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.JourneyApiServiceTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
 import org.junit.jupiter.api.Test;
