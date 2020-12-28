@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Point;
 
+import java.util.Locale;
+
 @Import(ZonedDateTimeConfiguration.class)
 @TestConfiguration
 public class OpenTripPlannerTestConfiguration {
@@ -20,6 +22,8 @@ public class OpenTripPlannerTestConfiguration {
     private int port;
     @Value("${otp.router}")
     private String router;
+    @Value("${test.apitokens[0].language}")
+    private Locale language;
     @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
     @Value("${test.apitokens[0].departureCoordinateLatitude}")
@@ -37,6 +41,7 @@ public class OpenTripPlannerTestConfiguration {
                 .setHost(host)
                 .setPort(port)
                 .setRouter(router)
+                .setLanguage(language)
                 .setDepartureCoordinate(new Point(departureCoordinateLongitude, departureCoordinateLatitude))
                 .setArrivalCoordinate(new Point(arrivalCoordinateLongitude, arrivalCoordinateLatitude));
     }
