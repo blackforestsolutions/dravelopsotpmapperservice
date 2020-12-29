@@ -1,6 +1,6 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import reactor.core.publisher.Mono;
 
 public interface RequestTokenHandlerService {

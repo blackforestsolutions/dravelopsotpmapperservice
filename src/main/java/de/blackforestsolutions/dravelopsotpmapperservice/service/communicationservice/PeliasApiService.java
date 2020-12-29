@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import org.springframework.data.geo.Point;
 import reactor.core.publisher.Mono;
 

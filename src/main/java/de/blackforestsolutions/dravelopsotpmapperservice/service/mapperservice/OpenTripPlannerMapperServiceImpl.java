@@ -43,14 +43,15 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return Mono.just(response)
                 .map(OpenTripPlannerJourneyResponse::getPlan)
                 .flatMapMany(plan -> Flux.fromIterable(plan.getItineraries()))
-                .map(itinerary -> extractJourneyFrom(itinerary, departure, arrival))
+                .map(itinerary -> extractJourneyFrom(itinerary, departure, arrival, response.getRequestParameters().getLocale()))
                 .onErrorResume(e -> Mono.just(new CallStatus<>(null, Status.FAILED, e)));
     }
 
-    private CallStatus<Journey> extractJourneyFrom(Itinerary itinerary, String departure, String arrival) {
+    private CallStatus<Journey> extractJourneyFrom(Itinerary itinerary, String departure, String arrival, String language) {
         try {
             return new CallStatus<>(
                     new Journey.JourneyBuilder(uuidService.createUUID())
+                            .setLanguage(new Locale(language))
                             .setLegs(extractLegsFrom(itinerary.getLegs(), departure, arrival))
                             .setPrices(extractPricesFrom(itinerary))
                             .build(),

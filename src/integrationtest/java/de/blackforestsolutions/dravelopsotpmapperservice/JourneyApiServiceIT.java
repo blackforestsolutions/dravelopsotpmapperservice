@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.JourneyApiServiceTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
 import org.junit.jupiter.api.Test;
@@ -33,6 +33,7 @@ class JourneyApiServiceIT {
         StepVerifier.create(result)
                 .expectNextCount(1L)
                 .thenConsumeWhile(journey -> {
+                    assertThat(journey.getLanguage().getLanguage().length()).isEqualTo(2);
                     assertThat(journey.getLegs().size()).isGreaterThan(0);
                     assertThat(journey.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)

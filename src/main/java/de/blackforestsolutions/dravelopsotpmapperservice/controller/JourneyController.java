@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.controller;
 
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

@@ -2,7 +2,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.PeliasApiService;
 import org.junit.jupiter.api.Test;
