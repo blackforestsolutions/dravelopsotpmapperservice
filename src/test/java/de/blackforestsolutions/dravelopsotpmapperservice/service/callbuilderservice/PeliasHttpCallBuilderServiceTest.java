@@ -21,7 +21,7 @@ class PeliasHttpCallBuilderServiceTest {
 
         String result = classUnderTest.buildPeliasTravelPointNamePathWith(testData, testPoint);
 
-        assertThat(result).isEqualTo("/v1/reverse?point.lat=48.087517&point.lon=7.891595&size=1&lang=de-DE");
+        assertThat(result).isEqualTo("/v1/reverse?point.lat=48.087517&point.lon=7.891595&size=1&lang=de");
     }
 
     @Test
