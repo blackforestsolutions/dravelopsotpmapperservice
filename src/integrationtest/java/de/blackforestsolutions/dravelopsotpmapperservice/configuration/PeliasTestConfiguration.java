@@ -1,12 +1,12 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.geo.Point;
 
 import java.util.Locale;
 
@@ -36,6 +36,7 @@ public class PeliasTestConfiguration {
 
     @Bean(name = "peliasPoint")
     public Point point() {
-        return new Point(coordinateLongitude, coordinateLatitude);
+        return new Point.PointBuilder(coordinateLongitude, coordinateLatitude)
+                .build();
     }
 }

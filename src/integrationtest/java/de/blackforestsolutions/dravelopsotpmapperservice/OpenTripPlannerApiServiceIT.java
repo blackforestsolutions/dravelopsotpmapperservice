@@ -1,17 +1,13 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
-import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.Status;
+import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
-import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripPlannerTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.OpenTripPlannerApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.geo.Point;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -30,7 +26,7 @@ class OpenTripPlannerApiServiceIT {
     @Test
     void test_getJourneysBy_with_incorrect_apiToken_returns_noExternalResultFoundException() {
         openTripPlannerApiTokenIT.setArrival("Berlin Mitte");
-        openTripPlannerApiTokenIT.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        openTripPlannerApiTokenIT.setArrivalCoordinate(new Point.PointBuilder(13.409600d, 52.509439d).build());
 
         Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(openTripPlannerApiTokenIT.build());
 

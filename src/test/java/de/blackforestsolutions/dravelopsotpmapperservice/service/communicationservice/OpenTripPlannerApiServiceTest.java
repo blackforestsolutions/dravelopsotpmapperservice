@@ -20,11 +20,8 @@ import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class OpenTripPlannerApiServiceTest {
@@ -44,7 +41,7 @@ class OpenTripPlannerApiServiceTest {
                 .thenReturn(Mono.just(retrieveJsonToPojo("json/openTripPlannerSuedbadenJourney.json", OpenTripPlannerJourneyResponse.class)));
 
         when(openTripPlannerMapperService.extractJourneysFrom(any(OpenTripPlannerJourneyResponse.class), anyString(), anyString()))
-                .thenReturn(Flux.just(new CallStatus<>(getJourneyWithEmptyFields(TEST_UUID_1), Status.SUCCESS, null)));
+                .thenReturn(Flux.just(new CallStatus<>(getJourneyWithEmptyFields(), Status.SUCCESS, null)));
     }
 
     @Test
@@ -79,7 +76,7 @@ class OpenTripPlannerApiServiceTest {
         inOrder.verify(callService, times(1)).getOne(urlArg.capture(), httpHeadersArg.capture(), eq(OpenTripPlannerJourneyResponse.class));
         inOrder.verify(openTripPlannerMapperService, times(1)).extractJourneysFrom(responseArg.capture(), departureArg.capture(), arrivalArg.capture());
         inOrder.verifyNoMoreInteractions();
-        assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByField(getOpenTripPlannerApiToken());
+        assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken());
         assertThat(urlArg.getValue()).isEqualTo("http://localhost:8089");
         assertThat(httpHeadersArg.getValue()).isEqualTo(HttpHeaders.EMPTY);
         assertThat(responseArg.getValue()).isInstanceOf(OpenTripPlannerJourneyResponse.class);

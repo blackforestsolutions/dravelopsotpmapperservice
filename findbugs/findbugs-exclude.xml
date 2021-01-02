@@ -60,4 +60,10 @@
         <Class name="~.*\.*Test"/>
     </Match>
 
+    <Match>
+        <Class name="de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperServiceImpl" />
+        <Method name="extractJourneyFrom" />
+        <Bug pattern="REC_CATCH_EXCEPTION" />
+    </Match>
+
 </FindBugsFilter>

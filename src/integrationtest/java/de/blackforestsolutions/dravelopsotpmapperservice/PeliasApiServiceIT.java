@@ -1,15 +1,15 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
-import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
+import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.PeliasApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.geo.Point;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 

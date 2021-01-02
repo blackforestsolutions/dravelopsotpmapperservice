@@ -1,8 +1,9 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
-import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
+import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerServiceImpl;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.PeliasApiService;
@@ -10,13 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import org.springframework.data.geo.Point;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class RequestTokenHandlerServiceTest {
@@ -42,7 +41,7 @@ class RequestTokenHandlerServiceTest {
         Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
 
         StepVerifier.create(result)
-                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByField(getOpenTripPlannerApiToken()))
+                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken()))
                 .verifyComplete();
     }
 
@@ -82,7 +81,9 @@ class RequestTokenHandlerServiceTest {
 
         StepVerifier.create(result)
                 .assertNext(apiToken -> {
-                    assertThat(apiToken).isEqualToIgnoringGivenFields(getOpenTripPlannerApiToken(), "departure", "arrival");
+                    assertThat(apiToken).isEqualToIgnoringGivenFields(getOpenTripPlannerApiToken(), "departure", "arrival", "departureCoordinate", "arrivalCoordinate");
+                    assertThat(apiToken.getDepartureCoordinate()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken().getDepartureCoordinate());
+                    assertThat(apiToken.getArrivalCoordinate()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken().getArrivalCoordinate());
                     assertThat(apiToken.getDeparture()).isEqualTo("Start");
                     assertThat(apiToken.getArrival()).isEqualTo("Ziel");
                 })

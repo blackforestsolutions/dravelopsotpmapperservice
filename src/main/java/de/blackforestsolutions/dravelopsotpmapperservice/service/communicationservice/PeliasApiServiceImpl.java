@@ -1,6 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
@@ -8,7 +9,6 @@ import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPoin
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

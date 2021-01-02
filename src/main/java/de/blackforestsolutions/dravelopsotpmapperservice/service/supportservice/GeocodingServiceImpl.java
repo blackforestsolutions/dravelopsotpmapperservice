@@ -1,11 +1,11 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
 import com.google.maps.internal.PolylineEncoding;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.CoordinateConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.DistanceConfiguration;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -19,10 +19,8 @@ public class GeocodingServiceImpl implements GeocodingService {
 
     @Override
     public Point extractCoordinateWithFixedDecimalPlacesFrom(double longitude, double latitude) {
-        return new Point(
-                roundToFixedDecimalPlaces(longitude),
-                roundToFixedDecimalPlaces(latitude)
-        );
+        return new Point.PointBuilder(roundToFixedDecimalPlaces(longitude), roundToFixedDecimalPlaces(latitude))
+                .build();
     }
 
     @Override

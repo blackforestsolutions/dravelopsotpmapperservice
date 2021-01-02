@@ -1,9 +1,9 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
-import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerServiceImpl;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
@@ -17,8 +17,6 @@ import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
-import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.toJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -37,7 +35,7 @@ class JourneyApiServiceTest {
                 .thenReturn(Mono.just(getOpenTripPlannerApiToken()));
 
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class))).thenReturn(Flux.just(
-                new CallStatus<>(getJourneyWithEmptyFields(TEST_UUID_1), Status.SUCCESS, null),
+                new CallStatus<>(getJourneyWithEmptyFields(), Status.SUCCESS, null),
                 new CallStatus<>(null, Status.FAILED, new Exception())
         ));
     }
@@ -49,7 +47,7 @@ class JourneyApiServiceTest {
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .assertNext(journey -> assertThat(toJson(journey)).isEqualTo(toJson(getJourneyWithEmptyFields(TEST_UUID_1))))
+                .assertNext(journey -> assertThat(journey).isEqualToComparingFieldByFieldRecursively(getJourneyWithEmptyFields()))
                 .verifyComplete();
     }
 
@@ -68,9 +66,9 @@ class JourneyApiServiceTest {
         inOrder.verify(openTripPlannerApiService, times(1)).getJourneysBy(mergedTokenArg.capture());
         inOrder.verify(exceptionHandlerService, times(2)).handleExceptions(callStatusArg.capture());
         inOrder.verifyNoMoreInteractions();
-        assertThat(otpMapperTokenArg.getValue()).isEqualToComparingFieldByField(getOtpMapperApiToken());
-        assertThat(configuredTokenArg.getValue()).isEqualToComparingFieldByField(getOpenTripPlannerConfiguredApiToken());
-        assertThat(mergedTokenArg.getValue()).isEqualToComparingFieldByField(getOpenTripPlannerApiToken());
+        assertThat(otpMapperTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken());
+        assertThat(configuredTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerConfiguredApiToken());
+        assertThat(mergedTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken());
         assertThat(callStatusArg.getAllValues().size()).isEqualTo(2);
         assertThat(callStatusArg.getAllValues().get(0).getStatus()).isEqualTo(Status.SUCCESS);
         assertThat(callStatusArg.getAllValues().get(0).getThrowable()).isNull();
@@ -78,21 +76,6 @@ class JourneyApiServiceTest {
         assertThat(callStatusArg.getAllValues().get(1).getStatus()).isEqualTo(Status.FAILED);
         assertThat(callStatusArg.getAllValues().get(1).getCalledObject()).isNull();
         assertThat(callStatusArg.getAllValues().get(1).getThrowable()).isInstanceOf(Exception.class);
-    }
-
-    @Test
-    void test_retrieveJourneysFromApiService_handles_distinct_exception_correctly_with_error() {
-        ApiToken otpMapperTestToken = getOtpMapperApiToken();
-        when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class))).thenReturn(Flux.just(
-                new CallStatus<>(getJourneyWithEmptyFields(null), Status.SUCCESS, null)
-        ));
-
-        Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
-
-        StepVerifier.create(result)
-                .expectNextCount(0L)
-                .verifyComplete();
-        verify(exceptionHandlerService, times(1)).handleExceptions(any(Throwable.class));
     }
 
     @Test
