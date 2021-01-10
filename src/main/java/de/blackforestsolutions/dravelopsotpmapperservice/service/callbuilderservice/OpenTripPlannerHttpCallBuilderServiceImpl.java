@@ -1,6 +1,6 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
                 .concat("?")
                 .concat(LANGUAGE_PARAM)
                 .concat("=")
-                .concat(apiToken.getLanguage().toLanguageTag())
+                .concat(apiToken.getLanguage().getLanguage())
                 .concat("&")
                 .concat(OPTIMIZATION_PARAM)
                 .concat("=")

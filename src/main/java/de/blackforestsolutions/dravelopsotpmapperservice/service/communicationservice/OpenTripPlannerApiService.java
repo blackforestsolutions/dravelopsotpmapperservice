@@ -2,7 +2,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.util.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import reactor.core.publisher.Flux;
 
 public interface OpenTripPlannerApiService {
