@@ -17,30 +17,20 @@ import java.time.ZoneId;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getExampleWaypoints;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class OpenTripPlannerMapperServiceTest {
 
-    private final UuidService uuidService = mock(UuidService.class);
     private final GeocodingService geocodingService = spy(GeocodingServiceImpl.class);
     private final ZonedDateTimeService zonedDateTimeService = new ZonedDateTimeServiceImpl(ZoneId.of("Europe/Berlin"));
 
-    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(uuidService, geocodingService, zonedDateTimeService);
+    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(geocodingService, zonedDateTimeService);
 
     @BeforeEach
     void init() {
-        when(uuidService.createUUID())
-                .thenReturn(TEST_UUID_1)
-                .thenReturn(TEST_UUID_2)
-                .thenReturn(TEST_UUID_3)
-                .thenReturn(TEST_UUID_4)
-                .thenReturn(TEST_UUID_5);
-
         doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
     }
 
@@ -56,7 +46,7 @@ class OpenTripPlannerMapperServiceTest {
                 .assertNext(journeyCallStatus -> {
                     assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.SUCCESS);
                     assertThat(journeyCallStatus.getThrowable()).isNull();
-                    assertThat(toJson(journeyCallStatus.getCalledObject())).isEqualTo(toJson(getFurtwangenToWaldkirchJourney()));
+                    assertThat(journeyCallStatus.getCalledObject()).isEqualToComparingFieldByFieldRecursively(getFurtwangenToWaldkirchJourney());
                 })
                 .verifyComplete();
     }
@@ -73,7 +63,7 @@ class OpenTripPlannerMapperServiceTest {
                 .assertNext(journeyCallStatus -> {
                     assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.SUCCESS);
                     assertThat(journeyCallStatus.getThrowable()).isNull();
-                    assertThat(toJson(journeyCallStatus.getCalledObject())).isEqualTo(toJson(getMannheimHbfLudwigsburgCenterJourney()));
+                    assertThat(journeyCallStatus.getCalledObject()).isEqualToComparingFieldByFieldRecursively((getMannheimHbfLudwigsburgCenterJourney()));
                 })
                 .verifyComplete();
     }

@@ -1,14 +1,14 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.Journey;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.JourneyApiServiceTestConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.JourneyApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.geo.Point;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -33,6 +33,7 @@ class JourneyApiServiceIT {
         StepVerifier.create(result)
                 .expectNextCount(1L)
                 .thenConsumeWhile(journey -> {
+                    assertThat(journey.getLanguage().getLanguage().length()).isEqualTo(2);
                     assertThat(journey.getLegs().size()).isGreaterThan(0);
                     assertThat(journey.getLegs())
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
@@ -63,7 +64,7 @@ class JourneyApiServiceIT {
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
         ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(otpMapperApiToken);
         testData.setArrival("Berlin Mitte");
-        testData.setArrivalCoordinate(new Point(13.409600d, 52.509439d));
+        testData.setArrivalCoordinate(new Point.PointBuilder(13.409600d, 52.509439d).build());
 
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(testData.build());
 

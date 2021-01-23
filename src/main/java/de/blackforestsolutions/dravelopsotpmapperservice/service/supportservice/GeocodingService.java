@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Point;
 
 import java.util.LinkedList;
 

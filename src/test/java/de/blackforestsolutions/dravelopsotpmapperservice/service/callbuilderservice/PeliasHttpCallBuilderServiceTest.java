@@ -1,8 +1,8 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.geo.Point;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasReverseApiToken;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getSickAgPoint;

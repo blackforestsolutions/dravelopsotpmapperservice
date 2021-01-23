@@ -5,7 +5,6 @@ import de.blackforestsolutions.dravelopsdatamodel.Price;
 import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
-import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,11 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     private static final String ORIGIN_PLACEHOLDER = "Origin";
     private static final String DESTINATION_PLACEHOLDER = "Destination";
 
-    private final UuidService uuidService;
     private final GeocodingService geocodingService;
     private final ZonedDateTimeService zonedDateTimeService;
 
     @Autowired
-    public OpenTripPlannerMapperServiceImpl(UuidService uuidService, GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService) {
-        this.uuidService = uuidService;
+    public OpenTripPlannerMapperServiceImpl(GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService) {
         this.geocodingService = geocodingService;
         this.zonedDateTimeService = zonedDateTimeService;
     }
@@ -43,14 +40,15 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return Mono.just(response)
                 .map(OpenTripPlannerJourneyResponse::getPlan)
                 .flatMapMany(plan -> Flux.fromIterable(plan.getItineraries()))
-                .map(itinerary -> extractJourneyFrom(itinerary, departure, arrival))
+                .map(itinerary -> extractJourneyFrom(itinerary, departure, arrival, response.getRequestParameters().getLocale()))
                 .onErrorResume(e -> Mono.just(new CallStatus<>(null, Status.FAILED, e)));
     }
 
-    private CallStatus<Journey> extractJourneyFrom(Itinerary itinerary, String departure, String arrival) {
+    private CallStatus<Journey> extractJourneyFrom(Itinerary itinerary, String departure, String arrival, String language) {
         try {
             return new CallStatus<>(
-                    new Journey.JourneyBuilder(uuidService.createUUID())
+                    new Journey.JourneyBuilder()
+                            .setLanguage(new Locale(language))
                             .setLegs(extractLegsFrom(itinerary.getLegs(), departure, arrival))
                             .setPrices(extractPricesFrom(itinerary))
                             .build(),
@@ -63,16 +61,16 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private LinkedList<Leg> extractLegsFrom(List<de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg> openTripPlannerLegs, String departure, String arrival) throws MalformedURLException {
-        LinkedHashMap<UUID, Leg> legs = new LinkedHashMap<>();
+        LinkedList<Leg> legs = new LinkedList<>();
         for (de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg : openTripPlannerLegs) {
             Leg leg = extractLegFrom(openTripPlannerLeg, departure, arrival);
-            legs.put(leg.getId(), leg);
+            legs.add(leg);
         }
-        return new LinkedList<>(legs.values());
+        return legs;
     }
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
-        return new Leg.LegBuilder(uuidService.createUUID())
+        return new Leg.LegBuilder()
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
                 .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))

@@ -1,6 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.PeliasTestConfiguration;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;

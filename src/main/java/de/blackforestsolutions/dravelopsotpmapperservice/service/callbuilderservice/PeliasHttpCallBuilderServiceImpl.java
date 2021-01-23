@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
-import org.springframework.data.geo.Point;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

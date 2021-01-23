@@ -1,6 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -23,8 +23,6 @@ import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenO
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class PeliasApiServiceTest {

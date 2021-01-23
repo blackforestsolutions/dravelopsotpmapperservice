@@ -1,10 +1,10 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.PeliasApiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
