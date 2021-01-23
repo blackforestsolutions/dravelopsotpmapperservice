@@ -41,7 +41,7 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
                 .concat("?")
                 .concat(LANGUAGE_PARAM)
                 .concat("=")
-                .concat(apiToken.getLanguage().toLanguageTag())
+                .concat(apiToken.getLanguage().getLanguage())
                 .concat("&")
                 .concat(OPTIMIZATION_PARAM)
                 .concat("=")
