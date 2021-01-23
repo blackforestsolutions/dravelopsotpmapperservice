@@ -19,8 +19,8 @@
         <apache.lang-version>2.6</apache.lang-version>
         <lombok.version>1.18.8</lombok.version>
         <google.maps.services>0.15.0</google.maps.services>
-        <blackforestsolutions.dravelopsdatamodel.version>5.0.0</blackforestsolutions.dravelopsdatamodel.version>
-        <blackforestsolutions.dravelopsgeneratedcontent.version>0.3.1-hazelcast</blackforestsolutions.dravelopsgeneratedcontent.version>
+        <blackforestsolutions.dravelopsdatamodel.version>5.1.1</blackforestsolutions.dravelopsdatamodel.version>
+        <blackforestsolutions.dravelopsgeneratedcontent.version>0.4.1</blackforestsolutions.dravelopsgeneratedcontent.version>
         <!-- Maven test Dependencies -->
         <assertj.version>3.9.0</assertj.version>
         <mockito.version>3.2.0</mockito.version>
@@ -36,13 +36,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!-- Productive dependencies -->
@@ -76,12 +69,12 @@
             <version>${google.maps.services}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.blackforestsolutions</groupId>
+            <groupId>de.blackforestsolutions</groupId>
             <artifactId>dravelopsdatamodel</artifactId>
             <version>${blackforestsolutions.dravelopsdatamodel.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.blackforestsolutions</groupId>
+            <groupId>de.blackforestsolutions</groupId>
             <artifactId>dravelopsgeneratedcontent</artifactId>
             <version>${blackforestsolutions.dravelopsgeneratedcontent.version}</version>
         </dependency>
@@ -123,7 +116,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.blackforestsolutions</groupId>
+            <groupId>de.blackforestsolutions</groupId>
             <artifactId>dravelopsdatamodel</artifactId>
             <version>${blackforestsolutions.dravelopsdatamodel.version}</version>
             <scope>test</scope>
