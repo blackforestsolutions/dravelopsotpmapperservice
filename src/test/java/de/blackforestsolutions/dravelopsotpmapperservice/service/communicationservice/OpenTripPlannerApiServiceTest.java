@@ -3,7 +3,6 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
-import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
@@ -132,7 +131,7 @@ class OpenTripPlannerApiServiceTest {
     }
 
     @Test
-    void test_getJourneysBy_apiToken_and_error_json_when_api_is_called_returns_call_status_with_noExternalResultFoundException() {
+    void test_getJourneysBy_apiToken_and_empty_json_when_api_is_called_returns_no_result() {
         ApiToken testData = getOpenTripPlannerApiToken();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(OpenTripPlannerJourneyResponse.class)))
                 .thenReturn(Mono.just(retrieveJsonToPojo("json/openTripPlannerNoJourneyFound.json", OpenTripPlannerJourneyResponse.class)));
@@ -140,11 +139,7 @@ class OpenTripPlannerApiServiceTest {
         Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
         StepVerifier.create(result)
-                .assertNext(error -> {
-                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
-                    assertThat(error.getCalledObject()).isNull();
-                    assertThat(error.getThrowable()).isInstanceOf(NoExternalResultFoundException.class);
-                })
+                .expectNextCount(0L)
                 .verifyComplete();
     }
 

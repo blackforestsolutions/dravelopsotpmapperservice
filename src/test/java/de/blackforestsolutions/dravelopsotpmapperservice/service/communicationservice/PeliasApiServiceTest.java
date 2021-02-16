@@ -3,7 +3,6 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
-import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
@@ -96,7 +95,7 @@ class PeliasApiServiceTest {
     }
 
     @Test
-    void test_extractTravelPointNameFrom_apiToken_testPoint_and_emptyResponse_returns_noExternalResultFoundException() {
+    void test_extractTravelPointNameFrom_apiToken_testPoint_and_emptyResponse_returns_no_result() {
         Point testPoint = getStuttgarterStreetPoint();
         ApiToken testData = getPeliasReverseApiToken();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
@@ -105,11 +104,7 @@ class PeliasApiServiceTest {
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
         StepVerifier.create(result)
-                .assertNext(error -> {
-                    assertThat(error.getStatus()).isEqualTo(Status.FAILED);
-                    assertThat(error.getCalledObject()).isNull();
-                    assertThat(error.getThrowable()).isInstanceOf(NoExternalResultFoundException.class);
-                })
+                .expectNextCount(0L)
                 .verifyComplete();
     }
 
