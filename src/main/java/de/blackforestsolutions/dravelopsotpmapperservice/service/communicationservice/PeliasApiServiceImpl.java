@@ -1,22 +1,24 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
+import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Point;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
-import de.blackforestsolutions.dravelopsdatamodel.exception.NoExternalResultFoundException;
-import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsgeneratedcontent.pelias.PeliasTravelPointResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.PeliasHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.net.URL;
+import java.util.Optional;
 
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
 
+@Slf4j
 @Service
 public class PeliasApiServiceImpl implements PeliasApiService {
 
@@ -63,9 +65,27 @@ public class PeliasApiServiceImpl implements PeliasApiService {
 
     private Mono<PeliasTravelPointResponse> handleEmptyResponse(PeliasTravelPointResponse response) {
         if (response.getFeatures().size() == 0) {
-            return Mono.error(new NoExternalResultFoundException());
+            logEmptyPeliasResult(response);
+            return Mono.empty();
         }
         return Mono.just(response);
     }
 
+    private void logEmptyPeliasResult(PeliasTravelPointResponse response) {
+        Optional<Double> optionalLongitude = Optional.ofNullable(response.getGeocoding().getQuery().getPointLon());
+        Optional<Double> optionalLatitude = Optional.ofNullable(response.getGeocoding().getQuery().getPointLat());
+
+        if (optionalLongitude.isPresent() && optionalLatitude.isPresent()) {
+            log.info(getPeliasNoResultLogMessageWith(optionalLongitude.get(), optionalLatitude.get()));
+        } else {
+            log.warn("Longitude and latitude is not available for logging a missing result!");
+        }
+    }
+
+    private String getPeliasNoResultLogMessageWith(double longitude, double latitude) {
+        return "No result found in pelias for longitude: "
+                .concat(String.valueOf(longitude))
+                .concat(" and latitude: ")
+                .concat(String.valueOf(latitude));
+    }
 }
