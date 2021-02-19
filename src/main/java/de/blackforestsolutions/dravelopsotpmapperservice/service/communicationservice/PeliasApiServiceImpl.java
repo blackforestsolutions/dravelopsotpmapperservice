@@ -65,17 +65,21 @@ public class PeliasApiServiceImpl implements PeliasApiService {
 
     private Mono<PeliasTravelPointResponse> handleEmptyResponse(PeliasTravelPointResponse response) {
         if (response.getFeatures().size() == 0) {
-            Optional<Double> optionalLongitude = Optional.ofNullable(response.getGeocoding().getQuery().getPointLon());
-            Optional<Double> optionalLatitude = Optional.ofNullable(response.getGeocoding().getQuery().getPointLat());
-
-            if (optionalLongitude.isPresent() && optionalLatitude.isPresent()) {
-                log.info(getPeliasNoResultLogMessageWith(optionalLongitude.get(), optionalLatitude.get()));
-            } else {
-                log.warn("Longitude and latitude is not available for logging a missing result!");
-            }
+            logEmptyPeliasResult(response);
             return Mono.empty();
         }
         return Mono.just(response);
+    }
+
+    private void logEmptyPeliasResult(PeliasTravelPointResponse response) {
+        Optional<Double> optionalLongitude = Optional.ofNullable(response.getGeocoding().getQuery().getPointLon());
+        Optional<Double> optionalLatitude = Optional.ofNullable(response.getGeocoding().getQuery().getPointLat());
+
+        if (optionalLongitude.isPresent() && optionalLatitude.isPresent()) {
+            log.info(getPeliasNoResultLogMessageWith(optionalLongitude.get(), optionalLatitude.get()));
+        } else {
+            log.warn("Longitude and latitude is not available for logging a missing result!");
+        }
     }
 
     private String getPeliasNoResultLogMessageWith(double longitude, double latitude) {
