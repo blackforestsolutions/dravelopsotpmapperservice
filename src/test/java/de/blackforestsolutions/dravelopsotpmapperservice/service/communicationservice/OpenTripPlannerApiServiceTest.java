@@ -76,7 +76,7 @@ class OpenTripPlannerApiServiceTest {
         inOrder.verify(openTripPlannerMapperService, times(1)).extractJourneysFrom(responseArg.capture(), departureArg.capture(), arrivalArg.capture());
         inOrder.verifyNoMoreInteractions();
         assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken());
-        assertThat(urlArg.getValue()).isEqualTo("http://localhost:8089");
+        assertThat(urlArg.getValue()).isEqualTo("http://localhost:8080");
         assertThat(httpHeadersArg.getValue()).isEqualTo(HttpHeaders.EMPTY);
         assertThat(responseArg.getValue()).isInstanceOf(OpenTripPlannerJourneyResponse.class);
         assertThat(departureArg.getValue()).isEqualTo("Am Großhausberg 8");
