@@ -41,17 +41,4 @@ class OpenTripPlannerCallServiceIT {
                 .assertNext(openTripPlannerJourneyResponse -> assertThat(openTripPlannerJourneyResponse.getPlan().getItineraries().size()).isGreaterThan(0))
                 .verifyComplete();
     }
-
-    @Test
-    void test_journey_with_wrong_path() {
-        String testUrl = "/otp/routers/b";
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
-        testData.setPath(testUrl);
-
-        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
-
-        StepVerifier.create(result)
-                .expectError(WebClientResponseException.class)
-                .verify();
-    }
 }

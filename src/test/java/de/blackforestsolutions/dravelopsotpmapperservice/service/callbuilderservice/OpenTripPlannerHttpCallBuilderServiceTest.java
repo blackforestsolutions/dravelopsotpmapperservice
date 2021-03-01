@@ -19,7 +19,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData);
 
-        assertThat(result).isEqualTo("/otp/routers/bw/plan?locale=de&optimize=QUICK&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595");
+        assertThat(result).isEqualTo("/otp/routers/bw/plan?locale=de&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595&showIntermediateStops=true&searchWindow=120");
     }
 
     @Test
@@ -59,9 +59,9 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
     }
 
     @Test
-    void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_optimize_as_null_throws_exception() {
+    void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_isArrivalDateTime_as_null_throws_exception() {
         ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
-        testData.setOptimize(null);
+        testData.setIsArrivalDateTime(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
     }
@@ -86,6 +86,22 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_arrivalCoordinate_as_null_throws_exception() {
         ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
         testData.setArrivalCoordinate(null);
+
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
+    }
+
+    @Test
+    void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_showIntermediateStops_as_null_throws_exception() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
+        testData.setShowIntermediateStops(null);
+
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
+    }
+
+    @Test
+    void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_journeySearchWindowInMinutes_as_null_throws_exception() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
+        testData.setJourneySearchWindowInMinutes(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
     }

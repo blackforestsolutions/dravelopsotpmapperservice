@@ -18,6 +18,10 @@ public class OpenTripPlannerConfiguration {
     private int port;
     @Value("${otp.router}")
     private String router;
+    @Value("${otp.showIntermediateStops}")
+    private boolean showIntermediateStops;
+    @Value("${otp.journeySearchWindowInMinutes}")
+    private int journeySearchWindowInMinutes;
     @Value("${otp.timeZone}")
     private String timeZone;
 
@@ -28,6 +32,8 @@ public class OpenTripPlannerConfiguration {
                 .setHost(host)
                 .setPort(port)
                 .setRouter(router)
+                .setShowIntermediateStops(showIntermediateStops)
+                .setJourneySearchWindowInMinutes(journeySearchWindowInMinutes)
                 .build();
     }
 

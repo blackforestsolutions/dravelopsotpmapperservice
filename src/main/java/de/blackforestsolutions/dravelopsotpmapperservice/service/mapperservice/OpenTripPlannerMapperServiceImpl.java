@@ -80,7 +80,10 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
                 .setVehicleNumber(Optional.ofNullable(openTripPlannerLeg.getRouteShortName()).orElse(""))
                 .setVehicleName(Optional.ofNullable(openTripPlannerLeg.getRouteLongName()).orElse(""))
-                .setIntermediateStops(extractIntermediateStopsFrom(openTripPlannerLeg.getIntermediateStops()))
+                .setIntermediateStops(Optional.ofNullable(openTripPlannerLeg.getIntermediateStops())
+                        .map(this::extractIntermediateStopsFrom)
+                        .orElse(new LinkedList<>())
+                )
                 .build();
     }
 

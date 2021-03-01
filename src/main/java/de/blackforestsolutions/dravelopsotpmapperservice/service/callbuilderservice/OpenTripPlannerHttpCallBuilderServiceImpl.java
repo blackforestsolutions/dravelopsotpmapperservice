@@ -16,20 +16,23 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
 
     private static final String DEPARTURE_OR_ARRIVAL_TIME_PARAM = "arriveBy";
     private static final String LANGUAGE_PARAM = "locale";
-    private static final String OPTIMIZATION_PARAM = "optimize";
     private static final String DATE_PARAM = "date";
     private static final String TIME_PARAM = "time";
     private static final String DEPARTURE_PLACE_PARAM = "fromPlace";
     private static final String ARRIVAL_PLACE_PARAM = "toPlace";
+    private static final String SHOW_INTERMEDIATE_STOPS_PARAM = "showIntermediateStops";
+    private static final String SEARCH_WINDOW_PARAM = "searchWindow";
 
     @Override
     public String buildOpenTripPlannerJourneyPathWith(ApiToken apiToken) {
         Objects.requireNonNull(apiToken.getRouter(), "router is not allowed to be null");
         Objects.requireNonNull(apiToken.getLanguage(), "language is not allowed to be null");
-        Objects.requireNonNull(apiToken.getOptimize(), "optimize is not allowed to be null");
+        Objects.requireNonNull(apiToken.getIsArrivalDateTime(), "isArrivalDateTime is not allowed to be null");
         Objects.requireNonNull(apiToken.getDateTime(), "dateTime is not allowed to be null");
         Objects.requireNonNull(apiToken.getDepartureCoordinate(), "departureCoordinate is not allowed to be null");
         Objects.requireNonNull(apiToken.getArrivalCoordinate(), "arrivalCoordinate is not allowed to be null");
+        Objects.requireNonNull(apiToken.getShowIntermediateStops(), "showIntermediateStops is not allowed to be null");
+        Objects.requireNonNull(apiToken.getJourneySearchWindowInMinutes(), "journeySearchWindowInMinutes is not allowed to be null");
         return "/"
                 .concat(OPEN_TRIP_PLANNER_PATH)
                 .concat("/")
@@ -42,10 +45,6 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
                 .concat(LANGUAGE_PARAM)
                 .concat("=")
                 .concat(apiToken.getLanguage().getLanguage())
-                .concat("&")
-                .concat(OPTIMIZATION_PARAM)
-                .concat("=")
-                .concat(apiToken.getOptimize().toString())
                 .concat("&")
                 .concat(DEPARTURE_OR_ARRIVAL_TIME_PARAM)
                 .concat("=")
@@ -65,7 +64,15 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
                 .concat("&")
                 .concat(ARRIVAL_PLACE_PARAM)
                 .concat("=")
-                .concat(convertCoordinateToString(apiToken.getArrivalCoordinate()));
+                .concat(convertCoordinateToString(apiToken.getArrivalCoordinate()))
+                .concat("&")
+                .concat(SHOW_INTERMEDIATE_STOPS_PARAM)
+                .concat("=")
+                .concat(String.valueOf(apiToken.getShowIntermediateStops()))
+                .concat("&")
+                .concat(SEARCH_WINDOW_PARAM)
+                .concat("=")
+                .concat(String.valueOf(apiToken.getJourneySearchWindowInMinutes()));
     }
 
     private String convertCoordinateToString(Point coordinate) {
