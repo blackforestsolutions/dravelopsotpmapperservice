@@ -17,7 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,8 +44,23 @@ class OpenTripPlannerApiServiceTest {
     }
 
     @Test
-    void test_getJourneysBy_apiToken_returns_journeys() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+    void test_getJourneysBy_fast_lane_apiToken_returns_journeys() {
+        ApiToken testData = getOtpFastLaneApiToken();
+
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
+
+        StepVerifier.create(result)
+                .assertNext(journey -> {
+                    assertThat(journey.getStatus()).isEqualTo(Status.SUCCESS);
+                    assertThat(journey.getCalledObject()).isInstanceOf(Journey.class);
+                    assertThat(journey.getThrowable()).isNull();
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void test_getJourneysBy_slow_lane_apiToken_returns_journeys() {
+        ApiToken testData = getOtpSlowLaneApiToken();
 
         Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
@@ -60,7 +75,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_is_executed_correctly() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         ArgumentCaptor<ApiToken> apiTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<String> urlArg = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<HttpHeaders> httpHeadersArg = ArgumentCaptor.forClass(HttpHeaders.class);
@@ -75,8 +90,8 @@ class OpenTripPlannerApiServiceTest {
         inOrder.verify(callService, times(1)).getOne(urlArg.capture(), httpHeadersArg.capture(), eq(OpenTripPlannerJourneyResponse.class));
         inOrder.verify(openTripPlannerMapperService, times(1)).extractJourneysFrom(responseArg.capture(), departureArg.capture(), arrivalArg.capture());
         inOrder.verifyNoMoreInteractions();
-        assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken());
-        assertThat(urlArg.getValue()).isEqualTo("http://localhost:8080");
+        assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOtpFastLaneApiToken());
+        assertThat(urlArg.getValue()).isEqualTo("http://localhost:9000");
         assertThat(httpHeadersArg.getValue()).isEqualTo(HttpHeaders.EMPTY);
         assertThat(responseArg.getValue()).isInstanceOf(OpenTripPlannerJourneyResponse.class);
         assertThat(departureArg.getValue()).isEqualTo("Am Großhausberg 8");
@@ -85,7 +100,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_and_host_as_null_returns_failed_call_status() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOpenTripPlannerApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
         testData.setHost(null);
 
         Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData.build());
@@ -115,7 +130,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_returns_failed_call_status_when_exception_is_thrown_by_mapperService() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         when(openTripPlannerMapperService.extractJourneysFrom(any(OpenTripPlannerJourneyResponse.class), anyString(), anyString()))
                 .thenThrow(NullPointerException.class);
 
@@ -132,7 +147,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_and_empty_json_when_api_is_called_returns_no_result() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(OpenTripPlannerJourneyResponse.class)))
                 .thenReturn(Mono.just(retrieveJsonToPojo("json/openTripPlannerNoJourneyFound.json", OpenTripPlannerJourneyResponse.class)));
 
@@ -145,7 +160,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_and_error_by_callService_returns_failed_callStatus() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(OpenTripPlannerJourneyResponse.class)))
                 .thenReturn(Mono.error(new Exception()));
 
@@ -162,7 +177,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_and_failed_call_status_by_mapper_returns_failed_callStatus() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         when(openTripPlannerMapperService.extractJourneysFrom(any(OpenTripPlannerJourneyResponse.class), anyString(), anyString()))
                 .thenReturn(Flux.just(new CallStatus<>(null, Status.FAILED, new Exception())));
 
@@ -179,7 +194,7 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_and_thrown_excpetion_by_httpCallBuiler_returns_failed_callStatus() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         when(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerJourneyPathWith(any(ApiToken.class)))
                 .thenThrow(NullPointerException.class);
 

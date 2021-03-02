@@ -1,44 +1,30 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
-import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import java.time.ZoneId;
+import java.util.List;
 
-@Configuration
+@Setter
+@Getter
+@Component
+@ConfigurationProperties(prefix = "otp")
 public class OpenTripPlannerConfiguration {
 
-    @Value("${otp.protocol}")
-    private String protocol;
-    @Value("${otp.host}")
-    private String host;
-    @Value("${otp.port}")
-    private int port;
-    @Value("${otp.router}")
-    private String router;
-    @Value("${otp.showIntermediateStops}")
-    private boolean showIntermediateStops;
-    @Value("${otp.journeySearchWindowInMinutes}")
-    private int journeySearchWindowInMinutes;
-    @Value("${otp.timeZone}")
-    private String timeZone;
+    private List<ApiToken> apiTokens;
 
-    @Bean(name = "openTripPlannerApiToken")
-    public ApiToken apiToken() {
-        return new ApiToken.ApiTokenBuilder()
-                .setProtocol(protocol)
-                .setHost(host)
-                .setPort(port)
-                .setRouter(router)
-                .setShowIntermediateStops(showIntermediateStops)
-                .setJourneySearchWindowInMinutes(journeySearchWindowInMinutes)
-                .build();
-    }
+    @Setter
+    @Getter
+    public static class ApiToken {
 
-    @Bean
-    public ZoneId zoneId() {
-        return ZoneId.of(timeZone);
+        private String protocol;
+        private String host;
+        private Integer port;
+        private String router;
+        private Boolean showIntermediateStops;
+        private Integer journeySearchWindowInMinutes;
+
     }
 }

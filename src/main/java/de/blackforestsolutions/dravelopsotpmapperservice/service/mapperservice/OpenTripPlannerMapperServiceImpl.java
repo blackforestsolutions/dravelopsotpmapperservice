@@ -1,8 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.Leg;
-import de.blackforestsolutions.dravelopsdatamodel.Price;
 import de.blackforestsolutions.dravelopsdatamodel.*;
+import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
