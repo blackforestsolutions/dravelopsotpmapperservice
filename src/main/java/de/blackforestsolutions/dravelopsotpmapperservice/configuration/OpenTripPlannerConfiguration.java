@@ -24,7 +24,5 @@ public class OpenTripPlannerConfiguration {
         private Integer port;
         private String router;
         private Boolean showIntermediateStops;
-        private Integer journeySearchWindowInMinutes;
-
     }
 }

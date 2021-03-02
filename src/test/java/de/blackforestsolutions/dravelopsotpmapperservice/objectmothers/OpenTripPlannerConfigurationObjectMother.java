@@ -33,7 +33,6 @@ public class OpenTripPlannerConfigurationObjectMother {
         fastLaneOtpConfig.setPort(9000);
         fastLaneOtpConfig.setRouter("bw-fast");
         fastLaneOtpConfig.setShowIntermediateStops(DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS);
-        fastLaneOtpConfig.setJourneySearchWindowInMinutes(DEFAULT_TEST_TWO_HOURS_FAST_LANE_SEARCH_WINDOW_IN_MIN);
 
         return fastLaneOtpConfig;
     }
@@ -46,7 +45,6 @@ public class OpenTripPlannerConfigurationObjectMother {
         slowLaneOtpConfig.setPort(9002);
         slowLaneOtpConfig.setRouter("bw-slow");
         slowLaneOtpConfig.setShowIntermediateStops(DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS);
-        slowLaneOtpConfig.setJourneySearchWindowInMinutes(DEFAULT_TEST_ONE_DAY_SLOW_LANE_SEARCH_WINDOW_IN_MIN);
 
         return slowLaneOtpConfig;
     }

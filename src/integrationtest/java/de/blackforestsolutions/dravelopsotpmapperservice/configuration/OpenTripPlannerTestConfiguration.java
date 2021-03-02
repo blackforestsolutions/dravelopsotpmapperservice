@@ -22,8 +22,6 @@ public class OpenTripPlannerTestConfiguration {
     private String router;
     @Value("${otp.apitokens[0].showIntermediateStops}")
     private boolean showIntermediateStops;
-    @Value("${otp.apitokens[0].journeySearchWindowInMinutes}")
-    private Integer journeySearchWindowInMinutes;
     @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
     @Value("${test.apitokens[0].departureCoordinateLatitude}")
@@ -42,7 +40,6 @@ public class OpenTripPlannerTestConfiguration {
                 .setPort(port)
                 .setRouter(router)
                 .setShowIntermediateStops(showIntermediateStops)
-                .setJourneySearchWindowInMinutes(journeySearchWindowInMinutes)
                 .setDepartureCoordinate(new Point.PointBuilder(departureCoordinateLongitude, departureCoordinateLatitude).build())
                 .setArrivalCoordinate(new Point.PointBuilder(arrivalCoordinateLongitude, arrivalCoordinateLatitude).build());
     }

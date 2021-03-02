@@ -55,7 +55,6 @@ public class JourneyApiServiceImpl implements JourneyApiService {
                 .setPort(apiToken.getPort())
                 .setRouter(apiToken.getRouter())
                 .setShowIntermediateStops(apiToken.getShowIntermediateStops())
-                .setJourneySearchWindowInMinutes(apiToken.getJourneySearchWindowInMinutes())
                 .build();
     }
 

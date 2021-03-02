@@ -75,7 +75,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
-                .setWaypoints(geocodingService.decodePolylineFrom(openTripPlannerLeg.getLegGeometry().getPoints()))
+                .setWaypoints(extractWaypointsFrom(openTripPlannerLeg.getMode(), openTripPlannerLeg.getLegGeometry().getPoints()))
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
                 .setVehicleNumber(Optional.ofNullable(openTripPlannerLeg.getRouteShortName()).orElse(""))
                 .setVehicleName(Optional.ofNullable(openTripPlannerLeg.getRouteLongName()).orElse(""))
@@ -84,6 +84,13 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                         .orElse(new LinkedList<>())
                 )
                 .build();
+    }
+
+    private LinkedList<Point> extractWaypointsFrom(String mode, String points) {
+        if (VehicleType.valueOf(mode).equals(VehicleType.WALK)) {
+            return geocodingService.decodePolylineFrom(points);
+        }
+        return new LinkedList<>();
     }
 
     private LinkedList<TravelPoint> extractIntermediateStopsFrom(List<Stop> intermediateStops) {

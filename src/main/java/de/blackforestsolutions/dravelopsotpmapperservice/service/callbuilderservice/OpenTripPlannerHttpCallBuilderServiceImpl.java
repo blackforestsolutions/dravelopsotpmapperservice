@@ -21,7 +21,6 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
     private static final String DEPARTURE_PLACE_PARAM = "fromPlace";
     private static final String ARRIVAL_PLACE_PARAM = "toPlace";
     private static final String SHOW_INTERMEDIATE_STOPS_PARAM = "showIntermediateStops";
-    private static final String SEARCH_WINDOW_PARAM = "searchWindow";
 
     @Override
     public String buildOpenTripPlannerJourneyPathWith(ApiToken apiToken) {
@@ -32,7 +31,6 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
         Objects.requireNonNull(apiToken.getDepartureCoordinate(), "departureCoordinate is not allowed to be null");
         Objects.requireNonNull(apiToken.getArrivalCoordinate(), "arrivalCoordinate is not allowed to be null");
         Objects.requireNonNull(apiToken.getShowIntermediateStops(), "showIntermediateStops is not allowed to be null");
-        Objects.requireNonNull(apiToken.getJourneySearchWindowInMinutes(), "journeySearchWindowInMinutes is not allowed to be null");
         return "/"
                 .concat(OPEN_TRIP_PLANNER_PATH)
                 .concat("/")
@@ -68,11 +66,7 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
                 .concat("&")
                 .concat(SHOW_INTERMEDIATE_STOPS_PARAM)
                 .concat("=")
-                .concat(String.valueOf(apiToken.getShowIntermediateStops()))
-                .concat("&")
-                .concat(SEARCH_WINDOW_PARAM)
-                .concat("=")
-                .concat(String.valueOf(apiToken.getJourneySearchWindowInMinutes()));
+                .concat(String.valueOf(apiToken.getShowIntermediateStops()));
     }
 
     private String convertCoordinateToString(Point coordinate) {

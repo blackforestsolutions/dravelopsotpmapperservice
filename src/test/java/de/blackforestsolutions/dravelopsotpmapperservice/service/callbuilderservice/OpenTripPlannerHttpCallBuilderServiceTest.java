@@ -20,7 +20,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData);
 
-        assertThat(result).isEqualTo("/otp/routers/bw-fast/plan?locale=de&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595&showIntermediateStops=true&searchWindow=120");
+        assertThat(result).isEqualTo("/otp/routers/bw-fast/plan?locale=de&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595&showIntermediateStops=true");
     }
 
     @Test
@@ -29,7 +29,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData);
 
-        assertThat(result).isEqualTo("/otp/routers/bw-slow/plan?locale=de&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595&showIntermediateStops=true&searchWindow=1440");
+        assertThat(result).isEqualTo("/otp/routers/bw-slow/plan?locale=de&arriveBy=false&date=09-30-2020&time=13:00&fromPlace=48.048381,8.209198&toPlace=48.087517,7.891595&showIntermediateStops=true");
     }
 
     @Test
@@ -104,14 +104,6 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_showIntermediateStops_as_null_throws_exception() {
         ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
         testData.setShowIntermediateStops(null);
-
-        assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
-    }
-
-    @Test
-    void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_journeySearchWindowInMinutes_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
-        testData.setJourneySearchWindowInMinutes(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
     }
