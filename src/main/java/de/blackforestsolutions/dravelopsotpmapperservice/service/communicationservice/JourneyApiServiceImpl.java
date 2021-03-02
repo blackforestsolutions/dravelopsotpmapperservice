@@ -44,8 +44,7 @@ public class JourneyApiServiceImpl implements JourneyApiService {
         return Mono.just(otpConfigToken)
                 .flatMap(otpToken -> requestTokenHandlerService.getRequestApiTokenWith(userRequestToken, otpToken))
                 .flatMapMany(openTripPlannerApiService::getJourneysBy)
-                .subscribeOn(Schedulers.parallel())
-                .log();
+                .subscribeOn(Schedulers.parallel());
     }
 
     private ApiToken buildApiTokenFromOtpConfiguration(OpenTripPlannerConfiguration.ApiToken apiToken) {
