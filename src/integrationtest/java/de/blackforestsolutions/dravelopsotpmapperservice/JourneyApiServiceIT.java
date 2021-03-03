@@ -39,7 +39,7 @@ class JourneyApiServiceIT {
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
-                            .allMatch(leg -> leg.getWaypoints().size() > 0)
+                            .allMatch(leg -> leg.getWaypoints() != null)
                             .allMatch(leg -> leg.getIntermediateStops().size() == 0 || leg.getIntermediateStops().size() > 0)
                             .allMatch(leg -> leg.getVehicleName() != null)
                             .allMatch(leg -> leg.getVehicleNumber() != null)
