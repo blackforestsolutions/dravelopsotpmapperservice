@@ -12,14 +12,16 @@ import org.springframework.context.annotation.Import;
 @TestConfiguration
 public class OpenTripPlannerTestConfiguration {
 
-    @Value("${otp.protocol}")
+    @Value("${otp.apitokens[0].protocol}")
     private String protocol;
-    @Value("${otp.host}")
+    @Value("${otp.apitokens[0].host}")
     private String host;
-    @Value("${otp.port}")
+    @Value("${otp.apitokens[0].port}")
     private int port;
-    @Value("${otp.router}")
+    @Value("${otp.apitokens[0].router}")
     private String router;
+    @Value("${otp.apitokens[0].showIntermediateStops}")
+    private boolean showIntermediateStops;
     @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
     @Value("${test.apitokens[0].departureCoordinateLatitude}")
@@ -37,6 +39,7 @@ public class OpenTripPlannerTestConfiguration {
                 .setHost(host)
                 .setPort(port)
                 .setRouter(router)
+                .setShowIntermediateStops(showIntermediateStops)
                 .setDepartureCoordinate(new Point.PointBuilder(departureCoordinateLongitude, departureCoordinateLatitude).build())
                 .setArrivalCoordinate(new Point.PointBuilder(arrivalCoordinateLongitude, arrivalCoordinateLatitude).build());
     }

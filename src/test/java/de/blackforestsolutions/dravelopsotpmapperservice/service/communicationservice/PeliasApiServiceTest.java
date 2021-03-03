@@ -17,8 +17,7 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOpenTripPlannerApiToken;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getPeliasReverseApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.PointObjectMother.getStuttgarterStreetPoint;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -124,8 +123,8 @@ class PeliasApiServiceTest {
     }
 
     @Test
-    void test_getJourneysBy_apiToken_and_error_by_callService_returns_failed_callStatus() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+    void test_extractTravelPointNameFrom_apiToken_and_error_by_callService_returns_failed_callStatus() {
+        ApiToken testData = getOtpFastLaneApiToken();
         Point testPoint = getStuttgarterStreetPoint();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
                 .thenReturn(Mono.error(new Exception()));
@@ -143,7 +142,7 @@ class PeliasApiServiceTest {
 
     @Test
     void test_extractTravelPointNameFrom_apiToken_point_and_thrown_exception_by_httpCallBuilder_returns_failed_call_status() {
-        ApiToken testData = getOpenTripPlannerApiToken();
+        ApiToken testData = getOtpFastLaneApiToken();
         Point testPoint = getStuttgarterStreetPoint();
         when(peliasHttpCallBuilderService.buildPeliasReversePathWith(any(ApiToken.class), any(Point.class)))
                 .thenThrow(NullPointerException.class);

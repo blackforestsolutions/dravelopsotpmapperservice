@@ -4,19 +4,21 @@ import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripPlannerConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerServiceImpl;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
+import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.OpenTripPlannerConfigurationObjectMother.getOtpConfigurationWithNoEmptyFields;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -24,20 +26,25 @@ class JourneyApiServiceTest {
 
     private final ExceptionHandlerService exceptionHandlerService = spy(ExceptionHandlerServiceImpl.class);
     private final RequestTokenHandlerService requestTokenHandlerService = spy(RequestTokenHandlerService.class);
-    private final ApiToken openTripPlannerApiToken = getOpenTripPlannerConfiguredApiToken();
+    private final OpenTripPlannerConfiguration openTripPlannerConfiguration = getOtpConfigurationWithNoEmptyFields();
     private final OpenTripPlannerApiService openTripPlannerApiService = mock(OpenTripPlannerApiService.class);
 
-    private final JourneyApiService classUnderTest = new JourneyApiServiceImpl(requestTokenHandlerService, exceptionHandlerService, openTripPlannerApiToken, openTripPlannerApiService);
+    private final JourneyApiService classUnderTest = new JourneyApiServiceImpl(requestTokenHandlerService, exceptionHandlerService, openTripPlannerConfiguration, openTripPlannerApiService);
 
     @BeforeEach
     void init() {
         when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
-                .thenReturn(Mono.just(getOpenTripPlannerApiToken()));
+                .thenReturn(Mono.just(getOtpFastLaneApiToken()))
+                .thenReturn(Mono.just(getOtpSlowLaneApiToken()));
 
-        when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class))).thenReturn(Flux.just(
-                new CallStatus<>(getJourneyWithEmptyFields(), Status.SUCCESS, null),
-                new CallStatus<>(null, Status.FAILED, new Exception())
-        ));
+        when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
+                .thenReturn(Flux.just(
+                        new CallStatus<>(getJourneyWithEmptyFields(), Status.SUCCESS, null),
+                        new CallStatus<>(null, Status.FAILED, new Exception())
+                ))
+                .thenReturn(Flux.just(
+                        new CallStatus<>(getFurtwangenToWaldkirchJourney(), Status.SUCCESS, null)
+                ));
     }
 
     @Test
@@ -47,35 +54,20 @@ class JourneyApiServiceTest {
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
+                .assertNext(journey -> assertThat(journey).isEqualToComparingFieldByFieldRecursively(getFurtwangenToWaldkirchJourney()))
                 .assertNext(journey -> assertThat(journey).isEqualToComparingFieldByFieldRecursively(getJourneyWithEmptyFields()))
                 .verifyComplete();
     }
 
     @Test
     void test_retrieveJourneysFromApiService_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_is_executed_correctly() {
-        ArgumentCaptor<ApiToken> otpMapperTokenArg = ArgumentCaptor.forClass(ApiToken.class);
-        ArgumentCaptor<ApiToken> configuredTokenArg = ArgumentCaptor.forClass(ApiToken.class);
-        ArgumentCaptor<ApiToken> mergedTokenArg = ArgumentCaptor.forClass(ApiToken.class);
-        ArgumentCaptor<CallStatus<Journey>> callStatusArg = ArgumentCaptor.forClass(CallStatus.class);
         ApiToken otpMapperTestToken = getOtpMapperApiToken();
 
         classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken).collectList().block();
 
-        InOrder inOrder = inOrder(requestTokenHandlerService, openTripPlannerApiService, exceptionHandlerService);
-        inOrder.verify(requestTokenHandlerService, times(1)).getRequestApiTokenWith(otpMapperTokenArg.capture(), configuredTokenArg.capture());
-        inOrder.verify(openTripPlannerApiService, times(1)).getJourneysBy(mergedTokenArg.capture());
-        inOrder.verify(exceptionHandlerService, times(2)).handleExceptions(callStatusArg.capture());
-        inOrder.verifyNoMoreInteractions();
-        assertThat(otpMapperTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken());
-        assertThat(configuredTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerConfiguredApiToken());
-        assertThat(mergedTokenArg.getValue()).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken());
-        assertThat(callStatusArg.getAllValues().size()).isEqualTo(2);
-        assertThat(callStatusArg.getAllValues().get(0).getStatus()).isEqualTo(Status.SUCCESS);
-        assertThat(callStatusArg.getAllValues().get(0).getThrowable()).isNull();
-        assertThat(callStatusArg.getAllValues().get(0).getCalledObject()).isInstanceOf(Journey.class);
-        assertThat(callStatusArg.getAllValues().get(1).getStatus()).isEqualTo(Status.FAILED);
-        assertThat(callStatusArg.getAllValues().get(1).getCalledObject()).isNull();
-        assertThat(callStatusArg.getAllValues().get(1).getThrowable()).isInstanceOf(Exception.class);
+        verify(requestTokenHandlerService, times(2)).getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class));
+        verify(openTripPlannerApiService, times(2)).getJourneysBy(any(ApiToken.class));
+        verify(exceptionHandlerService, times(3)).handleExceptions(any(CallStatus.class));
     }
 
     @Test
@@ -117,6 +109,5 @@ class JourneyApiServiceTest {
         StepVerifier.create(result)
                 .expectNextCount(0L)
                 .verifyComplete();
-
     }
 }

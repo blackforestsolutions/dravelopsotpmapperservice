@@ -34,20 +34,32 @@ class RequestTokenHandlerServiceTest {
     }
 
     @Test
-    void test_getRequestApiTokenWith_configured_token_and_user_token_returns_correct_call_token() {
-        ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
+    void test_getRequestApiTokenWith_configured_fast_lane_token_and_user_token_returns_correct_call_token() {
+        ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
         ApiToken requestTestData = getOtpMapperApiToken();
 
         Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
 
         StepVerifier.create(result)
-                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getOpenTripPlannerApiToken()))
+                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getOtpFastLaneApiToken()))
+                .verifyComplete();
+    }
+
+    @Test
+    void test_getRequestApiTokenWith_configured_slow_lane_token_and_user_token_returns_correct_call_token() {
+        ApiToken configuredTestData = getOtpConfiguredSlowLaneApiToken();
+        ApiToken requestTestData = getOtpMapperApiToken();
+
+        Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
+
+        StepVerifier.create(result)
+                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getOtpSlowLaneApiToken()))
                 .verifyComplete();
     }
 
     @Test
     void test_getRequestApiTokenWith_requestToken_and_otpToken_is_executed_correctly() {
-        ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
+        ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
         ApiToken requestTestData = getOtpMapperApiToken();
         ArgumentCaptor<ApiToken> peliasApiTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<Point> pointArg = ArgumentCaptor.forClass(Point.class);
@@ -72,7 +84,7 @@ class RequestTokenHandlerServiceTest {
 
     @Test
     void test_getRequestApiTokenWith_configured_token_and_user_token_returns_apiToken_with_placeholders_when_pelias_call_was_not_successfull() {
-        ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
+        ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
         ApiToken requestTestData = getOtpMapperApiToken();
         when(peliasApiService.extractTravelPointNameFrom(any(ApiToken.class), any(Point.class)))
                 .thenReturn(Mono.just(new CallStatus<>(null, Status.FAILED, new Exception())));
@@ -81,7 +93,7 @@ class RequestTokenHandlerServiceTest {
 
         StepVerifier.create(result)
                 .assertNext(apiToken -> {
-                    assertThat(apiToken).isEqualToIgnoringGivenFields(getOpenTripPlannerApiToken(), "departure", "arrival", "departureCoordinate", "arrivalCoordinate");
+                    assertThat(apiToken).isEqualToIgnoringGivenFields(getOtpFastLaneApiToken(), "departure", "arrival", "departureCoordinate", "arrivalCoordinate");
                     assertThat(apiToken.getDepartureCoordinate()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken().getDepartureCoordinate());
                     assertThat(apiToken.getArrivalCoordinate()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken().getArrivalCoordinate());
                     assertThat(apiToken.getDeparture()).isEqualTo("Start");
@@ -92,7 +104,7 @@ class RequestTokenHandlerServiceTest {
 
     @Test
     void test_getRequestApiTokenWith__configured_token_and_user_tokengetOtpRequestToken_returns_error_when_exception_is_thrown() {
-        ApiToken configuredTestData = getOpenTripPlannerConfiguredApiToken();
+        ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
         ApiToken.ApiTokenBuilder reqeustTestData = new ApiToken.ApiTokenBuilder(getOtpMapperApiToken());
         reqeustTestData.setDepartureCoordinate(null);
 

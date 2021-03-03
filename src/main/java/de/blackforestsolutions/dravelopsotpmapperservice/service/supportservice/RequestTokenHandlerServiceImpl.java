@@ -37,22 +37,21 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
     }
 
     private ApiToken buildPeliasApiTokenWith(ApiToken request, ApiToken peliasApiToken) {
-        ApiToken.ApiTokenBuilder builderCopy = new ApiToken.ApiTokenBuilder(peliasApiToken);
-        builderCopy.setLanguage(request.getLanguage());
-        return builderCopy.build();
+        return new ApiToken.ApiTokenBuilder(peliasApiToken)
+                .setLanguage(request.getLanguage())
+                .build();
     }
 
     private ApiToken buildOpenTripPlannerApiTokenWith(ApiToken request, ApiToken configuredOtpData, String departure, String arrival) {
-        ApiToken.ApiTokenBuilder builderCopy = new ApiToken.ApiTokenBuilder(configuredOtpData);
-        builderCopy.setArrival(arrival);
-        builderCopy.setArrivalCoordinate(request.getArrivalCoordinate());
-        builderCopy.setDeparture(departure);
-        builderCopy.setDepartureCoordinate(request.getDepartureCoordinate());
-        builderCopy.setDateTime(request.getDateTime());
-        builderCopy.setOptimize(request.getOptimize());
-        builderCopy.setIsArrivalDateTime(request.getIsArrivalDateTime());
-        builderCopy.setLanguage(request.getLanguage());
-        return builderCopy.build();
+        return new ApiToken.ApiTokenBuilder(configuredOtpData)
+                .setArrival(arrival)
+                .setArrivalCoordinate(request.getArrivalCoordinate())
+                .setDeparture(departure)
+                .setDepartureCoordinate(request.getDepartureCoordinate())
+                .setDateTime(request.getDateTime())
+                .setIsArrivalDateTime(request.getIsArrivalDateTime())
+                .setLanguage(request.getLanguage())
+                .build();
     }
 
     private Mono<String> extractTravelPointNameFrom(ApiToken peliasApiToken, Point travelPointCoordinate, String travelPointNamePlaceholder) {
