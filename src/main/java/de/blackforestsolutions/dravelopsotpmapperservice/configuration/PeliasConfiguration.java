@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class PeliasConfiguration {
 
@@ -22,6 +24,8 @@ public class PeliasConfiguration {
     private String departurePlaceholder;
     @Value("${pelias.arrivalPlaceholder}")
     private String arrivalPlaceholder;
+    @Value("${pelias.layers}")
+    private List<String> layers;
 
     @Bean(name = "peliasApiToken")
     public ApiToken apiToken() {
@@ -33,6 +37,7 @@ public class PeliasConfiguration {
                 .setMaxResults(maxResults)
                 .setDeparture(departurePlaceholder)
                 .setArrival(arrivalPlaceholder)
+                .setLayers(layers)
                 .build();
     }
 

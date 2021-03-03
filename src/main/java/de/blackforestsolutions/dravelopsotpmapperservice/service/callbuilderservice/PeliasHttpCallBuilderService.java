@@ -4,5 +4,5 @@ import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsdatamodel.Point;
 
 public interface PeliasHttpCallBuilderService {
-    String buildPeliasTravelPointNamePathWith(ApiToken apiToken, Point coordinate);
+    String buildPeliasReversePathWith(ApiToken apiToken, Point coordinate);
 }

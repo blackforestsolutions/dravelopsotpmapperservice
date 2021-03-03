@@ -15,13 +15,15 @@ public class PeliasHttpCallBuilderServiceImpl implements PeliasHttpCallBuilderSe
     private static final String LONGITUDE_PARAM = "point.lon";
     private static final String SIZE_PARAM = "size";
     private static final String LANGUAGE_PARAM = "lang";
+    private static final String LAYERS_PARAM = "layers";
 
     @Override
-    public String buildPeliasTravelPointNamePathWith(ApiToken apiToken, Point coordinate) {
+    public String buildPeliasReversePathWith(ApiToken apiToken, Point coordinate) {
         Objects.requireNonNull(coordinate, "coordinate is not allowed be null");
         Objects.requireNonNull(apiToken.getLanguage(), "language is not allowed to be null");
         Objects.requireNonNull(apiToken.getMaxResults(), "maxResults is not allowed to be null");
         Objects.requireNonNull(apiToken.getApiVersion(), "apiVersion is not allowed to be null");
+        Objects.requireNonNull(apiToken.getLayers(), "layers is not allowed to be null");
         return "/"
                 .concat(apiToken.getApiVersion())
                 .concat("/")
@@ -41,7 +43,10 @@ public class PeliasHttpCallBuilderServiceImpl implements PeliasHttpCallBuilderSe
                 .concat("&")
                 .concat(LANGUAGE_PARAM)
                 .concat("=")
-                .concat(apiToken.getLanguage().toLanguageTag());
-
+                .concat(apiToken.getLanguage().toLanguageTag())
+                .concat("&")
+                .concat(LAYERS_PARAM)
+                .concat("=")
+                .concat(String.join(",", apiToken.getLayers()));
     }
 }
