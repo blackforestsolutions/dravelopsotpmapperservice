@@ -38,7 +38,7 @@ public class PeliasCallServiceIT {
     @Test
     void test_travelPointName() {
         ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasReverseApiToken);
-        testData.setPath(httpCallBuilderService.buildPeliasTravelPointNamePathWith(peliasReverseApiToken.build(), peliasPoint));
+        testData.setPath(httpCallBuilderService.buildPeliasReversePathWith(peliasReverseApiToken.build(), peliasPoint));
 
         Mono<PeliasTravelPointResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, PeliasTravelPointResponse.class);
 

@@ -32,11 +32,11 @@ class PeliasApiServiceTest {
 
     @BeforeEach
     void init() {
-        when(peliasHttpCallBuilderService.buildPeliasTravelPointNamePathWith(any(ApiToken.class), any(Point.class)))
+        when(peliasHttpCallBuilderService.buildPeliasReversePathWith(any(ApiToken.class), any(Point.class)))
                 .thenReturn("");
 
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
-                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasResult.json", PeliasTravelPointResponse.class)));
+                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasReverseResult.json", PeliasTravelPointResponse.class)));
     }
 
     @Test
@@ -67,7 +67,7 @@ class PeliasApiServiceTest {
         classUnderTest.extractTravelPointNameFrom(testData, testPoint).block();
 
         InOrder inOrder = inOrder(peliasHttpCallBuilderService, callService);
-        inOrder.verify(peliasHttpCallBuilderService, times(1)).buildPeliasTravelPointNamePathWith(apiTokenArg.capture(), pointArg.capture());
+        inOrder.verify(peliasHttpCallBuilderService, times(1)).buildPeliasReversePathWith(apiTokenArg.capture(), pointArg.capture());
         inOrder.verify(callService, times(1)).getOne(urlArg.capture(), httpHeadersArg.capture(), eq(PeliasTravelPointResponse.class));
         inOrder.verifyNoMoreInteractions();
         assertThat(apiTokenArg.getValue()).isEqualToComparingFieldByField(getPeliasReverseApiToken());
@@ -98,7 +98,7 @@ class PeliasApiServiceTest {
         Point testPoint = getStuttgarterStreetPoint();
         ApiToken testData = getPeliasReverseApiToken();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
-                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasNoResult.json", PeliasTravelPointResponse.class)));
+                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasReverseNoResult.json", PeliasTravelPointResponse.class)));
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
@@ -144,7 +144,7 @@ class PeliasApiServiceTest {
     void test_extractTravelPointNameFrom_apiToken_point_and_thrown_exception_by_httpCallBuilder_returns_failed_call_status() {
         ApiToken testData = getOtpFastLaneApiToken();
         Point testPoint = getStuttgarterStreetPoint();
-        when(peliasHttpCallBuilderService.buildPeliasTravelPointNamePathWith(any(ApiToken.class), any(Point.class)))
+        when(peliasHttpCallBuilderService.buildPeliasReversePathWith(any(ApiToken.class), any(Point.class)))
                 .thenThrow(NullPointerException.class);
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
