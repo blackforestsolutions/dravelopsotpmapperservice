@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import static de.blackforestsolutions.dravelopsotpmapperservice.configuration.CoordinateConfiguration.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(JourneyApiServiceTestConfiguration.class)
@@ -40,15 +41,26 @@ class JourneyApiServiceIT {
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
                             .allMatch(leg -> leg.getVehicleType() != null)
                             .allMatch(leg -> leg.getWaypoints() != null)
-                            .allMatch(leg -> leg.getIntermediateStops().size() == 0 || leg.getIntermediateStops().size() > 0)
+                            .allMatch(leg -> leg.getWaypoints().stream().allMatch(waypoint -> waypoint.getX() >= MIN_WGS_84_LONGITUDE))
+                            .allMatch(leg -> leg.getWaypoints().stream().allMatch(waypoint -> waypoint.getX() <= MAX_WGS_84_LONGITUDE))
+                            .allMatch(leg -> leg.getWaypoints().stream().allMatch(waypoint -> waypoint.getY() >= MIN_WGS_84_LATITUDE))
+                            .allMatch(leg -> leg.getWaypoints().stream().allMatch(waypoint -> waypoint.getY() <= MAX_WGS_84_LATITUDE))
                             .allMatch(leg -> leg.getVehicleName() != null)
                             .allMatch(leg -> leg.getVehicleNumber() != null)
                             .allMatch(leg -> leg.getDeparture() != null)
                             .allMatch(leg -> !leg.getDeparture().getName().isEmpty())
                             .allMatch(leg -> leg.getDeparture().getPoint() != null)
+                            .allMatch(leg -> leg.getDeparture().getPoint().getX() >= MIN_WGS_84_LONGITUDE)
+                            .allMatch(leg -> leg.getDeparture().getPoint().getX() <= MAX_WGS_84_LONGITUDE)
+                            .allMatch(leg -> leg.getDeparture().getPoint().getY() >= MIN_WGS_84_LATITUDE)
+                            .allMatch(leg -> leg.getDeparture().getPoint().getY() <= MAX_WGS_84_LATITUDE)
                             .allMatch(leg -> leg.getArrival() != null)
                             .allMatch(leg -> !leg.getArrival().getName().isEmpty())
-                            .allMatch(leg -> leg.getArrival().getPoint() != null);
+                            .allMatch(leg -> leg.getArrival().getPoint() != null)
+                            .allMatch(leg -> leg.getArrival().getPoint().getX() >= MIN_WGS_84_LONGITUDE)
+                            .allMatch(leg -> leg.getArrival().getPoint().getX() <= MAX_WGS_84_LONGITUDE)
+                            .allMatch(leg -> leg.getArrival().getPoint().getY() >= MIN_WGS_84_LATITUDE)
+                            .allMatch(leg -> leg.getArrival().getPoint().getY() <= MAX_WGS_84_LATITUDE);
                     assertThat(journey.getLegs())
                             .first()
                             .matches(leg -> leg.getDeparture().getArrivalTime() == null);

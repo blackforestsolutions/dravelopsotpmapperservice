@@ -8,18 +8,18 @@ import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripP
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerServiceImpl;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.List;
+
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.OpenTripPlannerConfigurationObjectMother.getOtpConfigurationWithNoEmptyFields;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class JourneyApiServiceTest {
@@ -48,14 +48,15 @@ class JourneyApiServiceTest {
     }
 
     @Test
-    void test_retrieveJourneysFromApiServices_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_as_json_asynchronously_and_sort_out_journeys() {
+    void test_retrieveJourneysFromApiServices_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_asynchronously_and_distinct_journeys() {
         ApiToken otpMapperTestToken = getOtpMapperApiToken();
+        List<Journey> expectedJourneys = List.of(getJourneyWithEmptyFields(), getFurtwangenToWaldkirchJourney());
 
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
         StepVerifier.create(result)
-                .assertNext(journey -> assertThat(journey).isEqualToComparingFieldByFieldRecursively(getFurtwangenToWaldkirchJourney()))
-                .assertNext(journey -> assertThat(journey).isEqualToComparingFieldByFieldRecursively(getJourneyWithEmptyFields()))
+                .expectNextMatches(expectedJourneys::contains)
+                .expectNextMatches(expectedJourneys::contains)
                 .verifyComplete();
     }
 

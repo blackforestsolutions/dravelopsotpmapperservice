@@ -36,7 +36,7 @@ class PeliasApiServiceTest {
                 .thenReturn("");
 
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
-                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasResult.json", PeliasTravelPointResponse.class)));
+                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasReverseResult.json", PeliasTravelPointResponse.class)));
     }
 
     @Test
@@ -98,7 +98,7 @@ class PeliasApiServiceTest {
         Point testPoint = getStuttgarterStreetPoint();
         ApiToken testData = getPeliasReverseApiToken();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
-                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasNoResult.json", PeliasTravelPointResponse.class)));
+                .thenReturn(Mono.just(retrieveJsonToPojo("json/peliasReverseNoResult.json", PeliasTravelPointResponse.class)));
 
         Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
