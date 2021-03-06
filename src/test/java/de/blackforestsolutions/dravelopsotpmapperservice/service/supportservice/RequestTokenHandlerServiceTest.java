@@ -34,38 +34,38 @@ class RequestTokenHandlerServiceTest {
     }
 
     @Test
-    void test_getRequestApiTokenWith_configured_fast_lane_token_and_user_token_returns_correct_call_token() {
+    void test_getJourneyApiTokenWith_configured_fast_lane_token_and_user_token_returns_correct_call_token() {
         ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
-        ApiToken requestTestData = getOtpMapperApiToken();
+        ApiToken requestTestData = getJourneyOtpMapperApiToken();
 
-        Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
+        Mono<ApiToken> result = classUnderTest.getJourneyApiTokenWith(requestTestData, configuredTestData);
 
         StepVerifier.create(result)
-                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getOtpFastLaneApiToken()))
+                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getJourneyOtpFastLaneApiToken()))
                 .verifyComplete();
     }
 
     @Test
-    void test_getRequestApiTokenWith_configured_slow_lane_token_and_user_token_returns_correct_call_token() {
+    void test_getJourneyApiTokenWith_configured_slow_lane_token_and_user_token_returns_correct_call_token() {
         ApiToken configuredTestData = getOtpConfiguredSlowLaneApiToken();
-        ApiToken requestTestData = getOtpMapperApiToken();
+        ApiToken requestTestData = getJourneyOtpMapperApiToken();
 
-        Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
+        Mono<ApiToken> result = classUnderTest.getJourneyApiTokenWith(requestTestData, configuredTestData);
 
         StepVerifier.create(result)
-                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getOtpSlowLaneApiToken()))
+                .assertNext(apiToken -> assertThat(apiToken).isEqualToComparingFieldByFieldRecursively(getJourneyOtpSlowLaneApiToken()))
                 .verifyComplete();
     }
 
     @Test
-    void test_getRequestApiTokenWith_requestToken_and_otpToken_is_executed_correctly() {
+    void test_getJourneyApiTokenWith_requestToken_and_otpToken_is_executed_correctly() {
         ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
-        ApiToken requestTestData = getOtpMapperApiToken();
+        ApiToken requestTestData = getJourneyOtpMapperApiToken();
         ArgumentCaptor<ApiToken> peliasApiTokenArg = ArgumentCaptor.forClass(ApiToken.class);
         ArgumentCaptor<Point> pointArg = ArgumentCaptor.forClass(Point.class);
         ArgumentCaptor<CallStatus<String>> callStatusArg = ArgumentCaptor.forClass(CallStatus.class);
 
-        classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData).block();
+        classUnderTest.getJourneyApiTokenWith(requestTestData, configuredTestData).block();
 
         InOrder inOrder = inOrder(peliasApiService, exceptionHandlerService);
         inOrder.verify(peliasApiService, times(2)).extractTravelPointNameFrom(peliasApiTokenArg.capture(), pointArg.capture());
@@ -83,19 +83,19 @@ class RequestTokenHandlerServiceTest {
     }
 
     @Test
-    void test_getRequestApiTokenWith_configured_token_and_user_token_returns_apiToken_with_placeholders_when_pelias_call_was_not_successfull() {
+    void test_getJourneyApiTokenWith_configured_token_and_user_token_returns_apiToken_with_placeholders_when_pelias_call_was_not_successfull() {
         ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
-        ApiToken requestTestData = getOtpMapperApiToken();
+        ApiToken requestTestData = getJourneyOtpMapperApiToken();
         when(peliasApiService.extractTravelPointNameFrom(any(ApiToken.class), any(Point.class)))
                 .thenReturn(Mono.just(new CallStatus<>(null, Status.FAILED, new Exception())));
 
-        Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(requestTestData, configuredTestData);
+        Mono<ApiToken> result = classUnderTest.getJourneyApiTokenWith(requestTestData, configuredTestData);
 
         StepVerifier.create(result)
                 .assertNext(apiToken -> {
-                    assertThat(apiToken).isEqualToIgnoringGivenFields(getOtpFastLaneApiToken(), "departure", "arrival", "departureCoordinate", "arrivalCoordinate");
-                    assertThat(apiToken.getDepartureCoordinate()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken().getDepartureCoordinate());
-                    assertThat(apiToken.getArrivalCoordinate()).isEqualToComparingFieldByFieldRecursively(getOtpMapperApiToken().getArrivalCoordinate());
+                    assertThat(apiToken).isEqualToIgnoringGivenFields(getJourneyOtpFastLaneApiToken(), "departure", "arrival", "departureCoordinate", "arrivalCoordinate");
+                    assertThat(apiToken.getDepartureCoordinate()).isEqualToComparingFieldByFieldRecursively(getJourneyOtpMapperApiToken().getDepartureCoordinate());
+                    assertThat(apiToken.getArrivalCoordinate()).isEqualToComparingFieldByFieldRecursively(getJourneyOtpMapperApiToken().getArrivalCoordinate());
                     assertThat(apiToken.getDeparture()).isEqualTo("Start");
                     assertThat(apiToken.getArrival()).isEqualTo("Ziel");
                 })
@@ -103,17 +103,36 @@ class RequestTokenHandlerServiceTest {
     }
 
     @Test
-    void test_getRequestApiTokenWith__configured_token_and_user_tokengetOtpRequestToken_returns_error_when_exception_is_thrown() {
+    void test_getJourneyApiTokenWith_configured_token_and_user_token_returns_error_when_exception_is_thrown() {
         ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
-        ApiToken.ApiTokenBuilder reqeustTestData = new ApiToken.ApiTokenBuilder(getOtpMapperApiToken());
+        ApiToken.ApiTokenBuilder reqeustTestData = new ApiToken.ApiTokenBuilder(getJourneyOtpMapperApiToken());
         reqeustTestData.setDepartureCoordinate(null);
 
-        Mono<ApiToken> result = classUnderTest.getRequestApiTokenWith(reqeustTestData.build(), configuredTestData);
+        Mono<ApiToken> result = classUnderTest.getJourneyApiTokenWith(reqeustTestData.build(), configuredTestData);
 
         StepVerifier.create(result)
                 .expectError(NullPointerException.class)
                 .verify();
     }
 
+    @Test
+    void test_getNearestStationsApiTokenWith_configured_fast_lane_token_and_user_token_returns_correct_call_token() {
+        ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
+        ApiToken requestTestData = getNearestStationsOtpMapperApiToken();
+
+        ApiToken result = classUnderTest.getNearestStationsApiTokenWith(requestTestData, configuredTestData);
+
+        assertThat(result).isEqualToComparingFieldByFieldRecursively(getNearestStationsOtpFastLaneApiToken());
+    }
+
+    @Test
+    void test_getNearestStationsApiTokenWith_configured_slow_lane_token_and_user_token_returns_correct_call_token() {
+        ApiToken configuredTestData = getOtpConfiguredSlowLaneApiToken();
+        ApiToken requestTestData = getNearestStationsOtpMapperApiToken();
+
+        ApiToken result = classUnderTest.getNearestStationsApiTokenWith(requestTestData, configuredTestData);
+
+        assertThat(result).isEqualToComparingFieldByFieldRecursively(getNearestStationsOtpSlowLaneApiToken());
+    }
 
 }

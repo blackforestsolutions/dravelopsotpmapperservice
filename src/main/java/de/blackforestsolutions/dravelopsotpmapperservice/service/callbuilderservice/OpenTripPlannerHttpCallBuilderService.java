@@ -4,4 +4,6 @@ import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 
 public interface OpenTripPlannerHttpCallBuilderService {
     String buildOpenTripPlannerJourneyPathWith(ApiToken apiToken);
+
+    String buildOpenTripPlannerNearestStationPathWith(ApiToken apiToken);
 }

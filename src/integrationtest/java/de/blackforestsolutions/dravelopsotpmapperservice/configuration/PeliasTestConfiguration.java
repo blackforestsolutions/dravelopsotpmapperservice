@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Locale;
 
-@Import(ZonedDateTimeConfiguration.class)
+@Import(ConverterConfiguration.class)
 @TestConfiguration
 public class PeliasTestConfiguration {
 

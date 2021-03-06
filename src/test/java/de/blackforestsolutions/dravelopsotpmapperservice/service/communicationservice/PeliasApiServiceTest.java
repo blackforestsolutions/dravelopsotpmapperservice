@@ -124,7 +124,7 @@ class PeliasApiServiceTest {
 
     @Test
     void test_extractTravelPointNameFrom_apiToken_and_error_by_callService_returns_failed_callStatus() {
-        ApiToken testData = getOtpFastLaneApiToken();
+        ApiToken testData = getJourneyOtpMapperApiToken();
         Point testPoint = getStuttgarterStreetPoint();
         when(callService.getOne(anyString(), any(HttpHeaders.class), eq(PeliasTravelPointResponse.class)))
                 .thenReturn(Mono.error(new Exception()));
@@ -142,7 +142,7 @@ class PeliasApiServiceTest {
 
     @Test
     void test_extractTravelPointNameFrom_apiToken_point_and_thrown_exception_by_httpCallBuilder_returns_failed_call_status() {
-        ApiToken testData = getOtpFastLaneApiToken();
+        ApiToken testData = getJourneyOtpMapperApiToken();
         Point testPoint = getStuttgarterStreetPoint();
         when(peliasHttpCallBuilderService.buildPeliasReversePathWith(any(ApiToken.class), any(Point.class)))
                 .thenThrow(NullPointerException.class);

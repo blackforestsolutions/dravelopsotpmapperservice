@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOtpFastLaneApiToken;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.getOtpSlowLaneApiToken;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -16,7 +15,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_fast_lane_apiToken_returns_valid_path() {
-        ApiToken testData = getOtpFastLaneApiToken();
+        ApiToken testData = getJourneyOtpFastLaneApiToken();
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData);
 
@@ -25,7 +24,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_slow_lane_apiToken_returns_valid_path() {
-        ApiToken testData = getOtpSlowLaneApiToken();
+        ApiToken testData = getJourneyOtpSlowLaneApiToken();
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData);
 
@@ -34,7 +33,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_english_language_returns_valid_path() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setLanguage(Locale.forLanguageTag("en"));
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build());
@@ -44,7 +43,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_us_language_returns_valid_path() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setLanguage(Locale.forLanguageTag("us"));
 
         String result = classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build());
@@ -54,7 +53,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_router_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setRouter(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -62,7 +61,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_language_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setLanguage(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -70,7 +69,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_isArrivalDateTime_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setIsArrivalDateTime(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -78,7 +77,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_dateTime_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setDateTime(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -86,7 +85,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_departureCoordinate_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setDepartureCoordinate(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -94,7 +93,7 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_arrivalCoordinate_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setArrivalCoordinate(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -102,9 +101,51 @@ class OpenTripPlannerHttpCallBuilderServiceTest {
 
     @Test
     void test_buildOpenTripPlannerJourneyPathWith_apiToken_and_showIntermediateStops_as_null_throws_exception() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getOtpFastLaneApiToken());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
         testData.setShowIntermediateStops(null);
 
         assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerJourneyPathWith(testData.build()));
+    }
+
+    @Test
+    void test_buildOpenTripPlannerNearestStationPathWith_fast_lane_apiToken_returns_valid_path() {
+        ApiToken testData = getNearestStationsOtpFastLaneApiToken();
+
+        String result = classUnderTest.buildOpenTripPlannerNearestStationPathWith(testData);
+
+        assertThat(result).isEqualTo("/otp/routers/bw-fast/index/stops?radius=1000&lat=48.048381&lon=8.209198");
+    }
+
+    @Test
+    void test_buildOpenTripPlannerNearestStationPathWith_slow_lane_apiToken_returns_valid_path() {
+        ApiToken testData = getNearestStationsOtpSlowLaneApiToken();
+
+        String result = classUnderTest.buildOpenTripPlannerNearestStationPathWith(testData);
+
+        assertThat(result).isEqualTo("/otp/routers/bw-slow/index/stops?radius=1000&lat=48.048381&lon=8.209198");
+    }
+
+    @Test
+    void test_buildOpenTripPlannerNearestStationPathWith_apiToken_and_router_as_null_throws_exception() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getNearestStationsOtpFastLaneApiToken());
+        testData.setRouter(null);
+
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerNearestStationPathWith(testData.build()));
+    }
+
+    @Test
+    void test_buildOpenTripPlannerNearestStationPathWith_apiToken_and_radiusInKilometers_as_null_throws_exception() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getNearestStationsOtpFastLaneApiToken());
+        testData.setRadiusInKilometers(null);
+
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerNearestStationPathWith(testData.build()));
+    }
+
+    @Test
+    void test_buildOpenTripPlannerNearestStationPathWith_apiToken_and_arrivalCoordinate_as_null_throws_exception() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getNearestStationsOtpFastLaneApiToken());
+        testData.setArrivalCoordinate(null);
+
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildOpenTripPlannerNearestStationPathWith(testData.build()));
     }
 }

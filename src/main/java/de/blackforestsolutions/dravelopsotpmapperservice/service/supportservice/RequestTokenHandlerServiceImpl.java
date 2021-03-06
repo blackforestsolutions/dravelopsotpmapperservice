@@ -24,7 +24,7 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
     }
 
     @Override
-    public Mono<ApiToken> getRequestApiTokenWith(ApiToken request, ApiToken otpConfiguredRequestData) {
+    public Mono<ApiToken> getJourneyApiTokenWith(ApiToken request, ApiToken otpConfiguredRequestData) {
         try {
             ApiToken peliasRequestToken = buildPeliasApiTokenWith(request, peliasApiToken);
             return Mono.zip(
@@ -34,6 +34,15 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
         } catch (Exception e) {
             return Mono.error(e);
         }
+    }
+
+    @Override
+    public ApiToken getNearestStationsApiTokenWith(ApiToken request, ApiToken otpConfiguredRequestData) {
+        return new ApiToken.ApiTokenBuilder(otpConfiguredRequestData)
+                .setArrivalCoordinate(request.getArrivalCoordinate())
+                .setRadiusInKilometers(request.getRadiusInKilometers())
+                .setLanguage(request.getLanguage())
+                .build();
     }
 
     private ApiToken buildPeliasApiTokenWith(ApiToken request, ApiToken peliasApiToken) {

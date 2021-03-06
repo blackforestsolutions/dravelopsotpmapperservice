@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-@Import(ZonedDateTimeConfiguration.class)
+@Import(ConverterConfiguration.class)
 @TestConfiguration
 public class OpenTripPlannerTestConfiguration {
 
@@ -20,8 +20,10 @@ public class OpenTripPlannerTestConfiguration {
     private int port;
     @Value("${otp.apitokens[0].router}")
     private String router;
-    @Value("${otp.apitokens[0].showIntermediateStops}")
+    @Value("${otp.showIntermediateStops}")
     private boolean showIntermediateStops;
+    @Value("${otp.maxResults}")
+    private int maxResults;
     @Value("${test.apitokens[0].departureCoordinateLongitude}")
     private Double departureCoordinateLongitude;
     @Value("${test.apitokens[0].departureCoordinateLatitude}")
@@ -40,6 +42,7 @@ public class OpenTripPlannerTestConfiguration {
                 .setPort(port)
                 .setRouter(router)
                 .setShowIntermediateStops(showIntermediateStops)
+                .setMaxResults(maxResults)
                 .setDepartureCoordinate(new Point.PointBuilder(departureCoordinateLongitude, departureCoordinateLatitude).build())
                 .setArrivalCoordinate(new Point.PointBuilder(arrivalCoordinateLongitude, arrivalCoordinateLatitude).build());
     }

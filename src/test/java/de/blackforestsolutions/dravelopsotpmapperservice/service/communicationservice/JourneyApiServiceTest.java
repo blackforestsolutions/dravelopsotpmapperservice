@@ -27,15 +27,15 @@ class JourneyApiServiceTest {
     private final ExceptionHandlerService exceptionHandlerService = spy(ExceptionHandlerServiceImpl.class);
     private final RequestTokenHandlerService requestTokenHandlerService = spy(RequestTokenHandlerService.class);
     private final OpenTripPlannerConfiguration openTripPlannerConfiguration = getOtpConfigurationWithNoEmptyFields();
-    private final OpenTripPlannerApiService openTripPlannerApiService = mock(OpenTripPlannerApiService.class);
+    private final OpenTripPlannerApiService openTripPlannerApiService = mock(OpenTripPlannerApiServiceImpl.class);
 
     private final JourneyApiService classUnderTest = new JourneyApiServiceImpl(requestTokenHandlerService, exceptionHandlerService, openTripPlannerConfiguration, openTripPlannerApiService);
 
     @BeforeEach
     void init() {
-        when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
-                .thenReturn(Mono.just(getOtpFastLaneApiToken()))
-                .thenReturn(Mono.just(getOtpSlowLaneApiToken()));
+        when(requestTokenHandlerService.getJourneyApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
+                .thenReturn(Mono.just(getJourneyOtpFastLaneApiToken()))
+                .thenReturn(Mono.just(getJourneyOtpSlowLaneApiToken()));
 
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.just(
@@ -48,8 +48,8 @@ class JourneyApiServiceTest {
     }
 
     @Test
-    void test_retrieveJourneysFromApiServices_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_asynchronously_and_distinct_journeys() {
-        ApiToken otpMapperTestToken = getOtpMapperApiToken();
+    void test_retrieveJourneysFromApiServices_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_async_and_distinct_journeys() {
+        ApiToken otpMapperTestToken = getJourneyOtpMapperApiToken();
         List<Journey> expectedJourneys = List.of(getJourneyWithEmptyFields(), getFurtwangenToWaldkirchJourney());
 
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
@@ -62,19 +62,19 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_is_executed_correctly() {
-        ApiToken otpMapperTestToken = getOtpMapperApiToken();
+        ApiToken otpMapperTestToken = getJourneyOtpMapperApiToken();
 
         classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken).collectList().block();
 
-        verify(requestTokenHandlerService, times(2)).getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class));
+        verify(requestTokenHandlerService, times(2)).getJourneyApiTokenWith(any(ApiToken.class), any(ApiToken.class));
         verify(openTripPlannerApiService, times(2)).getJourneysBy(any(ApiToken.class));
         verify(exceptionHandlerService, times(3)).handleExceptions(any(CallStatus.class));
     }
 
     @Test
-    void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_by_mocked_returns_error() {
-        ApiToken otpMapperTestToken = getOtpMapperApiToken();
-        when(requestTokenHandlerService.getRequestApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
+    void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_by_mocked_returns_zero_results() {
+        ApiToken otpMapperTestToken = getJourneyOtpMapperApiToken();
+        when(requestTokenHandlerService.getJourneyApiTokenWith(any(ApiToken.class), any(ApiToken.class)))
                 .thenReturn(Mono.error(new Exception()));
 
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
@@ -87,7 +87,7 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_by_mocked_service_returns_error() {
-        ApiToken otpMapperTestToken = getOtpMapperApiToken();
+        ApiToken otpMapperTestToken = getJourneyOtpMapperApiToken();
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.error(new Exception()));
 
@@ -101,7 +101,7 @@ class JourneyApiServiceTest {
 
     @Test
     void test_retrieveJourneysFromApiService_with_otpMapperToken_and_error_call_status_returns_zero_journeys_when_apiService_failed() {
-        ApiToken otpMapperTestToken = getOtpMapperApiToken();
+        ApiToken otpMapperTestToken = getJourneyOtpMapperApiToken();
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.just(new CallStatus<>(null, Status.FAILED, new Exception())));
 

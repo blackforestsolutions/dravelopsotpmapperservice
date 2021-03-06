@@ -2,20 +2,20 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.communications
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
-import de.blackforestsolutions.dravelopsdatamodel.Journey;
+import de.blackforestsolutions.dravelopsdatamodel.TravelPoint;
 import de.blackforestsolutions.dravelopsotpmapperservice.configuration.OpenTripPlannerConfiguration;
 import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.ExceptionHandlerService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.RequestTokenHandlerService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-@Slf4j
+import java.util.Comparator;
+
 @Service
-public class JourneyApiServiceImpl implements JourneyApiService {
+public class TravelPointApiServiceImpl implements TravelPointApiService {
 
     private final RequestTokenHandlerService requestTokenHandlerService;
     private final ExceptionHandlerService exceptionHandlerService;
@@ -23,7 +23,7 @@ public class JourneyApiServiceImpl implements JourneyApiService {
     private final OpenTripPlannerApiService openTripPlannerApiService;
 
     @Autowired
-    public JourneyApiServiceImpl(RequestTokenHandlerService requestTokenHandlerService, ExceptionHandlerService exceptionHandlerService, OpenTripPlannerConfiguration openTripPlannerConfiguration, OpenTripPlannerApiService openTripPlannerApiService) {
+    public TravelPointApiServiceImpl(RequestTokenHandlerService requestTokenHandlerService, ExceptionHandlerService exceptionHandlerService, OpenTripPlannerConfiguration openTripPlannerConfiguration, OpenTripPlannerApiService openTripPlannerApiService) {
         this.requestTokenHandlerService = requestTokenHandlerService;
         this.exceptionHandlerService = exceptionHandlerService;
         this.openTripPlannerConfiguration = openTripPlannerConfiguration;
@@ -31,19 +31,21 @@ public class JourneyApiServiceImpl implements JourneyApiService {
     }
 
     @Override
-    public Flux<Journey> retrieveJourneysFromApiService(ApiToken userRequestToken) {
+    public Flux<TravelPoint> retrieveNearestStationsFromApiService(ApiToken userRequestToken) {
         return Flux.fromIterable(openTripPlannerConfiguration.getApiTokens())
                 .map(this::buildApiTokenFromOtpConfiguration)
-                .flatMap(otpConfigToken -> getJourneysBy(userRequestToken, otpConfigToken))
+                .flatMap(otpConfigToken -> getNearestStationsBy(userRequestToken, otpConfigToken))
                 .flatMap(exceptionHandlerService::handleExceptions)
-                .distinct(Journey::getId)
+                .distinct()
+                .sort(Comparator.comparingDouble(travelPoint -> travelPoint.getDistanceInKilometers().getValue()))
+                .take(openTripPlannerConfiguration.getMaxResults())
                 .onErrorResume(exceptionHandlerService::handleExceptions);
     }
 
-    private Flux<CallStatus<Journey>> getJourneysBy(ApiToken userRequestToken, ApiToken otpConfigToken) {
+    private Flux<CallStatus<TravelPoint>> getNearestStationsBy(ApiToken userRequestToken, ApiToken otpConfigToken) {
         return Mono.just(otpConfigToken)
-                .flatMap(otpToken -> requestTokenHandlerService.getJourneyApiTokenWith(userRequestToken, otpToken))
-                .flatMapMany(openTripPlannerApiService::getJourneysBy)
+                .map(configToken -> requestTokenHandlerService.getNearestStationsApiTokenWith(userRequestToken, configToken))
+                .flatMapMany(openTripPlannerApiService::getNearestStationsBy)
                 .subscribeOn(Schedulers.parallel());
     }
 
@@ -53,8 +55,6 @@ public class JourneyApiServiceImpl implements JourneyApiService {
                 .setHost(apiToken.getHost())
                 .setPort(apiToken.getPort())
                 .setRouter(apiToken.getRouter())
-                .setShowIntermediateStops(openTripPlannerConfiguration.getShowIntermediateStops())
                 .build();
     }
-
 }
