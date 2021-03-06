@@ -3,6 +3,7 @@ package de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice;
 import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
+import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -39,24 +41,31 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return Mono.just(response)
                 .map(OpenTripPlannerJourneyResponse::getPlan)
                 .flatMapMany(plan -> Flux.fromIterable(plan.getItineraries()))
-                .map(itinerary -> extractJourneyFrom(itinerary, departure, arrival, response.getRequestParameters().getLocale()))
+                .map(itinerary -> extractJourneyCallStatusFrom(itinerary, departure, arrival, response.getRequestParameters().getLocale()))
                 .onErrorResume(e -> Mono.just(new CallStatus<>(null, Status.FAILED, e)));
     }
 
-    private CallStatus<Journey> extractJourneyFrom(Itinerary itinerary, String departure, String arrival, String language) {
+    @Override
+    public Flux<CallStatus<TravelPoint>> extractNearestStationFrom(List<OpenTripPlannerStationResponse> response) {
+        return Flux.fromIterable(response)
+                .map(this::extractStationCallStatusFrom)
+                .onErrorResume(e -> Mono.just(new CallStatus<>(null, Status.FAILED, e)));
+    }
+
+    private CallStatus<Journey> extractJourneyCallStatusFrom(Itinerary itinerary, String departure, String arrival, String language) {
         try {
-            return new CallStatus<>(
-                    new Journey.JourneyBuilder()
-                            .setLanguage(new Locale(language))
-                            .setLegs(extractLegsFrom(itinerary.getLegs(), departure, arrival))
-                            .setPrices(extractPricesFrom(itinerary))
-                            .build(),
-                    Status.SUCCESS,
-                    null
-            );
+            return new CallStatus<>(extractJourneyFrom(itinerary, departure, arrival, language), Status.SUCCESS, null);
         } catch (Exception e) {
             return new CallStatus<>(null, Status.FAILED, e);
         }
+    }
+
+    private Journey extractJourneyFrom(Itinerary itinerary, String departure, String arrival, String language) throws IOException {
+        return new Journey.JourneyBuilder()
+                .setLanguage(new Locale(language))
+                .setLegs(extractLegsFrom(itinerary.getLegs(), departure, arrival))
+                .setPrices(extractPricesFrom(itinerary))
+                .build();
     }
 
     private LinkedList<Leg> extractLegsFrom(List<de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg> openTripPlannerLegs, String departure, String arrival) throws MalformedURLException {
@@ -162,6 +171,22 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setPriceType(PriceType.valueOf(fare.getKey().toString().toUpperCase(Locale.GERMANY)))
                 .setSmallestCurrencyValue(fare.getValue().getCents())
                 .setCurrencyCode(Currency.getInstance(fare.getValue().getCurrency().getCurrencyCode()))
+                .build();
+    }
+
+    private CallStatus<TravelPoint> extractStationCallStatusFrom(OpenTripPlannerStationResponse stationResponse) {
+        try {
+            return new CallStatus<>(extractStationFrom(stationResponse), Status.SUCCESS, null);
+        } catch (Exception e) {
+            return new CallStatus<>(null, Status.FAILED, e);
+        }
+    }
+
+    private TravelPoint extractStationFrom(OpenTripPlannerStationResponse stationResponse) {
+        return new TravelPoint.TravelPointBuilder()
+                .setName(stationResponse.getName())
+                .setPoint(new Point.PointBuilder(stationResponse.getLon(), stationResponse.getLat()).build())
+                .setDistanceInKilometers(geocodingService.extractKilometersFrom(stationResponse.getDist()))
                 .build();
     }
 

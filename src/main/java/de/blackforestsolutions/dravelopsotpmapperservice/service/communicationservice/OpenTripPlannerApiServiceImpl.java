@@ -1,11 +1,9 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
-import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
-import de.blackforestsolutions.dravelopsdatamodel.Journey;
-import de.blackforestsolutions.dravelopsdatamodel.Status;
+import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Error;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
+import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.callbuilderservice.OpenTripPlannerHttpCallBuilderService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.communicationservice.restcalls.CallService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperService;
@@ -17,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallBuilder.buildUrlWith;
@@ -44,20 +43,49 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
     @Override
     public Flux<CallStatus<Journey>> getJourneysBy(ApiToken apiToken) {
         try {
-            return Mono.just(apiToken)
-                    .map(this::getJourneyRequestString)
-                    .flatMap(url -> callService.getOne(url, HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class))
-                    .flatMap(this::handleEmptyResponse)
-                    .flatMapMany(openTripPlannerJourney -> openTripPlannerMapperService.extractJourneysFrom(openTripPlannerJourney, apiToken.getDeparture(), apiToken.getArrival()))
+            return executeJourneyCallWith(apiToken)
                     .onErrorResume(e -> Flux.just(new CallStatus<>(null, Status.FAILED, e)));
         } catch (Exception e) {
             return Flux.just(new CallStatus<>(null, Status.FAILED, e));
         }
     }
 
+    @Override
+    public Flux<CallStatus<TravelPoint>> getNearestStationsBy(ApiToken apiToken) {
+        try {
+            return executeNearestStationsCallWith(apiToken)
+                    .onErrorResume(e -> Flux.just(new CallStatus<>(null, Status.FAILED, e)));
+        } catch (Exception e) {
+            return Flux.just(new CallStatus<>(null, Status.FAILED, e));
+        }
+    }
+
+    private Flux<CallStatus<Journey>> executeJourneyCallWith(ApiToken apiToken) {
+        return Mono.just(apiToken)
+                .map(this::getJourneyRequestString)
+                .flatMap(url -> callService.getOne(url, HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class))
+                .flatMap(this::handleEmptyResponse)
+                .flatMapMany(openTripPlannerJourney -> openTripPlannerMapperService.extractJourneysFrom(openTripPlannerJourney, apiToken.getDeparture(), apiToken.getArrival()));
+    }
+
+    private Flux<CallStatus<TravelPoint>> executeNearestStationsCallWith(ApiToken apiToken) {
+        return Mono.just(apiToken)
+                .map(this::getNearestStationsRequestString)
+                .flatMapMany(url -> callService.getOne(url, HttpHeaders.EMPTY, OpenTripPlannerStationResponse[].class))
+                .map(Arrays::asList)
+                .flatMap(openTripPlannerMapperService::extractNearestStationFrom);
+    }
+
     private String getJourneyRequestString(ApiToken apiToken) {
         ApiToken.ApiTokenBuilder builder = new ApiToken.ApiTokenBuilder(apiToken);
         builder.setPath(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerJourneyPathWith(apiToken));
+        URL requestUrl = buildUrlWith(builder.build());
+        return requestUrl.toString();
+    }
+
+    private String getNearestStationsRequestString(ApiToken apiToken) {
+        ApiToken.ApiTokenBuilder builder = new ApiToken.ApiTokenBuilder(apiToken);
+        builder.setPath(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerNearestStationPathWith(apiToken));
         URL requestUrl = buildUrlWith(builder.build());
         return requestUrl.toString();
     }

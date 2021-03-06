@@ -9,11 +9,12 @@ public class OpenTripPlannerConfigurationObjectMother {
     private static final String DEFAULT_TEST_PROTOCOL = "http";
     private static final String DEFAULT_TEST_HOST = "localhost";
     private static final boolean DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS = true;
-    private static final int DEFAULT_TEST_TWO_HOURS_FAST_LANE_SEARCH_WINDOW_IN_MIN = 120;
-    private static final int DEFAULT_TEST_ONE_DAY_SLOW_LANE_SEARCH_WINDOW_IN_MIN = 1440;
+    private static final int DEFAULT_TEST_MAX_RESULTS = 10;
 
     public static OpenTripPlannerConfiguration getOtpConfigurationWithNoEmptyFields() {
         OpenTripPlannerConfiguration otpConfig = new OpenTripPlannerConfiguration();
+        otpConfig.setShowIntermediateStops(DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS);
+        otpConfig.setMaxResults(DEFAULT_TEST_MAX_RESULTS);
         otpConfig.setApiTokens(getOtpConfigurations());
         return otpConfig;
     }
@@ -32,7 +33,6 @@ public class OpenTripPlannerConfigurationObjectMother {
         fastLaneOtpConfig.setHost(DEFAULT_TEST_HOST);
         fastLaneOtpConfig.setPort(9000);
         fastLaneOtpConfig.setRouter("bw-fast");
-        fastLaneOtpConfig.setShowIntermediateStops(DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS);
 
         return fastLaneOtpConfig;
     }
@@ -44,7 +44,6 @@ public class OpenTripPlannerConfigurationObjectMother {
         slowLaneOtpConfig.setHost(DEFAULT_TEST_HOST);
         slowLaneOtpConfig.setPort(9002);
         slowLaneOtpConfig.setRouter("bw-slow");
-        slowLaneOtpConfig.setShowIntermediateStops(DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS);
 
         return slowLaneOtpConfig;
     }

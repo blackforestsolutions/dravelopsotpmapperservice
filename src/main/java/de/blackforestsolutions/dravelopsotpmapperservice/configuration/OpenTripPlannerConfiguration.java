@@ -14,6 +14,8 @@ import java.util.List;
 public class OpenTripPlannerConfiguration {
 
     private List<ApiToken> apiTokens;
+    private Integer maxResults;
+    private Boolean showIntermediateStops;
 
     @Setter
     @Getter
@@ -23,6 +25,5 @@ public class OpenTripPlannerConfiguration {
         private String host;
         private Integer port;
         private String router;
-        private Boolean showIntermediateStops;
     }
 }
