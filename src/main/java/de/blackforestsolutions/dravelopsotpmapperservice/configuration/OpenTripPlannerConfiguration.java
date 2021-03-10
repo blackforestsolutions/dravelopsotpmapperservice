@@ -15,7 +15,6 @@ public class OpenTripPlannerConfiguration {
 
     private List<ApiToken> apiTokens;
     private Integer maxResults;
-    private Boolean showIntermediateStops;
 
     @Setter
     @Getter

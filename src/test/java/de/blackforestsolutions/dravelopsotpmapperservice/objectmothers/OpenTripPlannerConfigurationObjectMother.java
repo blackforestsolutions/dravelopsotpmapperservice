@@ -8,12 +8,10 @@ public class OpenTripPlannerConfigurationObjectMother {
 
     private static final String DEFAULT_TEST_PROTOCOL = "http";
     private static final String DEFAULT_TEST_HOST = "localhost";
-    private static final boolean DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS = true;
     private static final int DEFAULT_TEST_MAX_RESULTS = 10;
 
     public static OpenTripPlannerConfiguration getOtpConfigurationWithNoEmptyFields() {
         OpenTripPlannerConfiguration otpConfig = new OpenTripPlannerConfiguration();
-        otpConfig.setShowIntermediateStops(DEFAULT_TEST_SHOW_INTERMEDIATE_STOPS);
         otpConfig.setMaxResults(DEFAULT_TEST_MAX_RESULTS);
         otpConfig.setApiTokens(getOtpConfigurations());
         return otpConfig;

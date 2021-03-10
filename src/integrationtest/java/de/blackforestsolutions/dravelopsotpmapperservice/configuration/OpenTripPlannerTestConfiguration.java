@@ -20,8 +20,6 @@ public class OpenTripPlannerTestConfiguration {
     private int port;
     @Value("${otp.apitokens[0].router}")
     private String router;
-    @Value("${otp.showIntermediateStops}")
-    private boolean showIntermediateStops;
     @Value("${otp.maxResults}")
     private int maxResults;
     @Value("${test.apitokens[0].departureCoordinateLongitude}")
@@ -41,7 +39,6 @@ public class OpenTripPlannerTestConfiguration {
                 .setHost(host)
                 .setPort(port)
                 .setRouter(router)
-                .setShowIntermediateStops(showIntermediateStops)
                 .setMaxResults(maxResults)
                 .setDepartureCoordinate(new Point.PointBuilder(departureCoordinateLongitude, departureCoordinateLatitude).build())
                 .setArrivalCoordinate(new Point.PointBuilder(arrivalCoordinateLongitude, arrivalCoordinateLatitude).build());

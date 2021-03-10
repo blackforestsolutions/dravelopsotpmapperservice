@@ -18,7 +18,9 @@ import java.util.List;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.ApiTokenObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
-import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithEmptyFields;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getJourneyWithNoEmptyFieldsById;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_1;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_2;
 import static de.blackforestsolutions.dravelopsotpmapperservice.objectmothers.OpenTripPlannerConfigurationObjectMother.getOtpConfigurationWithNoEmptyFields;
 import static org.mockito.Mockito.*;
 
@@ -39,18 +41,20 @@ class JourneyApiServiceTest {
 
         when(openTripPlannerApiService.getJourneysBy(any(ApiToken.class)))
                 .thenReturn(Flux.just(
-                        new CallStatus<>(getJourneyWithEmptyFields(), Status.SUCCESS, null),
-                        new CallStatus<>(null, Status.FAILED, new Exception())
+                        new CallStatus<>(getFurtwangenToWaldkirchJourney(), Status.SUCCESS, null),
+                        new CallStatus<>(null, Status.FAILED, new Exception()),
+                        new CallStatus<>(getJourneyWithNoEmptyFieldsById(TEST_UUID_1), Status.SUCCESS, null)
                 ))
                 .thenReturn(Flux.just(
-                        new CallStatus<>(getFurtwangenToWaldkirchJourney(), Status.SUCCESS, null)
+                        new CallStatus<>(getFurtwangenToWaldkirchJourney(), Status.SUCCESS, null),
+                        new CallStatus<>(getJourneyWithNoEmptyFieldsById(TEST_UUID_2), Status.SUCCESS, null)
                 ));
     }
 
     @Test
     void test_retrieveJourneysFromApiServices_with_otpMapperToken_requestTokenHandler_exceptionHandler_and_apiService_returns_journeys_async_and_distinct_journeys() {
         ApiToken otpMapperTestToken = getJourneyOtpMapperApiToken();
-        List<Journey> expectedJourneys = List.of(getJourneyWithEmptyFields(), getFurtwangenToWaldkirchJourney());
+        List<Journey> expectedJourneys = List.of(getJourneyWithNoEmptyFieldsById(TEST_UUID_1), getFurtwangenToWaldkirchJourney());
 
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(otpMapperTestToken);
 
@@ -68,7 +72,7 @@ class JourneyApiServiceTest {
 
         verify(requestTokenHandlerService, times(2)).getJourneyApiTokenWith(any(ApiToken.class), any(ApiToken.class));
         verify(openTripPlannerApiService, times(2)).getJourneysBy(any(ApiToken.class));
-        verify(exceptionHandlerService, times(3)).handleExceptions(any(CallStatus.class));
+        verify(exceptionHandlerService, times(5)).handleExceptions(any(CallStatus.class));
     }
 
     @Test
