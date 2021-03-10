@@ -25,7 +25,6 @@ public class OpenTripPlannerHttpCallBuilderServiceImpl implements OpenTripPlanne
     private static final String TIME_PARAM = "time";
     private static final String DEPARTURE_PLACE_PARAM = "fromPlace";
     private static final String ARRIVAL_PLACE_PARAM = "toPlace";
-    private static final String SHOW_INTERMEDIATE_STOPS_PARAM = "showIntermediateStops";
     private static final String RADIUS_IN_METERS_PARAM = "radius";
     private static final String LATITUDE_PARAM = "lat";
     private static final String LONGITUDE_PARAM = "lon";
