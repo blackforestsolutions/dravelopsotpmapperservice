@@ -4,6 +4,7 @@ import de.blackforestsolutions.dravelopsdatamodel.CallStatus;
 import de.blackforestsolutions.dravelopsdatamodel.Journey;
 import de.blackforestsolutions.dravelopsdatamodel.Status;
 import de.blackforestsolutions.dravelopsdatamodel.TravelPoint;
+import de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.OpenTripPlannerJourneyResponse;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice.OpenTripPlannerMapperService;
@@ -21,6 +22,8 @@ import java.util.List;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getMannheimHbfLudwigsburgCenterJourney;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.TravelPointObjectMother.*;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_2;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_3;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getExampleWaypoints;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.*;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutil.TestAssertions.getOtpApiNearestStationsAsserts;
@@ -31,12 +34,14 @@ class OpenTripPlannerMapperServiceTest {
 
     private final GeocodingService geocodingService = spy(GeocodingServiceImpl.class);
     private final ZonedDateTimeService zonedDateTimeService = new ZonedDateTimeServiceImpl(ZoneId.of("Europe/Berlin"));
+    private final UuidService uuidService = mock(UuidServiceImpl.class);
 
-    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(geocodingService, zonedDateTimeService);
+    private final OpenTripPlannerMapperService classUnderTest = new OpenTripPlannerMapperServiceImpl(geocodingService, zonedDateTimeService, uuidService);
 
     @BeforeEach
     void init() {
         doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
+        doReturn(TEST_UUID_2).when(uuidService).createUUID();
     }
 
     @Test
@@ -61,6 +66,7 @@ class OpenTripPlannerMapperServiceTest {
         OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/otpRnvJourney.json", OpenTripPlannerJourneyResponse.class);
         String departureTestData = "Mannheim Hbf";
         String arrivalTestData = "Ludwigsburg Center";
+        doReturn(TEST_UUID_3).when(uuidService).createUUID();
 
         Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
 

@@ -36,7 +36,7 @@ public class JourneyApiServiceImpl implements JourneyApiService {
                 .map(this::buildApiTokenFromOtpConfiguration)
                 .flatMap(otpConfigToken -> getJourneysBy(userRequestToken, otpConfigToken))
                 .flatMap(exceptionHandlerService::handleExceptions)
-                .distinct(Journey::getId)
+                .distinct()
                 .onErrorResume(exceptionHandlerService::handleExceptions);
     }
 
@@ -53,7 +53,6 @@ public class JourneyApiServiceImpl implements JourneyApiService {
                 .setHost(apiToken.getHost())
                 .setPort(apiToken.getPort())
                 .setRouter(apiToken.getRouter())
-                .setShowIntermediateStops(openTripPlannerConfiguration.getShowIntermediateStops())
                 .build();
     }
 

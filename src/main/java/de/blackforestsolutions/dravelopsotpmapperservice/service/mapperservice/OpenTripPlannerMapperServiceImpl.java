@@ -5,6 +5,7 @@ import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
+import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,13 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private final GeocodingService geocodingService;
     private final ZonedDateTimeService zonedDateTimeService;
+    private final UuidService uuidService;
 
     @Autowired
-    public OpenTripPlannerMapperServiceImpl(GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService) {
+    public OpenTripPlannerMapperServiceImpl(GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService, UuidService uuidService) {
         this.geocodingService = geocodingService;
         this.zonedDateTimeService = zonedDateTimeService;
+        this.uuidService = uuidService;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private Journey extractJourneyFrom(Itinerary itinerary, String departure, String arrival, String language) throws IOException {
-        return new Journey.JourneyBuilder()
+        return new Journey.JourneyBuilder(uuidService.createUUID())
                 .setLanguage(new Locale(language))
                 .setLegs(extractLegsFrom(itinerary.getLegs(), departure, arrival))
                 .setPrices(extractPricesFrom(itinerary))
