@@ -1,7 +1,5 @@
 spring:
   profiles:
-    active: dev,bw
+    active: dev,sbg
   application:
     name: otpmapper
-server:
-  port: 8084

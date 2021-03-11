@@ -20,7 +20,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallB
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(OpenTripPlannerTestConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 class OpenTripPlannerCallServiceIT {
 
     @Autowired

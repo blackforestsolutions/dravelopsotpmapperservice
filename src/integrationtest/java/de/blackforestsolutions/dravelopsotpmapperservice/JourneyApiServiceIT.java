@@ -16,7 +16,7 @@ import static de.blackforestsolutions.dravelopsotpmapperservice.configuration.Co
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(ApiServiceTestConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 class JourneyApiServiceIT {
 
     @Autowired
