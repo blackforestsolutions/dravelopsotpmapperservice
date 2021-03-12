@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -18,7 +19,8 @@ import static de.blackforestsolutions.dravelopsotpmapperservice.configuration.Co
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(ApiServiceTestConfiguration.class)
-@SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TravelPointApiServiceIT {
 
     @Autowired
