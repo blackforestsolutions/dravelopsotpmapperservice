@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -20,6 +21,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.util.DravelOpsHttpCallB
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(OpenTripPlannerTestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OpenTripPlannerCallServiceIT {
 
