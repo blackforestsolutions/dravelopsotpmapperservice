@@ -27,11 +27,11 @@ class TravelPointApiServiceIT {
     private TravelPointApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder otpMapperApiToken;
+    private ApiToken nearestStationsOtpMapperApiToken;
 
     @Test
     void test_retrieveNearestStationsFromApiService_with_correct_apiToken_returns_results() {
-        ApiToken testData = otpMapperApiToken.build();
+        ApiToken testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpMapperApiToken).build();
 
         Flux<TravelPoint> result = classUnderTest.retrieveNearestStationsFromApiService(testData);
 
@@ -57,7 +57,7 @@ class TravelPointApiServiceIT {
 
     @Test
     void test_retrieveNearestStationsFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(otpMapperApiToken);
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpMapperApiToken);
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, -90.0d).build());
         testData.setRadiusInKilometers(new Distance(1.0d, Metrics.KILOMETERS));
 

@@ -25,11 +25,11 @@ class JourneyApiServiceIT {
     private JourneyApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder otpMapperApiToken;
+    private ApiToken journeyOtpMapperApiToken;
 
     @Test
     void test_retrieveJourneysFromApiService_with_correct_apiToken_returns_results() {
-        ApiToken testData = otpMapperApiToken.build();
+        ApiToken testData = new ApiToken.ApiTokenBuilder(journeyOtpMapperApiToken).build();
 
         Flux<Journey> result = classUnderTest.retrieveJourneysFromApiService(testData);
 
@@ -76,7 +76,7 @@ class JourneyApiServiceIT {
 
     @Test
     void test_retrieveJourneysFromApiService_with_incorrect_apiToken_returns_zero_results() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(otpMapperApiToken);
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(journeyOtpMapperApiToken);
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, 0.0d).build());
         testData.setDepartureCoordinate(new Point.PointBuilder(1.0d, 1.0d).build());
 
