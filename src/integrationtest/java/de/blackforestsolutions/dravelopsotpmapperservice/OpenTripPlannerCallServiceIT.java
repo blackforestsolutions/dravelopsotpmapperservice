@@ -32,11 +32,14 @@ class OpenTripPlannerCallServiceIT {
     private CallService callService;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT;
+    private ApiToken.ApiTokenBuilder journeyOtpApiToken;
+
+    @Autowired
+    private ApiToken.ApiTokenBuilder nearestStationsOtpApiToken;
 
     @Test
     void test_getOne_openTripPlannerJourneyResponse_with_correct_apiToken_returns_journeys() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(journeyOtpApiToken);
         testData.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()));
 
         Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
@@ -48,7 +51,7 @@ class OpenTripPlannerCallServiceIT {
 
     @Test
     void test_getOne_openTripPlannerJourneyResponse_with_incorrect_apiToken_returns_zero_journeys() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(journeyOtpApiToken);
         testData.setDepartureCoordinate(new Point.PointBuilder(1.0d, 1.0d).build());
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, 0.0d).build());
         testData.setPath(httpCallBuilderService.buildOpenTripPlannerJourneyPathWith(testData.build()));
@@ -61,8 +64,8 @@ class OpenTripPlannerCallServiceIT {
     }
 
     @Test
-    void test_getOne_openTripPlannerJourneyResponse_list_with_correct_apiToken_returns_nearest_stations() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+    void test_getOne_openTripPlannerNearestStationsResponse_list_with_correct_apiToken_returns_nearest_stations() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpApiToken);
         testData.setPath(httpCallBuilderService.buildOpenTripPlannerNearestStationPathWith(testData.build()));
 
         Mono<OpenTripPlannerJourneyResponse[]> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse[].class);
@@ -73,8 +76,8 @@ class OpenTripPlannerCallServiceIT {
     }
 
     @Test
-    void test_getOne_openTripPlannerJourneyResponse_list_with_incorrect_apiToken_returns_zero_stations() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT.build());
+    void test_getOne_openTripPlannerNearestStationsResponse_list_with_incorrect_apiToken_returns_zero_stations() {
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpApiToken);
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, -90.0d).build());
         testData.setRadiusInKilometers(new Distance(1.0d, Metrics.KILOMETERS));
         testData.setPath(httpCallBuilderService.buildOpenTripPlannerNearestStationPathWith(testData.build()));

@@ -24,11 +24,14 @@ class OpenTripPlannerApiServiceIT {
     private OpenTripPlannerApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder openTripPlannerApiTokenIT;
+    private ApiToken.ApiTokenBuilder journeyOtpApiToken;
+
+    @Autowired
+    private ApiToken.ApiTokenBuilder nearestStationsOtpApiToken;
 
     @Test
     void test_getJourneysBy_with_correct_apiToken_returns_only_successful_callStatus() {
-        ApiToken testData = openTripPlannerApiTokenIT.build();
+        ApiToken testData = new ApiToken.ApiTokenBuilder(journeyOtpApiToken).build();
 
         Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
@@ -48,7 +51,7 @@ class OpenTripPlannerApiServiceIT {
 
     @Test
     void test_getJourneysBy_with_incorrect_apiToken_returns_no_result() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT);
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(journeyOtpApiToken);
         testData.setDepartureCoordinate(new Point.PointBuilder(1.0d, 1.0d).build());
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, 0.0d).build());
 
@@ -61,7 +64,7 @@ class OpenTripPlannerApiServiceIT {
 
     @Test
     void test_getNearestStationsBy_with_correct_apiToken_returns_only_successful_callStatus() {
-        ApiToken testData = openTripPlannerApiTokenIT.build();
+        ApiToken testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpApiToken).build();
 
         Flux<CallStatus<TravelPoint>> result = classUnderTest.getNearestStationsBy(testData);
 
@@ -81,7 +84,7 @@ class OpenTripPlannerApiServiceIT {
 
     @Test
     void test_getNearestStationsBy_with_incorrect_apiToken_returns_no_result() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(openTripPlannerApiTokenIT);
+        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpApiToken);
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, -90.0d).build());
         testData.setRadiusInKilometers(new Distance(1.0d, Metrics.KILOMETERS));
 
