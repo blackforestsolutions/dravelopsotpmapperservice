@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Import;
 @TestConfiguration
 public class OpenTripPlannerTestConfiguration {
 
-    @Value("${otp.maxResults}")
+    @Value("${graphql.playground.tabs[4].maxResults}")
     private Integer nearestStationsMaxResults;
-    @Value("${otpmapper.maxResults}")
+    @Value("${graphql.playground.tabs[0].maxResults}")
     private Integer journeyMaxResults;
 
     @Bean
