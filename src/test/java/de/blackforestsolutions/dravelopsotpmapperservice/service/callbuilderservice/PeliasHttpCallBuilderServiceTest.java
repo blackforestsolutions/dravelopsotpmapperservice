@@ -34,36 +34,36 @@ class PeliasHttpCallBuilderServiceTest {
     @Test
     void test_buildPeliasReversePathWith_apiToken_apiVersion_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasReverseApiToken());
+        ApiToken testData = new ApiToken(getPeliasReverseApiToken());
         testData.setApiVersion(null);
 
-        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData.build(), testPoint));
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData, testPoint));
     }
 
     @Test
     void test_buildPeliasReversePathWith_apiToken_maxResults_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasReverseApiToken());
+        ApiToken testData = new ApiToken(getPeliasReverseApiToken());
         testData.setMaxResults(null);
 
-        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData.build(), testPoint));
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData, testPoint));
     }
 
     @Test
     void test_buildPeliasReversePathWith_apiToken_language_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasReverseApiToken());
+        ApiToken testData = new ApiToken(getPeliasReverseApiToken());
         testData.setLanguage(null);
 
-        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData.build(), testPoint));
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData, testPoint));
     }
 
     @Test
     void test_buildPeliasReversePathWith_apiToken_layers_as_null_and_coordinate_throws_exception() {
         Point testPoint = getSickAgPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasReverseApiToken());
+        ApiToken testData = new ApiToken(getPeliasReverseApiToken());
         testData.setLayers(null);
 
-        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData.build(), testPoint));
+        assertThrows(NullPointerException.class, () -> classUnderTest.buildPeliasReversePathWith(testData, testPoint));
     }
 }

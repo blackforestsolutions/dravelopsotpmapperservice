@@ -32,17 +32,17 @@ public class PeliasCallServiceIT {
     private CallService callService;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder peliasReverseApiToken;
+    private ApiToken peliasReverseApiToken;
 
     @Autowired
     private Point peliasPoint;
 
     @Test
     void test_travelPointName() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasReverseApiToken);
-        testData.setPath(httpCallBuilderService.buildPeliasReversePathWith(peliasReverseApiToken.build(), peliasPoint));
+        ApiToken testData = new ApiToken(peliasReverseApiToken);
+        testData.setPath(httpCallBuilderService.buildPeliasReversePathWith(peliasReverseApiToken, peliasPoint));
 
-        Mono<PeliasTravelPointResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, PeliasTravelPointResponse.class);
+        Mono<PeliasTravelPointResponse> result = callService.getOne(buildUrlWith(testData).toString(), HttpHeaders.EMPTY, PeliasTravelPointResponse.class);
 
         StepVerifier.create(result)
                 .assertNext(peliasTravelPointResponse -> assertThat(peliasTravelPointResponse.getFeatures().size()).isGreaterThan(0))
@@ -52,10 +52,10 @@ public class PeliasCallServiceIT {
     @Test
     void test_travelPointName_with_wrong_path() {
         String testUrl = "wrongPath";
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(peliasReverseApiToken.build());
+        ApiToken testData = new ApiToken(peliasReverseApiToken);
         testData.setPath(testUrl);
 
-        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData.build()).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
+        Mono<OpenTripPlannerJourneyResponse> result = callService.getOne(buildUrlWith(testData).toString(), HttpHeaders.EMPTY, OpenTripPlannerJourneyResponse.class);
 
         StepVerifier.create(result)
                 .expectError(WebClientResponseException.class)

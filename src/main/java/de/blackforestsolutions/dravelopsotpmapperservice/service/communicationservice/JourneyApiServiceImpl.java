@@ -48,12 +48,12 @@ public class JourneyApiServiceImpl implements JourneyApiService {
     }
 
     private ApiToken buildApiTokenFromOtpConfiguration(OpenTripPlannerConfiguration.ApiToken apiToken) {
-        return new ApiToken.ApiTokenBuilder()
-                .setProtocol(apiToken.getProtocol())
-                .setHost(apiToken.getHost())
-                .setPort(apiToken.getPort())
-                .setRouter(apiToken.getRouter())
-                .build();
+        ApiToken otpApiToken = new ApiToken();
+        otpApiToken.setProtocol(apiToken.getProtocol());
+        otpApiToken.setHost(apiToken.getHost());
+        otpApiToken.setPort(apiToken.getPort());
+        otpApiToken.setRouter(apiToken.getRouter());
+        return otpApiToken;
     }
 
 }

@@ -111,10 +111,10 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getJourneysBy_apiToken_and_host_as_null_returns_failed_call_status() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getJourneyOtpFastLaneApiToken());
+        ApiToken testData = new ApiToken(getJourneyOtpFastLaneApiToken());
         testData.setHost(null);
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData.build());
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
         StepVerifier.create(result)
                 .assertNext(error -> {
@@ -295,10 +295,10 @@ class OpenTripPlannerApiServiceTest {
 
     @Test
     void test_getNearestStationsBy_apiToken_and_host_as_null_returns_failed_call_status() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getNearestStationsOtpFastLaneApiToken());
+        ApiToken testData = new ApiToken(getNearestStationsOtpFastLaneApiToken());
         testData.setHost(null);
 
-        Flux<CallStatus<TravelPoint>> result = classUnderTest.getNearestStationsBy(testData.build());
+        Flux<CallStatus<TravelPoint>> result = classUnderTest.getNearestStationsBy(testData);
 
         StepVerifier.create(result)
                 .assertNext(error -> {

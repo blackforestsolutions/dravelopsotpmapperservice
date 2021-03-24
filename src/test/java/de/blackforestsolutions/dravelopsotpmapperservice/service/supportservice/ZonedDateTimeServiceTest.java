@@ -1,15 +1,21 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ZonedDateTimeServiceTest {
 
-    private final ZonedDateTimeService classUnderTest = new ZonedDateTimeServiceImpl(ZoneId.of("Europe/Berlin"));
+    private final ZonedDateTimeService classUnderTest = new ZonedDateTimeServiceImpl();
+
+    @BeforeEach
+    void init() {
+        ReflectionTestUtils.setField(classUnderTest, "timeZone", "Europe/Berlin");
+    }
 
     @Test
     void test_convertEpochMillisecondsToDate_with_summertime_timestamp_returns_the_correct_time_offset_and_zoneId() {

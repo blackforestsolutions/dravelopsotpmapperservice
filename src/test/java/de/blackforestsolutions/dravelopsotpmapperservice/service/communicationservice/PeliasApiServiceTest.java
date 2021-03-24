@@ -79,10 +79,10 @@ class PeliasApiServiceTest {
     @Test
     void test_extractTravelPointNameFrom_apiToken_host_as_null_and_point_returns_failed_call_status() {
         Point testPoint = getStuttgarterStreetPoint();
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(getPeliasReverseApiToken());
+        ApiToken testData = new ApiToken(getPeliasReverseApiToken());
         testData.setHost(null);
 
-        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData.build(), testPoint);
+        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(testData, testPoint);
 
         StepVerifier.create(result)
                 .assertNext(error -> {

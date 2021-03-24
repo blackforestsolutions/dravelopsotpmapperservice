@@ -45,22 +45,22 @@ public class ApiServiceTestConfiguration {
 
     @Bean
     public ApiToken journeyOtpMapperApiToken() {
-        return new ApiToken.ApiTokenBuilder()
-                .setDepartureCoordinate(new Point.PointBuilder(departureLongitude, departureLatitude).build())
-                .setArrivalCoordinate(new Point.PointBuilder(arrivalLongitude, arrivalLatitude).build())
-                .setDateTime(ZonedDateTime.parse(dateTime))
-                .setIsArrivalDateTime(isArrivalDateTime)
-                .setLanguage(language)
-                .build();
+        ApiToken apiToken = new ApiToken();
+        apiToken.setDepartureCoordinate(new Point.PointBuilder(departureLongitude, departureLatitude).build());
+        apiToken.setArrivalCoordinate(new Point.PointBuilder(arrivalLongitude, arrivalLatitude).build());
+        apiToken.setDateTime(ZonedDateTime.parse(dateTime));
+        apiToken.setIsArrivalDateTime(isArrivalDateTime);
+        apiToken.setLanguage(language);
+        return apiToken;
     }
 
     @Bean
     public ApiToken nearestStationsOtpMapperApiToken() {
-        return new ApiToken.ApiTokenBuilder()
-                .setArrivalCoordinate(new Point.PointBuilder(longitude, latitude).build())
-                .setRadiusInKilometers(new Distance(radiusInKilometers, Metrics.KILOMETERS))
-                .setLanguage(language)
-                .build();
+        ApiToken apiToken = new ApiToken();
+        apiToken.setArrivalCoordinate(new Point.PointBuilder(longitude, latitude).build());
+        apiToken.setRadiusInKilometers(new Distance(radiusInKilometers, Metrics.KILOMETERS));
+        apiToken.setLanguage(language);
+        return apiToken;
     }
 
 }

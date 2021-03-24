@@ -77,16 +77,16 @@ public class OpenTripPlannerApiServiceImpl implements OpenTripPlannerApiService 
     }
 
     private String getJourneyRequestString(ApiToken apiToken) {
-        ApiToken.ApiTokenBuilder builder = new ApiToken.ApiTokenBuilder(apiToken);
+        ApiToken builder = new ApiToken(apiToken);
         builder.setPath(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerJourneyPathWith(apiToken));
-        URL requestUrl = buildUrlWith(builder.build());
+        URL requestUrl = buildUrlWith(builder);
         return requestUrl.toString();
     }
 
     private String getNearestStationsRequestString(ApiToken apiToken) {
-        ApiToken.ApiTokenBuilder builder = new ApiToken.ApiTokenBuilder(apiToken);
+        ApiToken builder = new ApiToken(apiToken);
         builder.setPath(openTripPlannerHttpCallBuilderService.buildOpenTripPlannerNearestStationPathWith(apiToken));
-        URL requestUrl = buildUrlWith(builder.build());
+        URL requestUrl = buildUrlWith(builder);
         return requestUrl.toString();
     }
 

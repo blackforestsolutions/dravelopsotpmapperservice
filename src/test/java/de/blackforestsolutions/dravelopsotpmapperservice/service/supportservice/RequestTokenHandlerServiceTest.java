@@ -105,10 +105,10 @@ class RequestTokenHandlerServiceTest {
     @Test
     void test_getJourneyApiTokenWith_configured_token_and_user_token_returns_error_when_exception_is_thrown() {
         ApiToken configuredTestData = getOtpConfiguredFastLaneApiToken();
-        ApiToken.ApiTokenBuilder reqeustTestData = new ApiToken.ApiTokenBuilder(getJourneyOtpMapperApiToken());
+        ApiToken reqeustTestData = new ApiToken(getJourneyOtpMapperApiToken());
         reqeustTestData.setDepartureCoordinate(null);
 
-        Mono<ApiToken> result = classUnderTest.getJourneyApiTokenWith(reqeustTestData.build(), configuredTestData);
+        Mono<ApiToken> result = classUnderTest.getJourneyApiTokenWith(reqeustTestData, configuredTestData);
 
         StepVerifier.create(result)
                 .expectError(NullPointerException.class)

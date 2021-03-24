@@ -2,11 +2,13 @@ package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+@RefreshScope
 @Configuration
 public class PeliasConfiguration {
 
@@ -18,27 +20,30 @@ public class PeliasConfiguration {
     private int port;
     @Value("${pelias.apiVersion}")
     private String apiVersion;
-    @Value("${graphql.playground.tabs[0].maxResults}")
-    private int maxResults;
     @Value("${graphql.playground.tabs[0].departurePlaceholder}")
     private String departurePlaceholder;
     @Value("${graphql.playground.tabs[0].arrivalPlaceholder}")
     private String arrivalPlaceholder;
+    @Value("${graphql.playground.tabs[3].maxResults}")
+    private int maxResults;
     @Value("${graphql.playground.tabs[3].layers}")
     private List<String> layers;
 
-    @Bean(name = "peliasApiToken")
-    public ApiToken apiToken() {
-        return new ApiToken.ApiTokenBuilder()
-                .setProtocol(protocol)
-                .setHost(host)
-                .setPort(port)
-                .setApiVersion(apiVersion)
-                .setMaxResults(maxResults)
-                .setDeparture(departurePlaceholder)
-                .setArrival(arrivalPlaceholder)
-                .setLayers(layers)
-                .build();
+    @RefreshScope
+    @Bean
+    public ApiToken peliasApiToken() {
+        ApiToken apiToken = new ApiToken();
+
+        apiToken.setProtocol(protocol);
+        apiToken.setHost(host);
+        apiToken.setPort(port);
+        apiToken.setApiVersion(apiVersion);
+        apiToken.setMaxResults(maxResults);
+        apiToken.setDeparture(departurePlaceholder);
+        apiToken.setArrival(arrivalPlaceholder);
+        apiToken.setLayers(layers);
+
+        return apiToken;
     }
 
 }

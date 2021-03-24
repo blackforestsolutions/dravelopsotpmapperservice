@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
 import java.util.Locale;
 
 @TestConfiguration
@@ -22,14 +23,21 @@ public class PeliasTestConfiguration {
     private Double longitude;
     @Value("${graphql.playground.tabs[3].variables.latitude}")
     private Double latitude;
+    @Value("${graphql.playground.tabs[3].maxResults}")
+    private Integer maxResults;
+    @Value("${graphql.playground.tabs[3].layers}")
+    private List<String> layers;
 
     @Bean
     @ConfigurationProperties(prefix = "pelias")
-    public ApiToken.ApiTokenBuilder peliasReverseApiToken() {
-        return new ApiToken.ApiTokenBuilder()
-                .setDeparture(departure)
-                .setArrival(arrival)
-                .setLanguage(language);
+    public ApiToken peliasReverseApiToken() {
+        ApiToken apiToken = new ApiToken();
+        apiToken.setDeparture(departure);
+        apiToken.setArrival(arrival);
+        apiToken.setLanguage(language);
+        apiToken.setMaxResults(maxResults);
+        apiToken.setLayers(layers);
+        return apiToken;
     }
 
     @Bean
