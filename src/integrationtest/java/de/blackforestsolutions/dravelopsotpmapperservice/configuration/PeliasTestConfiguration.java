@@ -12,9 +12,9 @@ import java.util.Locale;
 @TestConfiguration
 public class PeliasTestConfiguration {
 
-    @Value("${pelias.departurePlaceholder}")
+    @Value("${graphql.playground.tabs[0].departurePlaceholder}")
     private String departure;
-    @Value("${pelias.arrivalPlaceholder}")
+    @Value("${graphql.playground.tabs[0].arrivalPlaceholder}")
     private String arrival;
     @Value("${graphql.playground.tabs[3].variables.language}")
     private Locale language;

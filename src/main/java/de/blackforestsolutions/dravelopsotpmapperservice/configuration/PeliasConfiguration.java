@@ -18,13 +18,13 @@ public class PeliasConfiguration {
     private int port;
     @Value("${pelias.apiVersion}")
     private String apiVersion;
-    @Value("${pelias.maxResults}")
+    @Value("${graphql.playground.tabs[0].maxResults}")
     private int maxResults;
-    @Value("${pelias.departurePlaceholder}")
+    @Value("${graphql.playground.tabs[0].departurePlaceholder}")
     private String departurePlaceholder;
-    @Value("${pelias.arrivalPlaceholder}")
+    @Value("${graphql.playground.tabs[0].arrivalPlaceholder}")
     private String arrivalPlaceholder;
-    @Value("${pelias.layers}")
+    @Value("${graphql.playground.tabs[3].layers}")
     private List<String> layers;
 
     @Bean(name = "peliasApiToken")
