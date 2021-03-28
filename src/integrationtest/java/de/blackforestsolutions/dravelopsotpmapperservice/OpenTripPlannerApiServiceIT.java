@@ -24,14 +24,14 @@ class OpenTripPlannerApiServiceIT {
     private OpenTripPlannerApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder journeyOtpApiToken;
+    private ApiToken journeyOtpApiToken;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder nearestStationsOtpApiToken;
+    private ApiToken nearestStationsOtpApiToken;
 
     @Test
     void test_getJourneysBy_with_correct_apiToken_returns_only_successful_callStatus() {
-        ApiToken testData = new ApiToken.ApiTokenBuilder(journeyOtpApiToken).build();
+        ApiToken testData = new ApiToken(journeyOtpApiToken);
 
         Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
@@ -51,11 +51,11 @@ class OpenTripPlannerApiServiceIT {
 
     @Test
     void test_getJourneysBy_with_incorrect_apiToken_returns_no_result() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(journeyOtpApiToken);
+        ApiToken testData = new ApiToken(journeyOtpApiToken);
         testData.setDepartureCoordinate(new Point.PointBuilder(1.0d, 1.0d).build());
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, 0.0d).build());
 
-        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData.build());
+        Flux<CallStatus<Journey>> result = classUnderTest.getJourneysBy(testData);
 
         StepVerifier.create(result)
                 .expectNextCount(0L)
@@ -64,7 +64,7 @@ class OpenTripPlannerApiServiceIT {
 
     @Test
     void test_getNearestStationsBy_with_correct_apiToken_returns_only_successful_callStatus() {
-        ApiToken testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpApiToken).build();
+        ApiToken testData = new ApiToken(nearestStationsOtpApiToken);
 
         Flux<CallStatus<TravelPoint>> result = classUnderTest.getNearestStationsBy(testData);
 
@@ -84,11 +84,11 @@ class OpenTripPlannerApiServiceIT {
 
     @Test
     void test_getNearestStationsBy_with_incorrect_apiToken_returns_no_result() {
-        ApiToken.ApiTokenBuilder testData = new ApiToken.ApiTokenBuilder(nearestStationsOtpApiToken);
+        ApiToken testData = new ApiToken(nearestStationsOtpApiToken);
         testData.setArrivalCoordinate(new Point.PointBuilder(0.0d, -90.0d).build());
         testData.setRadiusInKilometers(new Distance(1.0d, Metrics.KILOMETERS));
 
-        Flux<CallStatus<TravelPoint>> result = classUnderTest.getNearestStationsBy(testData.build());
+        Flux<CallStatus<TravelPoint>> result = classUnderTest.getNearestStationsBy(testData);
 
         StepVerifier.create(result)
                 .expectNextCount(0L)

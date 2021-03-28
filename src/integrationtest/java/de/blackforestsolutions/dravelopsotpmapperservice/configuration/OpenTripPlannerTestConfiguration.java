@@ -19,15 +19,17 @@ public class OpenTripPlannerTestConfiguration {
 
     @Bean
     @ConfigurationProperties(prefix = "otp.apitokens[0]")
-    public ApiToken.ApiTokenBuilder journeyOtpApiToken(@Autowired ApiToken journeyOtpMapperApiToken) {
-        return new ApiToken.ApiTokenBuilder(journeyOtpMapperApiToken)
-                .setMaxResults(journeyMaxResults);
+    public ApiToken journeyOtpApiToken(@Autowired ApiToken journeyOtpMapperApiToken) {
+        ApiToken apiToken = new ApiToken(journeyOtpMapperApiToken);
+        apiToken.setMaxResults(journeyMaxResults);
+        return apiToken;
     }
 
     @Bean
     @ConfigurationProperties(prefix = "otp.apitokens[0]")
-    public ApiToken.ApiTokenBuilder nearestStationsOtpApiToken(@Autowired ApiToken nearestStationsOtpMapperApiToken) {
-        return new ApiToken.ApiTokenBuilder(nearestStationsOtpMapperApiToken)
-                .setMaxResults(nearestStationsMaxResults);
+    public ApiToken nearestStationsOtpApiToken(@Autowired ApiToken nearestStationsOtpMapperApiToken) {
+        ApiToken apiToken = new ApiToken(nearestStationsOtpMapperApiToken);
+        apiToken.setMaxResults(nearestStationsMaxResults);
+        return apiToken;
     }
 }

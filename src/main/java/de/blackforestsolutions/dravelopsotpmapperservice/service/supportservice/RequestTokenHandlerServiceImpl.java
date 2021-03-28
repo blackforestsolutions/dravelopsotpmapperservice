@@ -38,29 +38,35 @@ public class RequestTokenHandlerServiceImpl implements RequestTokenHandlerServic
 
     @Override
     public ApiToken getNearestStationsApiTokenWith(ApiToken request, ApiToken otpConfiguredRequestData) {
-        return new ApiToken.ApiTokenBuilder(otpConfiguredRequestData)
-                .setArrivalCoordinate(request.getArrivalCoordinate())
-                .setRadiusInKilometers(request.getRadiusInKilometers())
-                .setLanguage(request.getLanguage())
-                .build();
+        ApiToken nearestStationsApiToken = new ApiToken(otpConfiguredRequestData);
+
+        nearestStationsApiToken.setArrivalCoordinate(request.getArrivalCoordinate());
+        nearestStationsApiToken.setRadiusInKilometers(request.getRadiusInKilometers());
+        nearestStationsApiToken.setLanguage(request.getLanguage());
+
+        return nearestStationsApiToken;
     }
 
-    private ApiToken buildPeliasApiTokenWith(ApiToken request, ApiToken peliasApiToken) {
-        return new ApiToken.ApiTokenBuilder(peliasApiToken)
-                .setLanguage(request.getLanguage())
-                .build();
+    private ApiToken buildPeliasApiTokenWith(ApiToken request, ApiToken configuredPeliasApiToken) {
+        ApiToken peliasApiToken = new ApiToken(configuredPeliasApiToken);
+
+        peliasApiToken.setLanguage(request.getLanguage());
+
+        return peliasApiToken;
     }
 
     private ApiToken buildOpenTripPlannerApiTokenWith(ApiToken request, ApiToken configuredOtpData, String departure, String arrival) {
-        return new ApiToken.ApiTokenBuilder(configuredOtpData)
-                .setArrival(arrival)
-                .setArrivalCoordinate(request.getArrivalCoordinate())
-                .setDeparture(departure)
-                .setDepartureCoordinate(request.getDepartureCoordinate())
-                .setDateTime(request.getDateTime())
-                .setIsArrivalDateTime(request.getIsArrivalDateTime())
-                .setLanguage(request.getLanguage())
-                .build();
+        ApiToken openTripPlannerApiToken = new ApiToken(configuredOtpData);
+
+        openTripPlannerApiToken.setArrival(arrival);
+        openTripPlannerApiToken.setArrivalCoordinate(request.getArrivalCoordinate());
+        openTripPlannerApiToken.setDeparture(departure);
+        openTripPlannerApiToken.setDepartureCoordinate(request.getDepartureCoordinate());
+        openTripPlannerApiToken.setDateTime(request.getDateTime());
+        openTripPlannerApiToken.setIsArrivalDateTime(request.getIsArrivalDateTime());
+        openTripPlannerApiToken.setLanguage(request.getLanguage());
+
+        return openTripPlannerApiToken;
     }
 
     private Mono<String> extractTravelPointNameFrom(ApiToken peliasApiToken, Point travelPointCoordinate, String travelPointNamePlaceholder) {

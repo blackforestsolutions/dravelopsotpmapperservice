@@ -25,14 +25,14 @@ public class PeliasApiServiceIT {
     private PeliasApiService classUnderTest;
 
     @Autowired
-    private ApiToken.ApiTokenBuilder peliasReverseApiToken;
+    private ApiToken peliasReverseApiToken;
 
     @Autowired
     private Point peliasPoint;
 
     @Test
     void test_extractTravelPointNameFrom_returns_correct_travelPoint() {
-        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(peliasReverseApiToken.build(), peliasPoint);
+        Mono<CallStatus<String>> result = classUnderTest.extractTravelPointNameFrom(peliasReverseApiToken, peliasPoint);
 
         StepVerifier.create(result)
                 .assertNext(travelPointName -> {

@@ -53,9 +53,9 @@ public class PeliasApiServiceImpl implements PeliasApiService {
     }
 
     private String getTravelPointNameString(ApiToken apiToken, Point coordinate) {
-        ApiToken.ApiTokenBuilder builder = new ApiToken.ApiTokenBuilder(apiToken);
+        ApiToken builder = new ApiToken(apiToken);
         builder.setPath(peliasHttpCallBuilderService.buildPeliasReversePathWith(apiToken, coordinate));
-        URL requestUrl = buildUrlWith(builder.build());
+        URL requestUrl = buildUrlWith(builder);
         return requestUrl.toString();
     }
 
