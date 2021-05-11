@@ -101,7 +101,6 @@
             <artifactId>dravelopsgeneratedcontent</artifactId>
             <version>${blackforestsolutions.dravelopsgeneratedcontent.version}</version>
         </dependency>
-
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -17,29 +17,29 @@ public class ApiServiceTestConfiguration {
     /**
      * journeyOtpMapperApiToken
      */
-    @Value("${graphql.playground.tabs[0].variables.departureLatitude}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.departureLatitude}")
     private Double departureLatitude;
-    @Value("${graphql.playground.tabs[0].variables.departureLongitude}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.departureLongitude}")
     private Double departureLongitude;
-    @Value("${graphql.playground.tabs[0].variables.arrivalLatitude}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.arrivalLatitude}")
     private Double arrivalLatitude;
-    @Value("${graphql.playground.tabs[0].variables.arrivalLongitude}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.arrivalLongitude}")
     private Double arrivalLongitude;
-    @Value("${graphql.playground.tabs[0].variables.dateTime}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.dateTime}")
     private String dateTime;
-    @Value("${graphql.playground.tabs[0].variables.isArrivalDateTime}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.isArrivalDateTime}")
     private Boolean isArrivalDateTime;
-    @Value("${graphql.playground.tabs[0].variables.language}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.variables.language}")
     private Locale language;
 
     /**
      * nearestStationsOtpMapperApiToken
      */
-    @Value("${graphql.playground.tabs[4].variables.longitude}")
+    @Value("${graphql.playground.tabs.NEAREST_STATIONS.variables.longitude}")
     private Double longitude;
-    @Value("${graphql.playground.tabs[4].variables.latitude}")
+    @Value("${graphql.playground.tabs.NEAREST_STATIONS.variables.latitude}")
     private Double latitude;
-    @Value("${graphql.playground.tabs[4].variables.radiusInKilometers}")
+    @Value("${graphql.playground.tabs.NEAREST_STATIONS.variables.radiusInKilometers}")
     private Double radiusInKilometers;
 
 
