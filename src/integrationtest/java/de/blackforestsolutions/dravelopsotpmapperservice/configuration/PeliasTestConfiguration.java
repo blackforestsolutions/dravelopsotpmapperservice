@@ -7,26 +7,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Locale;
 
 @TestConfiguration
 public class PeliasTestConfiguration {
 
-    @Value("${graphql.playground.tabs[0].departurePlaceholder}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.departurePlaceholder}")
     private String departure;
-    @Value("${graphql.playground.tabs[0].arrivalPlaceholder}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.arrivalPlaceholder}")
     private String arrival;
-    @Value("${graphql.playground.tabs[3].variables.language}")
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.variables.language}")
     private Locale language;
-    @Value("${graphql.playground.tabs[3].variables.longitude}")
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.variables.longitude}")
     private Double longitude;
-    @Value("${graphql.playground.tabs[3].variables.latitude}")
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.variables.latitude}")
     private Double latitude;
-    @Value("${graphql.playground.tabs[3].maxResults}")
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.maxResults}")
     private Integer maxResults;
-    @Value("${graphql.playground.tabs[3].layers}")
-    private List<String> layers;
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers}")
+    private String[] layers;
 
     @Bean
     @ConfigurationProperties(prefix = "pelias")
@@ -36,7 +36,7 @@ public class PeliasTestConfiguration {
         apiToken.setArrival(arrival);
         apiToken.setLanguage(language);
         apiToken.setMaxResults(maxResults);
-        apiToken.setLayers(layers);
+        apiToken.setLayers(Arrays.asList(layers));
         return apiToken;
     }
 

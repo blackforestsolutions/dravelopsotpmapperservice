@@ -17,7 +17,7 @@ import java.util.List;
 public class OpenTripPlannerConfiguration {
 
     private List<ApiToken> apiTokens;
-    @Value("${graphql.playground.tabs[4].maxResults}")
+    @Value("${graphql.playground.tabs.NEAREST_STATIONS.maxResults}")
     private Integer maxResults;
 
     @Setter

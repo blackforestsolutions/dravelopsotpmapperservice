@@ -6,7 +6,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
+import java.util.Arrays;
 
 @RefreshScope
 @Configuration
@@ -20,14 +20,14 @@ public class PeliasConfiguration {
     private int port;
     @Value("${pelias.apiVersion}")
     private String apiVersion;
-    @Value("${graphql.playground.tabs[0].departurePlaceholder}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.departurePlaceholder}")
     private String departurePlaceholder;
-    @Value("${graphql.playground.tabs[0].arrivalPlaceholder}")
+    @Value("${graphql.playground.tabs.JOURNEY_QUERY.arrivalPlaceholder}")
     private String arrivalPlaceholder;
-    @Value("${graphql.playground.tabs[3].maxResults}")
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.maxResults}")
     private int maxResults;
-    @Value("${graphql.playground.tabs[3].layers}")
-    private List<String> layers;
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers}")
+    private String[] layers;
 
     @RefreshScope
     @Bean
@@ -41,7 +41,7 @@ public class PeliasConfiguration {
         apiToken.setMaxResults(maxResults);
         apiToken.setDeparture(departurePlaceholder);
         apiToken.setArrival(arrivalPlaceholder);
-        apiToken.setLayers(layers);
+        apiToken.setLayers(Arrays.asList(layers));
 
         return apiToken;
     }
