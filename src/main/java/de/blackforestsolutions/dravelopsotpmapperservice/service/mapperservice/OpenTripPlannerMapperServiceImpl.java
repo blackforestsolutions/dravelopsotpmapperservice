@@ -87,7 +87,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
-                .setWaypoints(geocodingService.decodePolylineFrom(openTripPlannerLeg.getLegGeometry().getPoints()))
+                .setPolyline(openTripPlannerLeg.getLegGeometry().getPoints())
                 .setTravelProvider(extractTravelProviderFrom(openTripPlannerLeg))
                 .setVehicleNumber(Optional.ofNullable(openTripPlannerLeg.getRouteShortName()).orElse(""))
                 .setVehicleName(Optional.ofNullable(openTripPlannerLeg.getRouteLongName()).orElse(""))
