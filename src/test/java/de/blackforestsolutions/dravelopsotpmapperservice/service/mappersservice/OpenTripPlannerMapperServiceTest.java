@@ -41,7 +41,6 @@ class OpenTripPlannerMapperServiceTest {
     @BeforeEach
     void init() {
         ReflectionTestUtils.setField(zonedDateTimeService, "timeZone", "Europe/Berlin");
-        doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
         doReturn(TEST_UUID_2).when(uuidService).createUUID();
     }
 
@@ -75,7 +74,7 @@ class OpenTripPlannerMapperServiceTest {
                 .assertNext(journeyCallStatus -> {
                     assertThat(journeyCallStatus.getStatus()).isEqualTo(Status.SUCCESS);
                     assertThat(journeyCallStatus.getThrowable()).isNull();
-                    assertThat(journeyCallStatus.getCalledObject()).isEqualToComparingFieldByFieldRecursively((getMannheimHbfLudwigsburgCenterJourney()));
+                    assertThat(journeyCallStatus.getCalledObject()).isEqualToComparingFieldByFieldRecursively(getMannheimHbfLudwigsburgCenterJourney());
                 })
                 .verifyComplete();
     }
