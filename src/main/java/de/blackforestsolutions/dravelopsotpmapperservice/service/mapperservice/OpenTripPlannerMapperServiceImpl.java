@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsdatamodel.Leg;
+import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
@@ -20,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.Currency;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -95,6 +96,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                         .map(this::extractIntermediateStopsFrom)
                         .orElse(new LinkedList<>())
                 )
+                .setWalkSteps(extractWalkStepsFrom(openTripPlannerLeg.getSteps()))
                 .build();
     }
 
@@ -184,6 +186,40 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setPoint(new Point.PointBuilder(stationResponse.getLon(), stationResponse.getLat()).build())
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(stationResponse.getDist()))
                 .build();
+    }
+
+    private LinkedList<WalkStep> extractWalkStepsFrom(List<Step> steps) {
+        AtomicInteger index = new AtomicInteger();
+
+        return steps.stream()
+                .map(step -> {
+                    if (index.incrementAndGet() < steps.size()) {
+                        return extractWalkStepFrom(step, steps.get(index.get()));
+                    }
+                    return extractWalkStepFrom(step, null);
+                })
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+
+    private WalkStep extractWalkStepFrom(Step step, Step nextStep) {
+        return new WalkStep.WalkStepBuilder()
+                .setStreetName(step.getStreetName())
+                .setDistanceInKilometers(geocodingService.extractKilometersFrom(step.getDistance()))
+                .setStartPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat()))
+                .setEndPoint(extractEndpointFrom(nextStep))
+                .setWalkingDirection(WalkingDirection.valueOf(step.getRelativeDirection()))
+                .setCompassDirection(CompassDirection.valueOf(step.getAbsoluteDirection()))
+                .setStreetNameGenerated(step.getBogusName())
+                .setPlaceOrTrainPlatform(step.getArea())
+                .setCircleExit(Optional.ofNullable(step.getExit()).orElse(""))
+                .build();
+    }
+
+    private Point extractEndpointFrom(Step nextStep) {
+        return Optional.ofNullable(nextStep)
+                .map(step -> geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(nextStep.getLon(), nextStep.getLat()))
+                .orElse(null);
     }
 
 
