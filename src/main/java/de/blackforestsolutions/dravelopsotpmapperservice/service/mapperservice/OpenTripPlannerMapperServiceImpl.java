@@ -28,6 +28,8 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private static final String ORIGIN_PLACEHOLDER = "Origin";
     private static final String DESTINATION_PLACEHOLDER = "Destination";
+    private static final double ZERO_DISTANCE = 0.0d;
+    private static final int FIRST_INDEX = 0;
 
     private final GeocodingService geocodingService;
     private final ZonedDateTimeService zonedDateTimeService;
@@ -190,35 +192,43 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private LinkedList<WalkStep> extractWalkStepsFrom(List<Step> steps) {
         AtomicInteger index = new AtomicInteger();
+        int lastIndex = steps.size() - 1;
 
         return steps.stream()
                 .map(step -> {
+                    boolean isFirstStep = steps.indexOf(step) == FIRST_INDEX;
+                    boolean isLastStep = steps.lastIndexOf(step) == lastIndex;
+
                     if (index.incrementAndGet() < steps.size()) {
-                        return extractWalkStepFrom(step, steps.get(index.get()));
+                        return extractWalkStepFrom(step, steps.get(index.get()), isFirstStep, isLastStep);
                     }
-                    return extractWalkStepFrom(step, null);
+                    return extractWalkStepFrom(step, null, isFirstStep, isLastStep);
                 })
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
-    private WalkStep extractWalkStepFrom(Step step, Step nextStep) {
+    private WalkStep extractWalkStepFrom(Step step, Step nextStep, boolean isFirstStep, boolean isLastStep) {
         return new WalkStep.WalkStepBuilder()
                 .setStreetName(step.getStreetName())
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(step.getDistance()))
                 .setStartPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat()))
-                .setEndPoint(extractEndpointFrom(nextStep))
+                .setEndPoint(extractEndpointFrom(step, nextStep, isFirstStep, isLastStep))
                 .setWalkingDirection(WalkingDirection.valueOf(step.getRelativeDirection()))
                 .setCompassDirection(CompassDirection.valueOf(step.getAbsoluteDirection()))
                 .setStreetNameGenerated(step.getBogusName())
-                .setPlaceOrTrainPlatform(step.getArea())
+                .setOriginPoint(isFirstStep && step.getDistance() == ZERO_DISTANCE)
+                .setDestinationPoint(isLastStep && step.getDistance() == ZERO_DISTANCE)
                 .setCircleExit(Optional.ofNullable(step.getExit()).orElse(""))
                 .build();
     }
 
-    private Point extractEndpointFrom(Step nextStep) {
+    private Point extractEndpointFrom(Step step, Step nextStep, boolean isFirstStep, boolean isLastStep) {
+        if (isFirstStep && step.getDistance() == ZERO_DISTANCE || isLastStep && step.getDistance() == ZERO_DISTANCE) {
+            return geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat());
+        }
         return Optional.ofNullable(nextStep)
-                .map(step -> geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(nextStep.getLon(), nextStep.getLat()))
+                .map(s -> geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(nextStep.getLon(), nextStep.getLat()))
                 .orElse(null);
     }
 
