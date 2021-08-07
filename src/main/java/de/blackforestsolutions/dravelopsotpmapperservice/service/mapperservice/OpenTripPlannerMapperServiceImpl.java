@@ -98,7 +98,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                         .map(this::extractIntermediateStopsFrom)
                         .orElse(new LinkedList<>())
                 )
-                .setWalkSteps(extractWalkStepsFrom(openTripPlannerLeg.getSteps()))
+                .setWalkSteps(extractWalkStepsFrom(openTripPlannerLeg.getSteps(), openTripPlannerLeg.getLegGeometry().getPoints()))
                 .build();
     }
 
@@ -190,7 +190,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .build();
     }
 
-    private LinkedList<WalkStep> extractWalkStepsFrom(List<Step> steps) {
+    private LinkedList<WalkStep> extractWalkStepsFrom(List<Step> steps, String polyline) {
         AtomicInteger index = new AtomicInteger();
         int lastIndex = steps.size() - 1;
 
@@ -200,20 +200,20 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                     boolean isLastStep = steps.lastIndexOf(step) == lastIndex;
 
                     if (index.incrementAndGet() < steps.size()) {
-                        return extractWalkStepFrom(step, steps.get(index.get()), isFirstStep, isLastStep);
+                        return extractWalkStepFrom(step, steps.get(index.get()), polyline, isFirstStep, isLastStep);
                     }
-                    return extractWalkStepFrom(step, null, isFirstStep, isLastStep);
+                    return extractWalkStepFrom(step, null, polyline, isFirstStep, isLastStep);
                 })
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
-    private WalkStep extractWalkStepFrom(Step step, Step nextStep, boolean isFirstStep, boolean isLastStep) {
+    private WalkStep extractWalkStepFrom(Step step, Step nextStep, String polyline, boolean isFirstStep, boolean isLastStep) {
         return new WalkStep.WalkStepBuilder()
                 .setStreetName(step.getStreetName())
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(step.getDistance()))
                 .setStartPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat()))
-                .setEndPoint(extractEndpointFrom(step, nextStep, isFirstStep, isLastStep))
+                .setEndPoint(extractEndpointFrom(step, nextStep, polyline, isFirstStep, isLastStep))
                 .setWalkingDirection(WalkingDirection.valueOf(step.getRelativeDirection()))
                 .setCompassDirection(CompassDirection.valueOf(step.getAbsoluteDirection()))
                 .setStreetNameGenerated(step.getBogusName())
@@ -223,13 +223,22 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .build();
     }
 
-    private Point extractEndpointFrom(Step step, Step nextStep, boolean isFirstStep, boolean isLastStep) {
+    private Point extractEndpointFrom(Step step, Step nextStep, String polyline, boolean isFirstStep, boolean isLastStep) {
         if (isFirstStep && step.getDistance() == ZERO_DISTANCE || isLastStep && step.getDistance() == ZERO_DISTANCE) {
             return geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat());
         }
         return Optional.ofNullable(nextStep)
                 .map(s -> geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(nextStep.getLon(), nextStep.getLat()))
-                .orElse(null);
+                .orElseGet(() -> extractEndpointFrom(polyline));
+    }
+
+    private Point extractEndpointFrom(String polyline) {
+        LinkedList<Point> waypoints = geocodingService.decodePolylineFrom(polyline);
+
+        if (waypoints.size() > FIRST_INDEX) {
+            return waypoints.getLast();
+        }
+        return null;
     }
 
 

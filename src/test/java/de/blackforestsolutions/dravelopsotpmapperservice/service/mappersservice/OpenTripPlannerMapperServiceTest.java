@@ -23,6 +23,7 @@ import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyOb
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.TravelPointObjectMother.*;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_2;
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.UUIDObjectMother.TEST_UUID_3;
+import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.WaypointsObjectMother.getExampleWaypoints;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToListPojo;
 import static de.blackforestsolutions.dravelopsdatamodel.testutil.TestUtils.retrieveJsonToPojo;
 import static de.blackforestsolutions.dravelopsotpmapperservice.testutil.TestAssertions.getOtpApiNearestStationsAsserts;
@@ -40,6 +41,7 @@ class OpenTripPlannerMapperServiceTest {
     @BeforeEach
     void init() {
         ReflectionTestUtils.setField(zonedDateTimeService, "timeZone", "Europe/Berlin");
+        doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
         doReturn(TEST_UUID_2).when(uuidService).createUUID();
     }
 
