@@ -1,12 +1,13 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.configuration;
 
 import de.blackforestsolutions.dravelopsdatamodel.ApiToken;
+import de.blackforestsolutions.dravelopsdatamodel.Layer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 
 @RefreshScope
 @Configuration
@@ -26,8 +27,14 @@ public class PeliasConfiguration {
     private String arrivalPlaceholder;
     @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.maxResults}")
     private int maxResults;
-    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers}")
-    private String[] layers;
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers.hasVenue}")
+    private Boolean hasVenueLayer;
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers.hasAddress}")
+    private Boolean hasAddressLayer;
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers.hasStreet}")
+    private Boolean hasStreetLayer;
+    @Value("${graphql.playground.tabs.NEAREST_ADDRESSES.layers.hasLocality}")
+    private Boolean hasLocalityLayer;
 
     @RefreshScope
     @Bean
@@ -41,9 +48,19 @@ public class PeliasConfiguration {
         apiToken.setMaxResults(maxResults);
         apiToken.setDeparture(departurePlaceholder);
         apiToken.setArrival(arrivalPlaceholder);
-        apiToken.setLayers(Arrays.asList(layers));
+        apiToken.setLayers(buildLayersMap());
 
         return apiToken;
     }
 
+    private LinkedHashMap<Layer, Boolean> buildLayersMap() {
+        LinkedHashMap<Layer, Boolean> layers = new LinkedHashMap<>();
+
+        layers.put(Layer.HAS_VENUE, hasVenueLayer);
+        layers.put(Layer.HAS_ADDRESS, hasAddressLayer);
+        layers.put(Layer.HAS_STREET, hasStreetLayer);
+        layers.put(Layer.HAS_LOCALITY, hasLocalityLayer);
+
+        return layers;
+    }
 }
