@@ -41,6 +41,7 @@ class OpenTripPlannerMapperServiceTest {
     @BeforeEach
     void init() {
         ReflectionTestUtils.setField(zonedDateTimeService, "timeZone", "Europe/Berlin");
+        doReturn(getExampleWaypoints()).when(geocodingService).decodePolylineFrom(anyString());
         doReturn(TEST_UUID_2).when(uuidService).createUUID();
     }
 

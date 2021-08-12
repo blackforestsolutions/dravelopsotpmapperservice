@@ -1,7 +1,7 @@
 package de.blackforestsolutions.dravelopsotpmapperservice.service.mapperservice;
 
-import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsdatamodel.Leg;
+import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
@@ -20,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.Currency;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +28,8 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private static final String ORIGIN_PLACEHOLDER = "Origin";
     private static final String DESTINATION_PLACEHOLDER = "Destination";
+    private static final double ZERO_DISTANCE = 0.0d;
+    private static final int FIRST_INDEX = 0;
 
     private final GeocodingService geocodingService;
     private final ZonedDateTimeService zonedDateTimeService;
@@ -95,6 +98,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                         .map(this::extractIntermediateStopsFrom)
                         .orElse(new LinkedList<>())
                 )
+                .setWalkSteps(extractWalkStepsFrom(openTripPlannerLeg.getSteps(), openTripPlannerLeg.getLegGeometry().getPoints()))
                 .build();
     }
 
@@ -184,6 +188,57 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setPoint(new Point.PointBuilder(stationResponse.getLon(), stationResponse.getLat()).build())
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(stationResponse.getDist()))
                 .build();
+    }
+
+    private LinkedList<WalkStep> extractWalkStepsFrom(List<Step> steps, String polyline) {
+        AtomicInteger index = new AtomicInteger();
+        int lastIndex = steps.size() - 1;
+
+        return steps.stream()
+                .map(step -> {
+                    boolean isFirstStep = steps.indexOf(step) == FIRST_INDEX;
+                    boolean isLastStep = steps.lastIndexOf(step) == lastIndex;
+
+                    if (index.incrementAndGet() < steps.size()) {
+                        return extractWalkStepFrom(step, steps.get(index.get()), polyline, isFirstStep, isLastStep);
+                    }
+                    return extractWalkStepFrom(step, null, polyline, isFirstStep, isLastStep);
+                })
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+
+    private WalkStep extractWalkStepFrom(Step step, Step nextStep, String polyline, boolean isFirstStep, boolean isLastStep) {
+        return new WalkStep.WalkStepBuilder()
+                .setStreetName(step.getStreetName())
+                .setDistanceInKilometers(geocodingService.extractKilometersFrom(step.getDistance()))
+                .setStartPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat()))
+                .setEndPoint(extractEndpointFrom(step, nextStep, polyline, isFirstStep, isLastStep))
+                .setWalkingDirection(WalkingDirection.valueOf(step.getRelativeDirection()))
+                .setCompassDirection(CompassDirection.valueOf(step.getAbsoluteDirection()))
+                .setStreetNameGenerated(step.getBogusName())
+                .setOriginPoint(isFirstStep && step.getDistance() == ZERO_DISTANCE)
+                .setDestinationPoint(isLastStep && step.getDistance() == ZERO_DISTANCE)
+                .setCircleExit(Optional.ofNullable(step.getExit()).orElse(""))
+                .build();
+    }
+
+    private Point extractEndpointFrom(Step step, Step nextStep, String polyline, boolean isFirstStep, boolean isLastStep) {
+        if (isFirstStep && step.getDistance() == ZERO_DISTANCE || isLastStep && step.getDistance() == ZERO_DISTANCE) {
+            return geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(step.getLon(), step.getLat());
+        }
+        return Optional.ofNullable(nextStep)
+                .map(s -> geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(nextStep.getLon(), nextStep.getLat()))
+                .orElseGet(() -> extractEndpointFrom(polyline));
+    }
+
+    private Point extractEndpointFrom(String polyline) {
+        LinkedList<Point> waypoints = geocodingService.decodePolylineFrom(polyline);
+
+        if (waypoints.size() > FIRST_INDEX) {
+            return waypoints.getLast();
+        }
+        return null;
     }
 
 
