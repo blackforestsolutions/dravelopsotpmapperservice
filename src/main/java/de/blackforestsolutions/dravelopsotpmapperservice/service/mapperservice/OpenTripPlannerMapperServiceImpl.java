@@ -85,7 +85,6 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
         return new Leg.LegBuilder()
-                .setRouteId(Optional.ofNullable(openTripPlannerLeg.getRouteId()).orElse(""))
                 .setTripId(Optional.ofNullable(openTripPlannerLeg.getTripId()).orElse(""))
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))

@@ -40,7 +40,6 @@ class JourneyApiServiceIT {
                     assertThat(journey.getLanguage().getLanguage().length()).isEqualTo(2);
                     assertThat(journey.getLegs().size()).isGreaterThan(0);
                     assertThat(journey.getLegs())
-                            .allMatch(leg -> leg.getRouteId() != null)
                             .allMatch(leg -> leg.getTripId() != null)
                             .allMatch(leg -> leg.getDelayInMinutes().toMillis() >= 0)
                             .allMatch(leg -> leg.getDistanceInKilometers().getValue() > 0)
