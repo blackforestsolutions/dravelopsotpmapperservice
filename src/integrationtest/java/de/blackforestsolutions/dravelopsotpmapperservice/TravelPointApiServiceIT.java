@@ -39,7 +39,7 @@ class TravelPointApiServiceIT {
                 .expectNextCount(1L)
                 .thenConsumeWhile(travelPoint -> {
                     assertThat(travelPoint).isNotNull();
-                    assertThat(travelPoint.getStopId()).isEmpty();
+                    assertThat(travelPoint.getStopId()).isNotEmpty();
                     assertThat(travelPoint.getStopSequence()).isEqualTo(-1L);
                     assertThat(travelPoint.getName()).isNotEmpty();
                     assertThat(travelPoint.getPoint()).isNotNull();

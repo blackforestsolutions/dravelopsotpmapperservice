@@ -188,6 +188,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private TravelPoint extractStationFrom(OpenTripPlannerStationResponse stationResponse) {
         return new TravelPoint.TravelPointBuilder()
+                .setStopId(stationResponse.getId())
                 .setName(stationResponse.getName())
                 .setPoint(new Point.PointBuilder(stationResponse.getLon(), stationResponse.getLat()).build())
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(stationResponse.getDist()))
