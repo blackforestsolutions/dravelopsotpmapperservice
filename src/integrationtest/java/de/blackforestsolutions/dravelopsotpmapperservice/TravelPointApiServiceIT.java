@@ -39,6 +39,8 @@ class TravelPointApiServiceIT {
                 .expectNextCount(1L)
                 .thenConsumeWhile(travelPoint -> {
                     assertThat(travelPoint).isNotNull();
+                    assertThat(travelPoint.getStopId()).isEmpty();
+                    assertThat(travelPoint.getStopSequence()).isEqualTo(-1L);
                     assertThat(travelPoint.getName()).isNotEmpty();
                     assertThat(travelPoint.getPoint()).isNotNull();
                     assertThat(travelPoint.getPoint().getX()).isGreaterThanOrEqualTo(MIN_WGS_84_LONGITUDE);

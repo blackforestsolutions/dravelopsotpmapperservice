@@ -85,6 +85,8 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
         return new Leg.LegBuilder()
+                .setRouteId(Optional.ofNullable(openTripPlannerLeg.getRouteId()).orElse(""))
+                .setTripId(Optional.ofNullable(openTripPlannerLeg.getTripId()).orElse(""))
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
                 .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
@@ -110,6 +112,8 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private TravelPoint extractTravelPointFrom(Stop stop, String optionalStopName) {
         return new TravelPoint.TravelPointBuilder()
+                .setStopId(Optional.ofNullable(stop.getStopId()).orElse(""))
+                .setStopSequence(Optional.ofNullable(stop.getStopSequence()).orElse(-1L))
                 .setName(extractStopNameFrom(stop, optionalStopName))
                 .setPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(stop.getLon(), stop.getLat()))
                 .setDepartureTime(Optional.ofNullable(stop.getDeparture()).map(this::extractDateTime).orElse(null))
