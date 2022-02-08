@@ -50,7 +50,9 @@ class TravelPointApiServiceIT {
                     assertThat(travelPoint.getDistanceInKilometers()).isNotNull();
                     assertThat(travelPoint.getDistanceInKilometers().getValue()).isGreaterThanOrEqualTo(MIN_DISTANCE_IN_KILOMETERS_TO_POINT);
                     assertThat(travelPoint.getDepartureTime()).isNull();
+                    assertThat(travelPoint.getDepartureDelayInSeconds().isZero()).isTrue();
                     assertThat(travelPoint.getArrivalTime()).isNull();
+                    assertThat(travelPoint.getArrivalDelayInSeconds().isZero()).isTrue();
                     assertThat(travelPoint.getPlatform()).isEmpty();
                     return true;
                 })

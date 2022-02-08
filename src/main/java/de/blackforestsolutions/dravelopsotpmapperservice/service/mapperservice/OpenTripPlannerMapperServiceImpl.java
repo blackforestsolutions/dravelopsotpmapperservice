@@ -15,11 +15,9 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Currency;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -88,7 +86,6 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
                 .setTripId(Optional.ofNullable(openTripPlannerLeg.getTripId()).orElse(""))
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
-                .setDelayInMinutes(extractDelayFrom(openTripPlannerLeg))
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
                 .setVehicleType(VehicleType.valueOf(openTripPlannerLeg.getMode()))
                 .setPolyline(openTripPlannerLeg.getLegGeometry().getPoints())
@@ -130,19 +127,6 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private ZonedDateTime extractDateTime(long epochMilliseconds) {
         return zonedDateTimeService.convertEpochMillisecondsToDate(epochMilliseconds);
-    }
-
-    private Duration extractDelayFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg) {
-        Optional<Long> arrivalDelay = Optional.ofNullable(openTripPlannerLeg.getArrivalDelay());
-        Optional<Long> departureDelay = Optional.ofNullable(openTripPlannerLeg.getDepartureDelay());
-
-        if (arrivalDelay.isPresent() && arrivalDelay.get() > 0) {
-            return Duration.ofMinutes(TimeUnit.MILLISECONDS.toMinutes(arrivalDelay.get()));
-        }
-        if (departureDelay.isPresent() && departureDelay.get() > 0) {
-            return Duration.ofMinutes(TimeUnit.MILLISECONDS.toMinutes(departureDelay.get()));
-        }
-        return Duration.ZERO;
     }
 
     private TravelProvider extractTravelProviderFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg) throws MalformedURLException {

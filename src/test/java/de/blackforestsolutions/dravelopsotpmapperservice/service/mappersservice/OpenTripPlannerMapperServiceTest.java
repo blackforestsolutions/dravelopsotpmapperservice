@@ -15,7 +15,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import java.time.Duration;
 import java.util.List;
 
 import static de.blackforestsolutions.dravelopsdatamodel.objectmothers.JourneyObjectMother.getFurtwangenToWaldkirchJourney;
@@ -113,34 +112,6 @@ class OpenTripPlannerMapperServiceTest {
                     assertThat(journeyCallStatus.getThrowable()).isInstanceOf(NullPointerException.class);
                     assertThat(journeyCallStatus.getCalledObject()).isNull();
                 })
-                .verifyComplete();
-    }
-
-    @Test
-    void test_extractJourneysFrom_openTripPlannerRnvJourney_returns_correctly_mapped_journeys_with_arrivalDelay() {
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/otpRnvJourney.json", OpenTripPlannerJourneyResponse.class);
-        String departureTestData = "Mannheim Hbf";
-        String arrivalTestData = "Ludwigsburg Center";
-        testData.getPlan().getItineraries().get(0).getLegs().get(0).setArrivalDelay(300000L);
-
-        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
-
-        StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelayInMinutes()).isEqualTo(Duration.ofMinutes(5)))
-                .verifyComplete();
-    }
-
-    @Test
-    void test_extractJourneysFrom_openTripPlannerRnvJourney_returns_correctly_mapped_journeys_with_departureDelay() {
-        OpenTripPlannerJourneyResponse testData = retrieveJsonToPojo("json/otpRnvJourney.json", OpenTripPlannerJourneyResponse.class);
-        String departureTestData = "Mannheim Hbf";
-        String arrivalTestData = "Ludwigsburg Center";
-        testData.getPlan().getItineraries().get(0).getLegs().get(0).setDepartureDelay(300000L);
-
-        Flux<CallStatus<Journey>> result = classUnderTest.extractJourneysFrom(testData, departureTestData, arrivalTestData);
-
-        StepVerifier.create(result)
-                .assertNext(journeyCallStatus -> assertThat(journeyCallStatus.getCalledObject().getLegs().get(0).getDelayInMinutes()).isEqualTo(Duration.ofMinutes(5)))
                 .verifyComplete();
     }
 
