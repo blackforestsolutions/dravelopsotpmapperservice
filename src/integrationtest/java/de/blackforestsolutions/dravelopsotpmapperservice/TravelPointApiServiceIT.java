@@ -15,8 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static de.blackforestsolutions.dravelopsotpmapperservice.configuration.CoordinateConfiguration.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static de.blackforestsolutions.dravelopsotpmapperservice.testutil.TestAssertions.getNearestStationsAssertions;
 
 @Import(ApiServiceTestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -36,26 +35,8 @@ class TravelPointApiServiceIT {
         Flux<TravelPoint> result = classUnderTest.retrieveNearestStationsFromApiService(testData);
 
         StepVerifier.create(result)
-                .expectNextCount(1L)
-                .thenConsumeWhile(travelPoint -> {
-                    assertThat(travelPoint).isNotNull();
-                    assertThat(travelPoint.getStopId()).isNotEmpty();
-                    assertThat(travelPoint.getStopSequence()).isEqualTo(-1L);
-                    assertThat(travelPoint.getName()).isNotEmpty();
-                    assertThat(travelPoint.getPoint()).isNotNull();
-                    assertThat(travelPoint.getPoint().getX()).isGreaterThanOrEqualTo(MIN_WGS_84_LONGITUDE);
-                    assertThat(travelPoint.getPoint().getX()).isLessThanOrEqualTo(MAX_WGS_84_LONGITUDE);
-                    assertThat(travelPoint.getPoint().getY()).isGreaterThanOrEqualTo(MIN_WGS_84_LATITUDE);
-                    assertThat(travelPoint.getPoint().getY()).isLessThanOrEqualTo(MAX_WGS_84_LATITUDE);
-                    assertThat(travelPoint.getDistanceInKilometers()).isNotNull();
-                    assertThat(travelPoint.getDistanceInKilometers().getValue()).isGreaterThanOrEqualTo(MIN_DISTANCE_IN_KILOMETERS_TO_POINT);
-                    assertThat(travelPoint.getDepartureTime()).isNull();
-                    assertThat(travelPoint.getDepartureDelayInSeconds().isZero()).isTrue();
-                    assertThat(travelPoint.getArrivalTime()).isNull();
-                    assertThat(travelPoint.getArrivalDelayInSeconds().isZero()).isTrue();
-                    assertThat(travelPoint.getPlatform()).isEmpty();
-                    return true;
-                })
+                .assertNext(getNearestStationsAssertions())
+                .thenConsumeWhile(travelPoint -> true, getNearestStationsAssertions())
                 .verifyComplete();
     }
 

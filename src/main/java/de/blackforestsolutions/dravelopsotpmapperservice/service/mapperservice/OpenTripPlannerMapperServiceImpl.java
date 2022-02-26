@@ -4,9 +4,12 @@ import de.blackforestsolutions.dravelopsdatamodel.Leg;
 import de.blackforestsolutions.dravelopsdatamodel.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.*;
 import de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.station.OpenTripPlannerStationResponse;
+import de.blackforestsolutions.dravelopsotpmapperservice.configuration.GtfsApiTokenConfiguration;
+import de.blackforestsolutions.dravelopsotpmapperservice.exceptionhandling.MissingPrefixException;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.GeocodingService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.UuidService;
 import de.blackforestsolutions.dravelopsotpmapperservice.service.supportservice.ZonedDateTimeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -22,22 +25,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperService {
 
     private static final String ORIGIN_PLACEHOLDER = "Origin";
     private static final String DESTINATION_PLACEHOLDER = "Destination";
+    private static final String MISSING_TRIP_ID = "tripId";
+    private static final String MISSING_STOP_ID = "stopId";
+    private static final String MISSING_AGENCY_ID = "agencyId";
     private static final double ZERO_DISTANCE = 0.0d;
     private static final int FIRST_INDEX = 0;
 
     private final GeocodingService geocodingService;
     private final ZonedDateTimeService zonedDateTimeService;
     private final UuidService uuidService;
+    private final GtfsApiTokenConfiguration gtfsApiTokenConfiguration;
 
     @Autowired
-    public OpenTripPlannerMapperServiceImpl(GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService, UuidService uuidService) {
+    public OpenTripPlannerMapperServiceImpl(GeocodingService geocodingService, ZonedDateTimeService zonedDateTimeService, UuidService uuidService, GtfsApiTokenConfiguration gtfsApiTokenConfiguration) {
         this.geocodingService = geocodingService;
         this.zonedDateTimeService = zonedDateTimeService;
         this.uuidService = uuidService;
+        this.gtfsApiTokenConfiguration = gtfsApiTokenConfiguration;
     }
 
     @Override
@@ -83,7 +92,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private Leg extractLegFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg, String departure, String arrival) throws MalformedURLException {
         return new Leg.LegBuilder()
-                .setTripId(Optional.ofNullable(openTripPlannerLeg.getTripId()).orElse(""))
+                .setTripId(Optional.ofNullable(openTripPlannerLeg.getTripId()).map(id -> extractIdFrom(id, MISSING_TRIP_ID)).orElse(""))
                 .setDeparture(extractTravelPointFrom(openTripPlannerLeg.getFrom(), departure))
                 .setArrival(extractTravelPointFrom(openTripPlannerLeg.getTo(), arrival))
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(openTripPlannerLeg.getDistance()))
@@ -108,7 +117,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private TravelPoint extractTravelPointFrom(Stop stop, String optionalStopName) {
         return new TravelPoint.TravelPointBuilder()
-                .setStopId(Optional.ofNullable(stop.getStopId()).orElse(""))
+                .setStopId(Optional.ofNullable(stop.getStopId()).map(id -> extractIdFrom(id, MISSING_STOP_ID)).orElse(""))
                 .setStopSequence(Optional.ofNullable(stop.getStopSequence()).orElse(-1L))
                 .setName(extractStopNameFrom(stop, optionalStopName))
                 .setPoint(geocodingService.extractCoordinateWithFixedDecimalPlacesFrom(stop.getLon(), stop.getLat()))
@@ -130,11 +139,13 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
     }
 
     private TravelProvider extractTravelProviderFrom(de.blackforestsolutions.dravelopsgeneratedcontent.opentripplanner.journey.Leg openTripPlannerLeg) throws MalformedURLException {
+        Optional<String> optionalAgencyId = Optional.ofNullable(openTripPlannerLeg.getAgencyId());
         Optional<String> optionalAgencyName = Optional.ofNullable(openTripPlannerLeg.getAgencyName());
         Optional<String> optionalAgencyUrl = Optional.ofNullable(openTripPlannerLeg.getAgencyUrl());
 
-        if (optionalAgencyName.isPresent() && optionalAgencyUrl.isPresent()) {
+        if (optionalAgencyId.isPresent() && optionalAgencyName.isPresent() && optionalAgencyUrl.isPresent()) {
             return new TravelProvider.TravelProviderBuilder()
+                    .setId(extractTravelProviderIdFrom(optionalAgencyId.get()))
                     .setName(optionalAgencyName.get())
                     .setUrl(new URL(optionalAgencyUrl.get()))
                     .build();
@@ -171,7 +182,7 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
 
     private TravelPoint extractStationFrom(OpenTripPlannerStationResponse stationResponse) {
         return new TravelPoint.TravelPointBuilder()
-                .setStopId(stationResponse.getId())
+                .setStopId(extractIdFrom(stationResponse.getId(), MISSING_STOP_ID))
                 .setName(stationResponse.getName())
                 .setPoint(new Point.PointBuilder(stationResponse.getLon(), stationResponse.getLat()).build())
                 .setDistanceInKilometers(geocodingService.extractKilometersFrom(stationResponse.getDist()))
@@ -229,5 +240,27 @@ public class OpenTripPlannerMapperServiceImpl implements OpenTripPlannerMapperSe
         return null;
     }
 
+    private String extractTravelProviderIdFrom(String id) {
+        return gtfsApiTokenConfiguration.getApitokens().keySet()
+                .stream()
+                .filter(id::contains)
+                .findFirst()
+                .orElseThrow(() -> new MissingPrefixException(buildMissingPrefixExceptionMessage(MISSING_AGENCY_ID)));
+    }
 
+    private String extractIdFrom(String id, String missingIdMessage) {
+        return gtfsApiTokenConfiguration.getApitokens().keySet()
+                .stream()
+                .filter(id::contains)
+                .findFirst()
+                .map(ignore -> id)
+                .orElseThrow(() -> new MissingPrefixException(buildMissingPrefixExceptionMessage(missingIdMessage)));
+    }
+
+    private String buildMissingPrefixExceptionMessage(String message) {
+        return ""
+                .concat("There is no ")
+                .concat(message)
+                .concat(" avaialble!");
+    }
 }
